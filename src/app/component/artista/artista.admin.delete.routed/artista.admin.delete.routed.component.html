@@ -2,7 +2,7 @@
   <div class="col-lg-7 col-md-10 col-sm-12">
     <h1 class="my-5 text-center">
       <i class="bi bi-card-list"></i>
-      Detalle de album
+      Detalle de artista
       <i class="bi bi-person-circle"></i>
     </h1>
     <br />
@@ -10,34 +10,36 @@
       <tbody>
         <tr class="text-center">
           <th scope="row" class="bg-danger text-white text-end pe-5">Id</th>
-          <td class="text-start ps-5">{{ oAlbum.id }}</td>
+          <td class="text-start ps-5">{{ oArtista.id }}</td>
         </tr>
         <tr class="text-center">
           <th scope="row" class="bg-primary text-white text-end pe-5">
             Nombre
           </th>
-          <td class="text-start ps-5">{{ oAlbum.nombre }}</td>
-        </tr>
-        <tr class="text-center">
-          <th scope="row" class="bg-primary text-white text-end pe-5">Fecha</th>
-          <td class="text-start ps-5">{{ oAlbum.fecha }}</td>
+          <td class="text-start ps-5">{{ oArtista.nombre }}</td>
         </tr>
         <tr class="text-center">
           <th scope="row" class="bg-primary text-white text-end pe-5">
-            Genero
+            Nombre real
           </th>
-          <td class="text-start ps-5">{{ oAlbum.genero }}</td>
+          <td class="text-start ps-5">{{ oArtista.nombreReal }}</td>
         </tr>
         <tr class="text-center">
           <th scope="row" class="bg-primary text-white text-end pe-5">
             Descripcion
           </th>
-          <td class="text-start ps-5">{{ oAlbum.descripcion }}</td>
+          <td class="text-start ps-5">{{ oArtista.descripcion }}</td>
+        </tr>
+        <tr class="text-center">
+          <th scope="row" class="bg-primary text-white text-end pe-5">
+            Spotify
+          </th>
+          <td class="text-start ps-5">{{ oArtista.spotify }}</td>
         </tr>
         <tr class="text-center">
           <th scope="row" class="bg-primary text-white text-end pe-5">img</th>
           <td class="text-start ps-5">
-            {{ oAlbum.img }}
+            {{ oArtista.img }}
           </td>
         </tr>
 
@@ -46,7 +48,7 @@
             GropoAlbumArtista
           </th>
           <td class="text-start ps-5">
-            {{ oAlbum.grupoalbumartistas }}
+            {{ oArtista.grupoalbumartistas }}
           </td>
         </tr>
       </tbody>

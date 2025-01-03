@@ -11,6 +11,10 @@ import { AlbumAdminDeleteRoutedComponent } from './component/album/album.admin.d
 
 //Artista
 import { ArtistaAdminPlistRoutedComponent } from './component/artista/artista.admin.plist.routed/artista.admin.plist.routed.component';
+import { ArtistaAdminCreateRoutedComponent } from './component/artista/artista.admin.create.routed/artista.admin.create.routed.component';
+import { ArtistaAdminViewRoutedComponent } from './component/artista/artista.admin.view.routed/artista.admin.view.routed.component';
+import { ArtistaAdminDeleteRoutedComponent } from './component/artista/artista.admin.delete.routed/artista.admin.delete.routed.component';
+import { ArtistaAdminEditRoutedComponent } from './component/artista/artista.admin.edit.routed/artista.admin.edit.routed.component';
 
 
 
@@ -22,12 +26,18 @@ export const routes: Routes = [
     { path: 'home', component: SharedHomeRoutedComponent },
     //Album
     { path: 'admin/album/plist', component: AlbumAdminPlistRoutedComponent },
-    { path: 'admin/album/create/:id', component: AlbumAdminCreateRoutedComponent },
+    { path: 'admin/album/create', component: AlbumAdminCreateRoutedComponent },
     { path: 'admin/album/view/:id', component: AlbumAdminViewRoutedComponent },
     { path: 'admin/album/edit/:id', component: AlbumAdminEditRoutedComponent },
-    { path: 'admin/album/delete/:id ', component: AlbumAdminDeleteRoutedComponent },
+    { path: 'admin/album/delete/:id', component: AlbumAdminDeleteRoutedComponent },
 
     //Artista
     { path: 'admin/artista/plist', component: ArtistaAdminPlistRoutedComponent },
+    { path: 'admin/artista/create', component: ArtistaAdminCreateRoutedComponent },
+    { path: 'admin/artista/view/:id', component: ArtistaAdminViewRoutedComponent },
+    { path: 'admin/artista/edit/:id', component: ArtistaAdminEditRoutedComponent },
+
+    { path: 'admin/artista/delete/:id', component: ArtistaAdminDeleteRoutedComponent },
+
 
 ];

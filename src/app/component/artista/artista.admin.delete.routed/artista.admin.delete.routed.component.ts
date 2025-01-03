@@ -1,22 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { AlbumService } from '../../../service/album.service';
-import { IAlbum } from '../../../model/album.interface';
+import { ArtistaService } from '../../../service/artista.service';
+import { IArtista } from '../../../model/artista.interface';
 import { HttpErrorResponse } from '@angular/common/http';
 
 declare let bootstrap: any;
 
 @Component({
-  selector: 'app-album.admin.delete.routed',
-  templateUrl: './album.admin.delete.routed.component.html',
+  selector: 'app-artista.admin.delete.routed',
+  templateUrl: './artista.admin.delete.routed.component.html',
   standalone: true,
   imports: [RouterModule],
-  styleUrls: ['./album.admin.delete.routed.component.css'],
+  styleUrls: ['./artista.admin.delete.routed.component.css'],
 })
-export class AlbumAdminDeleteRoutedComponent implements OnInit {
+export class ArtistaAdminDeleteRoutedComponent implements OnInit {
   //
   id: number = 0;
-  oAlbum: IAlbum = {} as IAlbum;
+  oArtista: IArtista = {} as IArtista;
 
   strMessage: string = '';
 
@@ -24,15 +24,15 @@ export class AlbumAdminDeleteRoutedComponent implements OnInit {
 
   constructor(
     private oActivatedRoute: ActivatedRoute,
-    private oAlbumService: AlbumService,
+    private oArtistaService: ArtistaService,
     private oRouter: Router
   ) {}
 
   ngOnInit() {
     this.id = this.oActivatedRoute.snapshot.params['id'];
-    this.oAlbumService.getOne(this.id).subscribe({
-      next: (data: IAlbum) => {
-        this.oAlbum = data;
+    this.oArtistaService.getOne(this.id).subscribe({
+      next: (data: IArtista) => {
+        this.oArtista = data;
       },
     });
   }
@@ -47,24 +47,24 @@ export class AlbumAdminDeleteRoutedComponent implements OnInit {
   }
 
   delete(): void {
-    this.oAlbumService.delete(this.oAlbum!.id).subscribe({
+    this.oArtistaService.delete(this.oArtista!.id).subscribe({
       next: (data) => {
         this.showModal(
-          'El Album con id ' + this.oAlbum!.id + ' ha sido borrado'
+          'El Artista con id ' + this.oArtista!.id + ' ha sido borrado'
         );
       },
       error: (error) => {
-        this.showModal('Error al borrar el album');
+        this.showModal('Error al borrar el artista');
       },
     });
   }
 
   cancel(): void {
-    this.oRouter.navigate(['/admin/album/plist']);
+    this.oRouter.navigate(['/admin/artista/plist']);
   }
 
   hideModal = () => {
     this.myModal.hide();
-    this.oRouter.navigate(['/admin/album/plist']);
+    this.oRouter.navigate(['/admin/artista/plist']);
   };
 }

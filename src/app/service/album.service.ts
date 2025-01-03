@@ -57,7 +57,20 @@ export class AlbumService {
   create(oAlbum: IAlbum): Observable<IAlbum> {
     let URL: string = '';
     URL += this.serverURL;
-    return this.oHttp.put<IAlbum>(URL, oAlbum);
+    console.log(oAlbum);
+    if (oAlbum.img) {
+      const formData = new FormData();
+      formData.append('nombre', oAlbum.nombre);
+      formData.append('fecha', oAlbum.fecha);
+      formData.append('genero', oAlbum.genero);
+      formData.append('descripcion', oAlbum.descripcion);
+      formData.append('discografica', oAlbum.discografica);
+      formData.append('img', oAlbum.img);
+      
+      return this.oHttp.post<IAlbum>(URL, formData);
+    } else {
+    return this.oHttp.post<IAlbum>(URL, oAlbum);
+    }
   }
 
   update(oAlbum: IAlbum): Observable<IAlbum> {

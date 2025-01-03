@@ -5,14 +5,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import {
   FormControl,
-  FormGroup,  
+  FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CALENDAR_ES } from '../../../environment/environment';
 import { AlbumService } from '../../../service/album.service';
 import { IAlbum } from '../../../model/album.interface';
+import { CalendarModule } from 'primeng/calendar';
+//import { PrimeNGConfig } from 'primeng/api';
 
 declare let bootstrap: any;
 
@@ -21,80 +22,85 @@ declare let bootstrap: any;
   selector: 'app-album.admin.create.routed',
   templateUrl: './album.admin.create.routed.component.html',
   imports: [
-    MatFormFieldModule,
     MatInputModule,
-    MatSelectModule,
     ReactiveFormsModule,
-    MatCheckboxModule,
     RouterModule,
     CalendarModule,
   ],
   styleUrls: ['./album.admin.create.routed.component.css'],
 })
 export class AlbumAdminCreateRoutedComponent implements OnInit {
-
   id: number = 0;
   oAlbumForm: FormGroup | undefined = undefined;
   oAlbum: IAlbum | null = null;
   strMessage: string = '';
-  checkboxValue: number = 0;  // Inicia con 0
 
   myModal: any;
 
-  form: FormGroup = new FormGroup({});
+
 
   constructor(
     private oAlbumService: AlbumService,
     private oRouter: Router,
-    private oPrimeconfig: PrimeNGConfig
+    //private oPrimeconfig: PrimeNGConfig
   ) {}
 
   ngOnInit() {
     this.createForm();
     this.oAlbumForm?.markAllAsTouched();
-    this.oPrimeconfig.setTranslation(CALENDAR_ES);
+   // this.oPrimeconfig.setTranslation(CALENDAR_ES);
   }
 
   createForm() {
     this.oAlbumForm = new FormGroup({
-      descripcion: new FormControl('', [
+      nombre: new FormControl('', [
         Validators.required,
         Validators.minLength(5),
         Validators.maxLength(255),
       ]),
-      comentarios: new FormControl('', [
+      fecha: new FormControl('', [Validators.required]),
+      genero: new FormControl('', [
+        Validators.required,
         Validators.minLength(0),
         Validators.maxLength(255),
       ]),
-      inventariable: new FormControl(''),
-      momentstamp: new FormControl('', [
-        Validators.required
+      descripcion: new FormControl('', [
+        Validators.minLength(0),
+        Validators.maxLength(255),
       ]),
-      id_tipoasiento: new FormControl('',[Validators.required]),
-      id_usuario: new FormControl('',[Validators.required]),
-      id_periodo: new FormControl('',[Validators.required]),
-
+      discografica: new FormControl('', [
+        Validators.required,
+        Validators.minLength(0),
+        Validators.maxLength(255),
+      ]),
+      img: new FormControl(null),
     });
   }
 
   updateForm() {
+    this.oAlbumForm?.controls['nombre'].setValue('');
+    this.oAlbumForm?.controls['fecha'].setValue('');
+    this.oAlbumForm?.controls['genero'].setValue('');
     this.oAlbumForm?.controls['descripcion'].setValue('');
-    this.oAlbumForm?.controls['comentarios'].setValue('');
-    this.oAlbumForm?.controls['inventariable'].setValue('');
-    this.oAlbumForm?.controls['momentstamp'].setValue('');
-    this.oAlbumForm?.controls['id_tipoasiento'].setValue('');
-    this.oAlbumForm?.controls['id_usuario'].setValue('');
-    this.oAlbumForm?.controls['id_periodo'].setValue('');
+    this.oAlbumForm?.controls['discografica'].setValue('');
+    this.oAlbumForm?.controls['img'].setValue(null);
   }
 
-  onCheckboxChange(event: any): void {
-    this.checkboxValue = event.checked ? 1 : 0;
-  }
+ 
 
   onReset() {
     this.updateForm();
     return false;
   }
+
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      const blob = new Blob([file], { type: file.type });
+      this.oAlbumForm?.controls['img'].setValue(blob);
+    }
+    console.log(this.oAlbumForm?.value);
+}
 
   showModal(mensaje: string) {
     this.strMessage = mensaje;
@@ -107,13 +113,21 @@ export class AlbumAdminCreateRoutedComponent implements OnInit {
   hideModal = () => {
     this.myModal.hide();
     this.oRouter.navigate(['/admin/album/view/' + this.oAlbum?.id]);
-  }
+  };
+
+
 
   onSubmit() {
     if (this.oAlbumForm?.invalid) {
       this.showModal('Formulario inválido');
       return;
-    } else {      
+    } else {
+
+      // Elimina la hora de la fecha ya que aún que la hemos ocultado sigue apareciendo como 0s
+      this.oAlbumForm?.controls['fecha'].setValue(this.oAlbumForm?.get('fecha')?.value.toISOString().split('T')[0]);
+
+      
+
       this.oAlbumService.create(this.oAlbumForm?.value).subscribe({
         next: (oAlbum: IAlbum) => {
           this.oAlbum = oAlbum;
@@ -126,7 +140,4 @@ export class AlbumAdminCreateRoutedComponent implements OnInit {
       });
     }
   }
-
-
-
 }

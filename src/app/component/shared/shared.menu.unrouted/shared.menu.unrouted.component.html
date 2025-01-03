@@ -13,11 +13,11 @@
             " aria-current="page" href="/home">Inicio</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [class.active]="strRuta == '/admin/album/plist'"
+          <a class="nav-link" [class.active]="strRuta.startsWith('/admin/album/')"
             href="/admin/album/plist">Album</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [class.active]="strRuta == '/admin/artista/plist'"
+          <a class="nav-link" [class.active]="strRuta.startsWith('/admin/artista/')"
             href="/admin/artista/plist">Artista</a>
         </li>
         <li class="nav-item">

@@ -5,6 +5,6 @@ export interface IAlbum {
      genero: string
      descripcion: string
      discografica: string
-     img: any
+     img: Blob 
      grupoalbumartistas?: any
    }
