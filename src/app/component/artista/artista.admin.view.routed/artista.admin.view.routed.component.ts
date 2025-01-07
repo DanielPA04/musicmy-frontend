@@ -22,7 +22,7 @@ export class ArtistaAdminViewRoutedComponent implements OnInit {
 
   ngOnInit() {
     this.id = this.oActivatedRoute.snapshot.params['id'];
-    this.oArtistaService.getOne(this.id).subscribe({
+    this.oArtistaService.get(this.id).subscribe({
       next: (data: IArtista) => {
         this.oArtista = data;
       },

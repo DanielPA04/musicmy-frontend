@@ -30,7 +30,7 @@ export class AlbumAdminDeleteRoutedComponent implements OnInit {
 
   ngOnInit() {
     this.id = this.oActivatedRoute.snapshot.params['id'];
-    this.oAlbumService.getOne(this.id).subscribe({
+    this.oAlbumService.get(this.id).subscribe({
       next: (data: IAlbum) => {
         this.oAlbum = data;
       },

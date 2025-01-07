@@ -37,7 +37,14 @@
         <tr class="text-center">
           <th scope="row" class="bg-primary text-white text-end pe-5">img</th>
           <td class="text-start ps-5">
-            {{ oAlbum.img }}
+            @if (oAlbum.img.size === 0) { No img } @else {
+            <img
+              [src]="oAlbum.img | blobToUrl"
+              alt="Imagen del álbum"
+              width="100"
+              height="100"
+            />
+            }
           </td>
         </tr>
 

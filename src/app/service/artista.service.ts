@@ -57,20 +57,13 @@ export class ArtistaService {
   create(oArtista: IArtista): Observable<IArtista> {
     let URL: string = '';
     URL += this.serverURL;
-    return this.oHttp.put<IArtista>(URL, oArtista);
+    return this.oHttp.post<IArtista>(URL, oArtista);
   }
 
   update(oArtista: IArtista): Observable<IArtista> {
     let URL: string = '';
     URL += this.serverURL;
     return this.oHttp.put<IArtista>(URL, oArtista);
-  }
-
-  getOne(id: number): Observable<IArtista> {
-    let URL: string = '';
-    URL += this.serverURL;
-    URL += '/' + id;
-    return this.oHttp.get<IArtista>(URL);
   }
 
   delete(id: number) {

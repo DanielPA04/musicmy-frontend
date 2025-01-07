@@ -8,13 +8,14 @@ import { BotoneraService } from '../../../service/botonera.service';
 import { debounceTime, Subject } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
 import { TrimPipe } from '../../../pipe/trim.pipe';
+import { BlobToUrlPipe } from '../../../pipe/blob.pipe';
 
 @Component({
   selector: 'app-album.admin.plist.routed',
   standalone: true,
   templateUrl: './album.admin.plist.routed.component.html',
   styleUrls: ['./album.admin.plist.routed.component.css'],
-  imports: [CommonModule, FormsModule, TrimPipe, RouterModule],
+  imports: [CommonModule, FormsModule, TrimPipe, RouterModule, BlobToUrlPipe],
 })
 export class AlbumAdminPlistRoutedComponent implements OnInit {
   oPage: IPage<IAlbum> | null = null;
@@ -56,6 +57,7 @@ export class AlbumAdminPlistRoutedComponent implements OnInit {
       )
       .subscribe({
         next: (oPageFromServer: IPage<IAlbum>) => {
+          console.log(oPageFromServer);
           this.oPage = oPageFromServer;
           this.arrBotonera = this.oBotoneraService.getBotonera(
             this.nPage,

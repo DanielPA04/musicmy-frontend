@@ -3,11 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 import { AlbumService } from '../../../service/album.service';
 import { IAlbum } from '../../../model/album.interface';
 import { HttpErrorResponse } from '@angular/common/http';
+import { BlobToUrlPipe } from '../../../pipe/blob.pipe';
 
 @Component({
   selector: 'app-album.admin.view.routed',
   templateUrl: './album.admin.view.routed.component.html',
   standalone: true,
+  imports: [BlobToUrlPipe],
   styleUrls: ['./album.admin.view.routed.component.css'],
 })
 export class AlbumAdminViewRoutedComponent implements OnInit {
@@ -22,8 +24,9 @@ export class AlbumAdminViewRoutedComponent implements OnInit {
 
   ngOnInit() {
     this.id = this.oActivatedRoute.snapshot.params['id'];
-    this.oAlbumService.getOne(this.id).subscribe({
+    this.oAlbumService.get(this.id).subscribe({
       next: (data: IAlbum) => {
+        console.log(data);
         this.oAlbum = data;
       },
     });
