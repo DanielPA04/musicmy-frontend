@@ -88,7 +88,7 @@ export class ArtistaAdminEditRoutedComponent implements OnInit {
   updateForm() {
     this.oArtistaForm?.controls['id'].setValue(this.oArtista?.id);
     this.oArtistaForm?.controls['nombre'].setValue(this.oArtista?.nombre);
-    this.oArtistaForm?.controls['nombreReal'].setValue(this.oArtista?.nombreReal);
+    this.oArtistaForm?.controls['nombreReal'].setValue(this.oArtista?.nombrereal);
     this.oArtistaForm?.controls['descripcion'].setValue(this.oArtista?.descripcion);
     this.oArtistaForm?.controls['spotify'].setValue(this.oArtista?.spotify);
     this.oArtistaForm?.controls['img'].setValue(null);

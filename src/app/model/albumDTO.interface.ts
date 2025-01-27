@@ -8,9 +8,7 @@ export interface IAlbumDTO {
     discografica: string
     imgBase64?: string
     grupoalbumartistas?: any
-
-
-    
+    resenyas?: any
 
 }
 

@@ -24,6 +24,7 @@ export class AlbumService {
       discografica: dto.discografica,
       img: dto.imgBase64 ? this.base64ToBlob(dto.imgBase64) : new Blob(),
       grupoalbumartistas: dto.grupoalbumartistas,
+      resenyas: dto.resenyas,
     };
   }
 
@@ -44,7 +45,8 @@ export class AlbumService {
     };
   }
 
-  albumToDTO(album: IAlbum): IAlbumDTO {
+  async albumToDTO(album: IAlbum): Promise<IAlbumDTO> {
+    const imgBase64 = album.img ? await this.blobToBase64(album.img) : '';
     return {
       id: album.id,
       nombre: album.nombre,
@@ -52,22 +54,30 @@ export class AlbumService {
       genero: album.genero,
       descripcion: album.descripcion,
       discografica: album.discografica,
-      imgBase64: album.img ? this.blobToBase64(album.img) : undefined,
+      imgBase64: imgBase64,
       grupoalbumartistas: album.grupoalbumartistas,
+      resenyas: album.resenyas,
     };
   }
+  
 
-  blobToBase64(blob: Blob): string {
-    const reader = new FileReader();
-    let base64String = '';
-
-    reader.onloadend = () => {
-      base64String = reader.result as string;
-    };
-
-    reader.readAsDataURL(blob);
-    return base64String.split(',')[1];
+  blobToBase64(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+  
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        resolve(base64String.split(',')[1]); // Extrae solo la parte base64
+      };
+  
+      reader.onerror = (error) => {
+        reject(error);
+      };
+  
+      reader.readAsDataURL(blob);
+    });
   }
+  
 
   getPage(
     page: number,
@@ -109,42 +119,43 @@ export class AlbumService {
     let URL: string = '';
     URL += this.serverURL;
     URL += '/' + id;
-    return this.oHttp
-      .get<IAlbumDTO>(URL)
-      .pipe(map((dto: IAlbumDTO) => this.convertAlbumDTOToAlbum(dto)));
+    return this.oHttp.get<IAlbumDTO>(URL).pipe(map((dto: IAlbumDTO) => this.convertAlbumDTOToAlbum(dto)));
   }
 
   create(oAlbum: IAlbum): Observable<IAlbum> {
+    oAlbum.fecha = new Date(oAlbum.fecha).toISOString().split('T')[0];
     let URL: string = '';
     URL += this.serverURL;
-    console.log(oAlbum);
-    if (oAlbum.img) {
-      URL += '/img';
-      const formData = new FormData();
-      formData.append('nombre', oAlbum.nombre);
-      formData.append('fecha', oAlbum.fecha);
-      formData.append('genero', oAlbum.genero);
-      formData.append('descripcion', oAlbum.descripcion);
-      formData.append('discografica', oAlbum.discografica);
-      formData.append('img', oAlbum.img as Blob);
 
-      return this.oHttp.post<IAlbum>(URL, formData);
-    } else {
-      return this.oHttp.post<IAlbum>(URL, oAlbum);
-    }
+    let album: Observable<IAlbumDTO> = this.oHttp.put<IAlbumDTO>(
+      URL,
+      this.albumToDTO(oAlbum)
+    );
+    return album.pipe(
+      map((dto: IAlbumDTO) => this.convertAlbumDTOToAlbum(dto))
+    );
   }
 
-  update(oAlbum: IAlbum): Observable<IAlbum> {
+  async update(oAlbum: IAlbum): Promise<Observable<IAlbum>> {
+    oAlbum.fecha = new Date(oAlbum.fecha).toISOString().split('T')[0];
     let URL: string = '';
     URL += this.serverURL;
+  
     if (oAlbum.img) {
       URL += '/img';
-       let album: Observable<IAlbumDTO> = this.oHttp.put<IAlbumDTO>(URL, this.albumToDTO(oAlbum));
-      return album.pipe(map((dto: IAlbumDTO) => this.convertAlbumDTOToAlbum(dto))); 
+  
+      // Espera la conversión del álbum a DTO
+      const albumDTO = await this.albumToDTO(oAlbum);
+  
+      // Realiza la petición con el DTO
+      const a = this.oHttp.put<IAlbumDTO>(URL, albumDTO);
+  
+      return a.pipe(map((dto: IAlbumDTO) => this.convertAlbumDTOToAlbum(dto)));
     } else {
       return this.oHttp.put<IAlbum>(URL, oAlbum);
     }
   }
+  
 
   delete(id: number) {
     let URL: string = '';

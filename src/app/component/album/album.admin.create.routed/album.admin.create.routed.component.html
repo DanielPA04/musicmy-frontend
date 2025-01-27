@@ -29,10 +29,8 @@
               placeholder="Fecha"
               inputId="spanish"
               [showIcon]="true"
-              [showTime]="false" 
-              [showSeconds]="false" 
               [showButtonBar]="false"
-            ></p-calendar>
+              ></p-calendar>
             @if (oAlbumForm?.get('fecha')?.hasError('required')) {
             <mat-error>El campo fecha es obligatorio</mat-error>
             }

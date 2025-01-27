@@ -34,7 +34,7 @@ export class AlbumAdminCreateRoutedComponent implements OnInit {
   oAlbumForm: FormGroup | undefined = undefined;
   oAlbum: IAlbum | null = null;
   strMessage: string = '';
-
+  date: string = '';
   myModal: any;
 
 
@@ -117,16 +117,13 @@ export class AlbumAdminCreateRoutedComponent implements OnInit {
 
 
 
+
   onSubmit() {
     if (this.oAlbumForm?.invalid) {
       this.showModal('Formulario inválido');
       return;
     } else {
-
-      // Elimina la hora de la fecha ya que aún que la hemos ocultado sigue apareciendo como 0s
-      this.oAlbumForm?.controls['fecha'].setValue(this.oAlbumForm?.get('fecha')?.value.toISOString().split('T')[0]);
-
-      
+  
 
       this.oAlbumService.create(this.oAlbumForm?.value).subscribe({
         next: (oAlbum: IAlbum) => {

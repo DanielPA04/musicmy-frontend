@@ -57,6 +57,7 @@ export class ArtistaAdminPlistRoutedComponent implements OnInit {
       .subscribe({
         next: (oPageFromServer: IPage<IArtista>) => {
           this.oPage = oPageFromServer;
+          console.log(oPageFromServer.content[1].nombrereal);
           this.arrBotonera = this.oBotoneraService.getBotonera(
             this.nPage,
             oPageFromServer.totalPages

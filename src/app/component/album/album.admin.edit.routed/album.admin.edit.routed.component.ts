@@ -24,7 +24,7 @@ declare let bootstrap: any;
     MatInputModule,
     ReactiveFormsModule,
     RouterModule,
-    CalendarModule
+    CalendarModule,
   ],
 })
 export class AlbumAdminEditRoutedComponent implements OnInit {
@@ -51,7 +51,6 @@ export class AlbumAdminEditRoutedComponent implements OnInit {
     this.oAlbumForm?.markAllAsTouched();
   }
 
-  
   onReset() {
     this.oAlbumService.get(this.id).subscribe({
       next: (oAlbum: IAlbum) => {
@@ -95,10 +94,14 @@ export class AlbumAdminEditRoutedComponent implements OnInit {
   updateForm() {
     this.oAlbumForm?.controls['id'].setValue(this.oAlbum?.id);
     this.oAlbumForm?.controls['nombre'].setValue(this.oAlbum?.nombre);
-    this.oAlbumForm?.controls['fecha'].setValue(this.oAlbum?.fecha ? new Date(this.oAlbum.fecha) : null);
+    this.oAlbumForm?.controls['fecha'].setValue(
+      this.oAlbum?.fecha ? new Date(this.oAlbum.fecha) : null
+    );
     this.oAlbumForm?.controls['genero'].setValue(this.oAlbum?.genero);
     this.oAlbumForm?.controls['descripcion'].setValue(this.oAlbum?.descripcion);
-    this.oAlbumForm?.controls['discografica'].setValue(this.oAlbum?.discografica);
+    this.oAlbumForm?.controls['discografica'].setValue(
+      this.oAlbum?.discografica
+    );
     this.oAlbumForm?.controls['img'].setValue(null);
   }
 
@@ -121,7 +124,7 @@ export class AlbumAdminEditRoutedComponent implements OnInit {
       this.oAlbumForm?.controls['img'].setValue(blob);
     }
     console.log(this.oAlbumForm?.value);
-}
+  }
 
   showModal(mensaje: string) {
     this.strMessage = mensaje;
@@ -141,20 +144,25 @@ export class AlbumAdminEditRoutedComponent implements OnInit {
       this.showModal('Formulario no válido');
       return;
     } else {
-      // Elimina la hora de la fecha ya que aún que la hemos ocultado sigue apareciendo como 0s
-
-      this.oAlbumForm?.controls['fecha'].setValue(this.oAlbumForm?.get('fecha')?.value.toISOString().split('T')[0]);
-      this.oAlbumService.update(this.oAlbumForm?.value).subscribe({
-        next: (oAlbum: IAlbum) => {
-          this.oAlbum = oAlbum;
-          this.updateForm();
-          this.showModal('Album ' + this.oAlbum.id + ' actualizado');
-        },
-        error: (error) => {
-          this.showModal('Error al actualizar el album');
+      this.oAlbumService
+        .update(this.oAlbumForm?.value)
+        .then((observable) => {
+          observable.subscribe({
+            next: (oAlbum: IAlbum) => {
+              this.oAlbum = oAlbum;
+              this.updateForm();
+              this.showModal('Album ' + this.oAlbum.id + ' actualizado');
+            },
+            error: (error) => {
+              this.showModal('Error al actualizar el álbum');
+              console.error(error);
+            },
+          });
+        })
+        .catch((error) => {
+          this.showModal('Error al preparar la actualización del álbum');
           console.error(error);
-        },
-      });
+        });
     }
   }
 }

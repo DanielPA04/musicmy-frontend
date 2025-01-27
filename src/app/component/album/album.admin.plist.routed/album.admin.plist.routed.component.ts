@@ -57,7 +57,6 @@ export class AlbumAdminPlistRoutedComponent implements OnInit {
       )
       .subscribe({
         next: (oPageFromServer: IPage<IAlbum>) => {
-          console.log(oPageFromServer);
           this.oPage = oPageFromServer;
           this.arrBotonera = this.oBotoneraService.getBotonera(
             this.nPage,

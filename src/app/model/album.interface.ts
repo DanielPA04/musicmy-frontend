@@ -7,4 +7,5 @@ export interface IAlbum {
      discografica: string
      img: Blob 
      grupoalbumartistas?: any
+     resenyas?: any
    }
