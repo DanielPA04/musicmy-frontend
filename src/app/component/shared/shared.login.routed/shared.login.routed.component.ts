@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import {
-  EmailValidator,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
@@ -13,7 +12,6 @@ import { Modal } from 'flowbite';
 import type { ModalOptions, ModalInterface } from 'flowbite';
 import type { InstanceOptions } from 'flowbite';
 
-const loginmodal: HTMLElement | null = document.querySelector('#login-modal');
 
 @Component({
   selector: 'app-shared.login.routed',
@@ -24,44 +22,52 @@ const loginmodal: HTMLElement | null = document.querySelector('#login-modal');
   templateUrl: './shared.login.routed.component.html',
   styleUrls: ['./shared.login.routed.component.css']
 })
-export class SharedLoginRoutedComponent implements OnInit {
+export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
 
-
+  loginmodal: HTMLElement | null = null;
+  modal: ModalInterface | null = null;
   oAuthForm: FormGroup | undefined = undefined;
   message: string = '';
-
 
   modalOptions: ModalOptions = {
     placement: 'bottom-right',
     backdrop: 'dynamic',
-    backdropClasses:
-      'bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-40',
+    backdropClasses: 'bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-40',
     closable: true,
     onHide: () => {
-      console.log('modal is hidden');
+      console.log('Modal is hidden');
     },
     onShow: () => {
-      console.log('modal is shown');
+      console.log('Modal is shown');
     },
     onToggle: () => {
-      console.log('modal has been toggled');
+      console.log('Modal has been toggled');
     },
-  }
-
-
+  };
 
    instanceOptions: InstanceOptions = {
     id: 'login-modal',
     override: true
-  }
+  };
 
-  modal: ModalInterface = new Modal(loginmodal, this.modalOptions, this.instanceOptions);
-
-
-  constructor(private oLoginService: LoginService, private oSessionService: SessionService, private oRouter: Router) { }
+  constructor(
+    private oLoginService: LoginService,
+    private oSessionService: SessionService,
+    private oRouter: Router
+  ) {}
 
   ngOnInit() {
     this.createForm();
+  }
+
+  ngAfterViewInit() {
+    // Asegúrate de que el DOM ya está listo
+    this.loginmodal = document.querySelector('#login-modal');
+    if (this.loginmodal) {
+      this.modal = new Modal(this.loginmodal, this.modalOptions, this.instanceOptions);
+    } else {
+      console.error('Modal element not found!');
+    }
   }
 
   createForm() {
@@ -69,18 +75,22 @@ export class SharedLoginRoutedComponent implements OnInit {
       email: new FormControl('', [
         Validators.required,
         Validators.email,
-
       ]),
       password: new FormControl('', [
         Validators.required,
         Validators.minLength(8),
         Validators.maxLength(255),
-        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/)]),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/),
+      ]),
     });
   }
 
   onSubmit() {
-    this.modal.show();
+    if (this.modal) {
+      this.modal.show();
+    } else {
+      console.error('Modal instance is not initialized!');
+    }
 
     this.oLoginService.login(this.oAuthForm?.value).subscribe({
       next: (oAuth: string) => {
@@ -90,12 +100,8 @@ export class SharedLoginRoutedComponent implements OnInit {
       },
       error: (err) => {
         console.log(err);
-      }
-    })
+        this.message = 'Error al iniciar sesión';
+      },
+    });
   }
-
- 
-
-
-
 }
