@@ -144,25 +144,17 @@ export class AlbumAdminEditRoutedComponent implements OnInit {
       this.showModal('Formulario no válido');
       return;
     } else {
-      this.oAlbumService
-        .update(this.oAlbumForm?.value)
-        .then((observable) => {
-          observable.subscribe({
-            next: (oAlbum: IAlbum) => {
-              this.oAlbum = oAlbum;
-              this.updateForm();
-              this.showModal('Album ' + this.oAlbum.id + ' actualizado');
-            },
-            error: (error) => {
-              this.showModal('Error al actualizar el álbum');
-              console.error(error);
-            },
-          });
-        })
-        .catch((error) => {
-          this.showModal('Error al preparar la actualización del álbum');
+      this.oAlbumService.update(this.oAlbumForm?.value).subscribe({
+        next: (oAlbum: IAlbum) => {
+          this.oAlbum = oAlbum;
+          this.updateForm();
+          this.showModal('Album ' + this.oAlbum.id + ' actualizado');
+        },
+        error: (error) => {
+          this.showModal('Error al actualizar el album');
           console.error(error);
-        });
+        },
+      });
     }
   }
 }

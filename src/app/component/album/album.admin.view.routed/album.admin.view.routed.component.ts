@@ -28,6 +28,11 @@ export class AlbumAdminViewRoutedComponent implements OnInit {
       next: (data: IAlbum) => {
         console.log(data);
         this.oAlbum = data;
+        this.oAlbumService.getImg(this.oAlbum.id).subscribe({
+          next: (data: Blob) => {
+            this.oAlbum.img = data;
+          },
+        });
       },
     });
   }

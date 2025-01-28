@@ -62,6 +62,19 @@ export class AlbumAdminPlistRoutedComponent implements OnInit {
             this.nPage,
             oPageFromServer.totalPages
           );
+
+          this.oPage.content.forEach((oAlbum) => {
+            this.oAlbumService.getImg(oAlbum.id).subscribe({
+              next: (data) => {
+                oAlbum.img = data;
+              },
+            });
+
+          });
+
+
+
+
         },
         error: (err) => {
           console.log(err);

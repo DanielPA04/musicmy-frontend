@@ -1,29 +1,15 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">MusicMy</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+<nav class="bg-gray-100 border-b border-gray-300">
+  <div class="container mx-auto flex items-center justify-between px-4 py-2">
+    <a class="text-lg font-bold text-gray-800" href="#">MusicMy</a>
+    <button class="lg:hidden flex items-center text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300" type="button" aria-label="Toggle navigation">
+      <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+      </svg>
     </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" [class.active]="
-              strRuta == '/home' || strRuta == '/' || strRuta == ''
-            " aria-current="page" href="/home">Inicio</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [class.active]="strRuta.startsWith('/admin/album/')"
-            href="/admin/album/plist">Album</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [class.active]="strRuta.startsWith('/admin/artista/')"
-            href="/admin/artista/plist">Artista</a>
-        </li>
-        <li class="nav-item">
-  
-      </ul>
-
+    <div class="hidden lg:flex  space-x-4">
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW="strRuta == '/home' || strRuta == '/' || strRuta == ''" href="/home">Inicio</a>
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.bg-blue-700]="strRuta.startsWith('/admin/album/')" href="/admin/album/plist">Album</a>
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.active]="strRuta.startsWith('/admin/artista/')" href="/admin/artista/plist">Artista</a>
     </div>
   </div>
 </nav>

@@ -167,14 +167,22 @@
                 {{ album.discografica }}
               </td>
               <td class="text-start">
-                @if (album.img.size === 0) { No img } @else {
+                @if (album.img) {
                 <img
                   [src]="album.img | blobToUrl"
                   alt="Imagen del álbum"
                   width="100"
                   height="100"
                 />
-                }
+                } @else {
+                <img
+                  src="assets/img/no-image.jpg"
+                  alt="Imagen no disponible"
+                  width="100"
+                  height="100"
+                />
+                } 
+                
               </td>
               <td class="text-start">
                 {{ album.grupoalbumartistas }}

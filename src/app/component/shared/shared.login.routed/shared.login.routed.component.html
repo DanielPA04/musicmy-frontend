@@ -1,0 +1,100 @@
+<div class="font-sans text-gray-900 antialiased">
+  <div
+    class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-[#f8f4f3]"
+  >
+    <div>
+      <a href="/">
+        <h2 class="font-bold text-3xl">
+          LOREM
+          <span class="bg-[#f84525] text-white px-2 rounded-md">IPSUM</span>
+        </h2>
+      </a>
+    </div>
+
+    <div
+      class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg"
+    >
+      <form method="POST">
+        <div class="py-8">
+          <span class="text-2xl font-semibold">Log In</span>
+        </div>
+
+        <div>
+          <label
+            class="block font-medium text-sm text-gray-700"
+            for="email"
+            value="Email"
+          >
+          </label>
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            class="w-full rounded-md py-2.5 px-4 border text-sm outline-[#f84525]"
+          />
+        </div>
+
+        <div class="mt-4">
+          <label
+            class="block font-medium text-sm text-gray-700"
+            for="password"
+            value="Password"
+          >
+          </label>
+          <div class="relative">
+            <input
+              id="password"
+              type="password"
+              name="password"
+              placeholder="Password"
+              required
+              autocomplete="current-password"
+              class="w-full rounded-md py-2.5 px-4 border text-sm outline-[#f84525]"
+            />
+           
+            
+            <div
+              class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+            >
+              <button
+                type="button"
+                id="togglePassword"
+                class="text-gray-500 focus:outline-none focus:text-gray-600 hover:text-gray-600"
+              >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+              </svg>
+            </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="block mt-4">
+          <label for="remember_me" class="flex items-center">
+            <input
+              type="checkbox"
+              id="remember_me"
+              name="remember"
+              class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+            />
+            <span class="ms-2 text-sm text-gray-600">Remember Me</span>
+          </label>
+        </div>
+
+        <div class="flex items-center justify-end mt-4">
+          <a
+            class="hover:underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Forgot your password?
+          </a>
+
+          <button
+            class="ms-4 inline-flex items-center px-4 py-2 bg-[#f84525] border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-800 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
+          >
+            Sign In
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
