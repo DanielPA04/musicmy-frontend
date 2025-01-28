@@ -8,9 +8,9 @@
       </h2>
       <form [formGroup]="oAlbumForm!" (ngSubmit)="onSubmit()" novalidate>
         <div class="row mt-4">
-          <mat-form-field>
+          <mat-form-field >
             <mat-label>Nombre</mat-label>
-            <input matInput formControlName="nombre" placeholder="Nombre" />
+            <input matInput formControlName="nombre" placeholder="Nombre"/>
             <mat-hint align="end">De 5 a 255 caracteres</mat-hint>
             @if (oAlbumForm?.get('nombre')?.hasError('required')) {
             <mat-error>Debes introducir un nombre</mat-error>

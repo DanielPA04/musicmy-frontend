@@ -1,15 +1,22 @@
-<nav class="bg-gray-100 border-b border-gray-300">
+<nav class="bg-gray-100 border-b border-gray-300 h-[6vh]">
   <div class="container mx-auto flex items-center justify-between px-4 py-2">
-    <a class="text-lg font-bold text-gray-800" href="#">MusicMy</a>
+    <a class="text-lg font-bold text-gray-800" href="#">Music<span class="bg-[#f84525] text-white rounded-md">My</span></a>
     <button class="lg:hidden flex items-center text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300" type="button" aria-label="Toggle navigation">
       <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
       </svg>
     </button>
     <div class="hidden lg:flex  space-x-4">
-      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW="strRuta == '/home' || strRuta == '/' || strRuta == ''" href="/home">Inicio</a>
-      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.bg-blue-700]="strRuta.startsWith('/admin/album/')" href="/admin/album/plist">Album</a>
-      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.active]="strRuta.startsWith('/admin/artista/')" href="/admin/artista/plist">Artista</a>
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta == '/home' || strRuta == '/' || strRuta == ''" href="/home">Inicio</a>
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/album/')" href="/admin/album/plist">Album</a>
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/artista/')" href="/admin/artista/plist">Artista</a>
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/resenya/')" href="/admin/resenya/plist">Reseña</a>
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/usuario/')" href="/admin/usuario/plist">Usuario</a>
+
+
+    </div>
+    <div>
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta == '/login'" href="/login">Login</a>
     </div>
   </div>
 </nav>
