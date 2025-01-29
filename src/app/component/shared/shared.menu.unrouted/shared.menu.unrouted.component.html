@@ -16,7 +16,12 @@
 
     </div>
     <div>
-      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta == '/login'" href="/login">Login</a>
+      @if (!activeSession) {
+      <a class="text-gray-600  px-3 py-2 rounded-lg border-1 border-solid border-[#f84525] hover:bg-[#f84525] hover:text-white" [class.activeTW]="strRuta == '/login'" href="/login">Login</a>
+    } @else {
+      <a class="text-gray-600  px-3 py-2 rounded-lg border-1 border-solid border-[#f84525] hover:bg-[#f84525] hover:text-white" [class.activeTW]="strRuta == '/logout'" href="/logout">Logout</a>
+
+    }
     </div>
   </div>
 </nav>

@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 //Menu
 import { SharedHomeRoutedComponent } from './component/shared/shared.home.routed/shared.home.routed.component';
 import { SharedLoginRoutedComponent } from './component/shared/shared.login.routed/shared.login.routed.component';
+import { SharedLogoutRoutedComponent } from './component/shared/shared.logout.routed/shared.logout.routed.component';
 
 //Album
 import { AlbumAdminPlistRoutedComponent } from './component/album/album.admin.plist.routed/album.admin.plist.routed.component';
@@ -26,6 +27,8 @@ export const routes: Routes = [
     { path: '', component: SharedHomeRoutedComponent },
     { path: 'home', component: SharedHomeRoutedComponent },
     { path: 'login', component: SharedLoginRoutedComponent },
+    { path: 'logout', component: SharedLogoutRoutedComponent },
+
     //Album
     { path: 'admin/album/plist', component: AlbumAdminPlistRoutedComponent },
     { path: 'admin/album/create', component: AlbumAdminCreateRoutedComponent },

@@ -86,17 +86,14 @@ export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit() {
-    if (this.modal) {
-      this.modal.show();
-    } else {
-      console.error('Modal instance is not initialized!');
-    }
+   
 
     this.oLoginService.login(this.oAuthForm?.value).subscribe({
       next: (oAuth: string) => {
         console.log(oAuth);
         this.oSessionService.login(oAuth);
         this.message = 'Login exitoso';
+        this.modal?.show();
       },
       error: (err) => {
         console.log(err);
