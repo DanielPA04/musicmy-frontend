@@ -3,8 +3,7 @@ import { httpOptions, serverURL } from '../environment/environment';
 import { HttpClient } from '@angular/common/http';
 import { IAlbum } from '../model/album.interface';
 import { map, Observable } from 'rxjs';
-import { IPage } from '../model/model.interface';
-import { IAlbumDTO } from '../model/albumDTO.interface';
+import { IPage } from '../environment/model.interface';
 
 @Injectable({
   providedIn: 'root',

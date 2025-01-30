@@ -3,7 +3,7 @@ import { httpOptions, serverURL } from '../environment/environment';
 import { HttpClient } from '@angular/common/http';
 import { IArtista } from '../model/artista.interface';
 import { Observable } from 'rxjs';
-import { IPage } from '../model/model.interface';
+import { IPage } from '../environment/model.interface';
 
 @Injectable({
   providedIn: 'root',

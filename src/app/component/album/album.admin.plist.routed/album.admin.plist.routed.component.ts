@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlbumService } from '../../../service/album.service';
 import { IAlbum } from '../../../model/album.interface';
 import { CommonModule } from '@angular/common';
-import { IPage } from '../../../model/model.interface';
+import { IPage } from '../../../environment/model.interface';
 import { FormsModule } from '@angular/forms';
 import { BotoneraService } from '../../../service/botonera.service';
 import { debounceTime, Subject } from 'rxjs';

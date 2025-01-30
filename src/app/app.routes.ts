@@ -17,6 +17,7 @@ import { ArtistaAdminCreateRoutedComponent } from './component/artista/artista.a
 import { ArtistaAdminViewRoutedComponent } from './component/artista/artista.admin.view.routed/artista.admin.view.routed.component';
 import { ArtistaAdminDeleteRoutedComponent } from './component/artista/artista.admin.delete.routed/artista.admin.delete.routed.component';
 import { ArtistaAdminEditRoutedComponent } from './component/artista/artista.admin.edit.routed/artista.admin.edit.routed.component';
+import { AdminGuard } from './guard/admin.guard';
 
 
 
@@ -38,7 +39,7 @@ export const routes: Routes = [
 
     //Artista
     { path: 'admin/artista/plist', component: ArtistaAdminPlistRoutedComponent },
-    { path: 'admin/artista/create', component: ArtistaAdminCreateRoutedComponent },
+    { path: 'admin/artista/create', component: ArtistaAdminCreateRoutedComponent, canActivate: [AdminGuard] },
     { path: 'admin/artista/view/:id', component: ArtistaAdminViewRoutedComponent },
     { path: 'admin/artista/edit/:id', component: ArtistaAdminEditRoutedComponent },
 
