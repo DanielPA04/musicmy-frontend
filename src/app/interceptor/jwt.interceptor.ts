@@ -12,7 +12,6 @@ export class JWTInterceptor implements HttpInterceptor {
 
         if (this.oSessionService.isSessionActive()) {
             const token = this.oSessionService.getToken();
-            // Clone the request and add the authorization header if the token exists
             if (token) {
                 req = req.clone({
                     setHeaders: {
@@ -21,7 +20,6 @@ export class JWTInterceptor implements HttpInterceptor {
                 });
             }
         }
-        // Pass the request to the next handler
         return next.handle(req);
     }
 }

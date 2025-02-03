@@ -1,8 +1,13 @@
 import { Routes } from '@angular/router';
+
+//Guards
+import { AdminGuard } from './guard/admin.guard';
+
 //Menu
 import { SharedHomeRoutedComponent } from './component/shared/shared.home.routed/shared.home.routed.component';
 import { SharedLoginRoutedComponent } from './component/shared/shared.login.routed/shared.login.routed.component';
 import { SharedLogoutRoutedComponent } from './component/shared/shared.logout.routed/shared.logout.routed.component';
+import { SharedPerfilRoutedComponent } from './component/shared/shared.perfil.routed/shared.perfil.routed.component';
 
 //Album
 import { AlbumAdminPlistRoutedComponent } from './component/album/album.admin.plist.routed/album.admin.plist.routed.component';
@@ -17,7 +22,6 @@ import { ArtistaAdminCreateRoutedComponent } from './component/artista/artista.a
 import { ArtistaAdminViewRoutedComponent } from './component/artista/artista.admin.view.routed/artista.admin.view.routed.component';
 import { ArtistaAdminDeleteRoutedComponent } from './component/artista/artista.admin.delete.routed/artista.admin.delete.routed.component';
 import { ArtistaAdminEditRoutedComponent } from './component/artista/artista.admin.edit.routed/artista.admin.edit.routed.component';
-import { AdminGuard } from './guard/admin.guard';
 
 
 
@@ -29,6 +33,7 @@ export const routes: Routes = [
     { path: 'home', component: SharedHomeRoutedComponent },
     { path: 'login', component: SharedLoginRoutedComponent },
     { path: 'logout', component: SharedLogoutRoutedComponent },
+    { path: 'perfil/:email', component: SharedPerfilRoutedComponent },
 
     //Album
     { path: 'admin/album/plist', component: AlbumAdminPlistRoutedComponent },
