@@ -23,6 +23,13 @@ import { ArtistaAdminViewRoutedComponent } from './component/artista/artista.adm
 import { ArtistaAdminDeleteRoutedComponent } from './component/artista/artista.admin.delete.routed/artista.admin.delete.routed.component';
 import { ArtistaAdminEditRoutedComponent } from './component/artista/artista.admin.edit.routed/artista.admin.edit.routed.component';
 
+//Resenya
+import { ResenyaAdminPlistRoutedComponent } from './component/resenya/resenya.admin.plist.routed/resenya.admin.plist.routed.component';
+import { ResenyaAdminCreateRoutedComponent } from './component/resenya/resenya.admin.create.routed/resenya.admin.create.routed.component';
+import { ResenyaAdminEditRoutedComponent } from './component/resenya/resenya.admin.edit.routed/resenya.admin.edit.routed.component';
+import { ResenyaAdminDeleteRoutedComponent } from './component/resenya/resenya.admin.delete.routed/resenya.admin.delete.routed.component';
+import { ResenyaAdminViewRoutedComponent } from './component/resenya/resenya.admin.view.routed/resenya.admin.view.routed.component';
+
 
 
 
@@ -47,8 +54,14 @@ export const routes: Routes = [
     { path: 'admin/artista/create', component: ArtistaAdminCreateRoutedComponent, canActivate: [AdminGuard] },
     { path: 'admin/artista/view/:id', component: ArtistaAdminViewRoutedComponent },
     { path: 'admin/artista/edit/:id', component: ArtistaAdminEditRoutedComponent },
-
     { path: 'admin/artista/delete/:id', component: ArtistaAdminDeleteRoutedComponent },
+
+     //Resenya
+     { path: 'admin/resenya/plist', component: ResenyaAdminPlistRoutedComponent },
+     { path: 'admin/resenya/create', component: ResenyaAdminCreateRoutedComponent},
+     { path: 'admin/resenya/view/:id', component: ResenyaAdminViewRoutedComponent },
+     { path: 'admin/resenya/edit/:id', component: ResenyaAdminEditRoutedComponent },
+     { path: 'admin/resenya/delete/:id', component: ResenyaAdminDeleteRoutedComponent },
 
 
 ];

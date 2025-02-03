@@ -6,13 +6,13 @@ import { IArtista } from '../../../model/artista.interface';
 declare let bootstrap: any;
 
 @Component({
-  selector: 'app-artista.admin.delete.routed',
-  templateUrl: './artista.admin.delete.routed.component.html',
+  selector: 'app-resenya.admin.delete.routed',
+  templateUrl: './resenya.admin.delete.routed.component.html',
   standalone: true,
   imports: [RouterModule],
-  styleUrls: ['./artista.admin.delete.routed.component.css'],
+  styleUrls: ['./resenya.admin.delete.routed.component.css'],
 })
-export class ArtistaAdminDeleteRoutedComponent implements OnInit {
+export class ResenyaAdminDeleteRoutedComponent implements OnInit {
   //
   id: number = 0;
   oArtista: IArtista = {} as IArtista;

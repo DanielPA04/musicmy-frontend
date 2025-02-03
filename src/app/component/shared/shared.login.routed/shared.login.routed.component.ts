@@ -28,6 +28,8 @@ export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
   modal: ModalInterface | null = null;
   oAuthForm: FormGroup | undefined = undefined;
   message: string = '';
+  passwordVisible: boolean = false;
+
 
   modalOptions: ModalOptions = {
     placement: 'bottom-right',
@@ -100,5 +102,9 @@ export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
         this.message = 'Error al iniciar sesión';
       },
     });
+  }
+
+  trogglePassword(){
+    this.passwordVisible = !this.passwordVisible;
   }
 }

@@ -1,0 +1,145 @@
+<div class="container mt-5 d-flex align-items-center justify-content-center">
+  <div class="row">
+    <div class="col text-center">
+      <h2 class="my-2">
+        <i class="bi bi-plus-square"></i>
+        Creación de Artista
+        <i class="bi bi-journal-text"></i>
+      </h2>
+      <form [formGroup]="oArtistaForm!" (ngSubmit)="onSubmit()" novalidate>
+        <div class="row mt-4">
+          <mat-form-field>
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="nombre" placeholder="Nombre" />
+            <mat-hint align="end">De 5 a 255 caracteres</mat-hint>
+            @if (oArtistaForm?.get('nombre')?.hasError('required')) {
+            <mat-error>Debes introducir un nombre</mat-error>
+            } @if (oArtistaForm?.get('nombre')?.hasError('minlength')) {
+            <mat-error>Debes introducir una nombre más largo</mat-error>
+            } @if (oArtistaForm?.get('nombre')?.hasError('maxlength')) {
+            <mat-error>Debes introducir una nombre más corto</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <br />
+       
+
+        <div class="row mt-4">
+          <mat-form-field>
+            <mat-label>Nombre real</mat-label>
+            <input matInput formControlName="nombreReal" placeholder="Nombre real" />
+            <mat-hint align="end">De 0 a 255 caracteres</mat-hint>
+            @if (oArtistaForm?.get('nombreReal')?.hasError('required')) {
+            <mat-error>Debes introducir un nombreReal</mat-error>
+            } @if (oArtistaForm?.get('nombreReal')?.hasError('minlength')) {
+            <mat-error>Debes introducir un nombreReal más largo</mat-error>
+            } @if (oArtistaForm?.get('nombreReal')?.hasError('maxlength')) {
+            <mat-error>Debes introducir un nombreReal más corto</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="row mt-4">
+          <mat-form-field>
+            <mat-label>Descripcion</mat-label>
+            <textarea
+              matInput
+              formControlName="descripcion"
+              placeholder="Descripcion"
+            ></textarea>
+            <mat-hint align="end">De 0 a 255 caracteres</mat-hint>
+            @if (oArtistaForm?.get('descripcion')?.hasError('minlength')) {
+            <mat-error>Debes introducir una descripcion más larga</mat-error>
+            } @if (oArtistaForm?.get('descripcion')?.hasError('maxlength')) {
+            <mat-error>Debes introducir una descripcion más corta</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="row mt-4">
+          <mat-form-field>
+            <mat-label>Spotify</mat-label>
+            <input matInput formControlName="spotify" placeholder="Spotify" />
+            <mat-hint align="end">De 0 a 255 caracteres</mat-hint>
+            @if (oArtistaForm?.get('spotify')?.hasError('required')) {
+            <mat-error>Debes introducir una spotify</mat-error>
+            } @if (oArtistaForm?.get('spotify')?.hasError('minlength')) {
+            <mat-error>Debes introducir una spotify más larga</mat-error>
+            } @if (oArtistaForm?.get('spotify')?.hasError('maxlength')) {
+            <mat-error>Debes introducir una spotify más corta</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+   
+        <div class="row mt-4">
+          
+          Img
+            <input type="file" (change)="onFileSelected($event)" />
+         
+        </div>
+
+
+        <div class="mt-4">
+          <button
+            class="btn btn-warning mt-4 mx-1"
+            [routerLink]="['/admin', 'artista', 'plist']"
+          >
+            <i class="bi bi-list"></i>
+            Ir a listado de artistas
+          </button>
+
+          <button class="btn btn-secondary mt-4 mx-1" (click)="onReset()">
+            <i class="bi bi-x-lg"></i>
+            Reset
+          </button>
+
+          <button
+            class="btn btn-primary mt-4 mx-1"
+            type="submit"
+            [disabled]="!oArtistaForm?.valid"
+          >
+            <i class="bi bi-save"></i>
+            Guardar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  [id]="'mimodal'"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Contante</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="hideModal()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ strMessage }}</p>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-dismiss="modal"
+          (click)="hideModal()"
+        >
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

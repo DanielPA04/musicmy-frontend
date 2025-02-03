@@ -14,16 +14,16 @@ declare let bootstrap: any;
 
 @Component({
   standalone: true,
-  selector: 'app-artista.admin.create.routed',
-  templateUrl: './artista.admin.create.routed.component.html',
+  selector: 'app-resenya.admin.create.routed',
+  templateUrl: './resenya.admin.create.routed.component.html',
   imports: [
     MatInputModule,
     ReactiveFormsModule,
     RouterModule,
   ],
-  styleUrls: ['./artista.admin.create.routed.component.css'],
+  styleUrls: ['./resenya.admin.create.routed.component.css'],
 })
-export class ArtistaAdminCreateRoutedComponent implements OnInit {
+export class ResenyaAdminCreateRoutedComponent implements OnInit {
   id: number = 0;
   oArtistaForm: FormGroup | undefined = undefined;
   oArtista: IArtista | null = null;

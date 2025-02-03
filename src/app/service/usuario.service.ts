@@ -56,7 +56,7 @@ get(id: number): Observable<IUsuario> {
 create(oUsuario: IUsuario): Observable<IUsuario> {
   let URL: string = '';
   URL += this.serverURL;
-  return this.oHttp.post<IUsuario>('http://localhost:8086/usuario/new', oUsuario);
+  return this.oHttp.post<IUsuario>(URL, oUsuario);
 }
 
 update(oUsuario: IUsuario): Observable<IUsuario> {

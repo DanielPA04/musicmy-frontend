@@ -3,14 +3,15 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AlbumService } from '../../../service/album.service';
 import { IAlbum } from '../../../model/album.interface';
 import { HttpErrorResponse } from '@angular/common/http';
+import { SharedTableUnroutedComponent } from '../../shared/shared.table.unrouted/shared.table.unrouted.component';
 
 declare let bootstrap: any;
 
 @Component({
   selector: 'app-album.admin.delete.routed',
   templateUrl: './album.admin.delete.routed.component.html',
-  standalone: true,
-  imports: [RouterModule],
+  standalone: true,  
+  imports: [RouterModule,SharedTableUnroutedComponent],
   styleUrls: ['./album.admin.delete.routed.component.css'],
 })
 export class AlbumAdminDeleteRoutedComponent implements OnInit {
@@ -32,11 +33,16 @@ export class AlbumAdminDeleteRoutedComponent implements OnInit {
     this.id = this.oActivatedRoute.snapshot.params['id'];
     this.oAlbumService.get(this.id).subscribe({
       next: (data: IAlbum) => {
+        console.log(data);
         this.oAlbum = data;
+        this.oAlbumService.getImg(this.oAlbum.id).subscribe({
+          next: (data: Blob) => {
+            this.oAlbum.img = data;
+          },
+        });
       },
     });
   }
-
 
   showModal(mensaje: string) {
     this.strMessage = mensaje;

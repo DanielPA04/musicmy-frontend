@@ -4,12 +4,12 @@ import { ArtistaService } from '../../../service/artista.service';
 import { IArtista } from '../../../model/artista.interface';
 
 @Component({
-  selector: 'app-artista.admin.view.routed',
-  templateUrl: './artista.admin.view.routed.component.html',
+  selector: 'app-resenya.admin.view.routed',
+  templateUrl: './resenya.admin.view.routed.component.html',
   standalone: true,
-  styleUrls: ['./artista.admin.view.routed.component.css'],
+  styleUrls: ['./resenya.admin.view.routed.component.css'],
 })
-export class ArtistaAdminViewRoutedComponent implements OnInit {
+export class ResenyaAdminViewRoutedComponent implements OnInit {
   //
   id: number = 0;
   oArtista: IArtista = {} as IArtista;

@@ -1,0 +1,52 @@
+<table class="table table-striped table-bordered my-5 text-center">
+  <tbody>
+    <tr class="text-center">
+      <th scope="row" class="bg-danger text-white text-end pe-5">Id</th>
+      <td class="text-start ps-5">{{ oAlbum.id }}</td>
+    </tr>
+    <tr class="text-center">
+      <th scope="row" class="bg-primary text-white text-end pe-5">
+        Nombre
+      </th>
+      <td class="text-start ps-5">{{ oAlbum.nombre }}</td>
+    </tr>
+    <tr class="text-center">
+      <th scope="row" class="bg-primary text-white text-end pe-5">Fecha</th>
+      <td class="text-start ps-5">{{ oAlbum.fecha }}</td>
+    </tr>
+    <tr class="text-center">
+      <th scope="row" class="bg-primary text-white text-end pe-5">
+        Genero
+      </th>
+      <td class="text-start ps-5">{{ oAlbum.genero }}</td>
+    </tr>
+    <tr class="text-center">
+      <th scope="row" class="bg-primary text-white text-end pe-5">
+        Descripcion
+      </th>
+      <td class="text-start ps-5">{{ oAlbum.descripcion }}</td>
+    </tr>
+    <tr class="text-center">
+      <th scope="row" class="bg-primary text-white text-end pe-5">img</th>
+      <td class="text-start ps-5">
+        @if (!oAlbum.img) { No img } @else {
+        <img
+          [src]="oAlbum.img | blobToUrl"
+          alt="Imagen del álbum"
+          width="100"
+          height="100"
+        />
+        }
+      </td>
+    </tr>
+
+    <tr class="text-center">
+      <th scope="row" class="bg-primary text-white text-end pe-5">
+        GropoAlbumArtista
+      </th>
+      <td class="text-start ps-5">
+        {{ oAlbum.grupoalbumartistas }}
+      </td>
+    </tr>
+  </tbody>
+</table>

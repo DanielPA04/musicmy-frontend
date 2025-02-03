@@ -2,14 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AlbumService } from '../../../service/album.service';
 import { IAlbum } from '../../../model/album.interface';
-import { HttpErrorResponse } from '@angular/common/http';
 import { BlobToUrlPipe } from '../../../pipe/blob.pipe';
+import { SharedTableUnroutedComponent } from '../../shared/shared.table.unrouted/shared.table.unrouted.component';
+import { SharedHomeRoutedComponent } from "../../shared/shared.home.routed/shared.home.routed.component";
 
 @Component({
   selector: 'app-album.admin.view.routed',
   templateUrl: './album.admin.view.routed.component.html',
   standalone: true,
-  imports: [BlobToUrlPipe],
+  imports: [ SharedTableUnroutedComponent],
   styleUrls: ['./album.admin.view.routed.component.css'],
 })
 export class AlbumAdminViewRoutedComponent implements OnInit {
