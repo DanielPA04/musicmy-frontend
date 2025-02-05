@@ -10,45 +10,43 @@
       <tbody>
         <tr class="text-center">
           <th scope="row" class="bg-danger text-white text-end pe-5">Id</th>
-          <td class="text-start ps-5">{{ oArtista.id }}</td>
+          <td class="text-start ps-5">{{ oResenya.id }}</td>
         </tr>
         <tr class="text-center">
           <th scope="row" class="bg-primary text-white text-end pe-5">
-            Nombre
+            Nota
           </th>
-          <td class="text-start ps-5">{{ oArtista.nombre }}</td>
-        </tr>
-        <tr class="text-center">
-          <th scope="row" class="bg-primary text-white text-end pe-5">
-            Nombre real
-          </th>
-          <td class="text-start ps-5">{{ oArtista.nombrereal }}</td>
+          <td class="text-start ps-5">{{ oResenya.nota }}</td>
         </tr>
         <tr class="text-center">
           <th scope="row" class="bg-primary text-white text-end pe-5">
             Descripcion
           </th>
-          <td class="text-start ps-5">{{ oArtista.descripcion }}</td>
+          <td class="text-start ps-5">{{ oResenya.descripcion }}</td>
+        </tr>
+        <tr class="text-center">
+          <th scope="row" class="bg-primary text-white text-end pe-5">Fecha</th>
+          <td class="text-start ps-5">{{ oResenya.fecha }}</td>
         </tr>
         <tr class="text-center">
           <th scope="row" class="bg-primary text-white text-end pe-5">
             Spotify
           </th>
-          <td class="text-start ps-5">{{ oArtista.spotify }}</td>
+          <td class="text-start ps-5">{{ oResenya.website }}</td>
         </tr>
         <tr class="text-center">
-          <th scope="row" class="bg-primary text-white text-end pe-5">img</th>
+          <th scope="row" class="bg-primary text-white text-end pe-5">Album</th>
           <td class="text-start ps-5">
-            {{ oArtista.img }}
+            {{ oResenya.album.nombre }} ({{ oResenya.album.id }})
           </td>
         </tr>
 
         <tr class="text-center">
           <th scope="row" class="bg-primary text-white text-end pe-5">
-            GropoAlbumArtista
+            Usuario
           </th>
           <td class="text-start ps-5">
-            {{ oArtista.grupoalbumartistas }}
+            {{ oResenya.usuario.nombre }}  ({{ oResenya.usuario.id }})
           </td>
         </tr>
       </tbody>
@@ -56,20 +54,20 @@
   </div>
 
   <div class="d-flex justify-content-center mt-4">
-    <p class="fs-3">¿Seguro que desea borrar el Album?</p>
+    <p class="fs-3">¿Seguro que desea borrar el Resenya?</p>
   </div>
 
   <div class="d-flex justify-content-center mt-4">
     <button
       class="btn btn-warning mt-4 mx-1"
-      [routerLink]="['/admin', 'album', 'plist']"
+      [routerLink]="['/admin', 'resenya', 'plist']"
     >
       <i class="bi bi-list"></i>
-      Ir a listado de Albumes
+      Ir a listado de Resenyas
     </button>
     <button class="btn btn-danger mt-4 mx-1" (click)="delete()">
       <i class="bi bi-trash"></i>
-      Borrar Album
+      Borrar Resenya
     </button>
   </div>
 </div>

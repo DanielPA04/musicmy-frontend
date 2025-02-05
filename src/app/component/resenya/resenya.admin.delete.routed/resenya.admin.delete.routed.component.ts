@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { ArtistaService } from '../../../service/artista.service';
-import { IArtista } from '../../../model/artista.interface';
+import { ResenyaService } from '../../../service/resenya.service';
+import { IResenya } from '../../../model/resenya.interface';
 
 declare let bootstrap: any;
 
@@ -15,7 +15,7 @@ declare let bootstrap: any;
 export class ResenyaAdminDeleteRoutedComponent implements OnInit {
   //
   id: number = 0;
-  oArtista: IArtista = {} as IArtista;
+  oResenya: IResenya = {} as IResenya;
 
   strMessage: string = '';
 
@@ -23,15 +23,15 @@ export class ResenyaAdminDeleteRoutedComponent implements OnInit {
 
   constructor(
     private oActivatedRoute: ActivatedRoute,
-    private oArtistaService: ArtistaService,
+    private oResenyaService: ResenyaService,
     private oRouter: Router
   ) {}
 
   ngOnInit() {
     this.id = this.oActivatedRoute.snapshot.params['id'];
-    this.oArtistaService.get(this.id).subscribe({
-      next: (data: IArtista) => {
-        this.oArtista = data;
+    this.oResenyaService.get(this.id).subscribe({
+      next: (data: IResenya) => {
+        this.oResenya = data;
       },
     });
   }
@@ -46,24 +46,24 @@ export class ResenyaAdminDeleteRoutedComponent implements OnInit {
   }
 
   delete(): void {
-    this.oArtistaService.delete(this.oArtista!.id).subscribe({
+    this.oResenyaService.delete(this.oResenya!.id).subscribe({
       next: (data) => {
         this.showModal(
-          'El Artista con id ' + this.oArtista!.id + ' ha sido borrado'
+          'La Resenya con id ' + this.oResenya!.id + ' ha sido borrado'
         );
       },
       error: (error) => {
-        this.showModal('Error al borrar el artista');
+        this.showModal('Error al borrar la resenya');
       },
     });
   }
 
   cancel(): void {
-    this.oRouter.navigate(['/admin/artista/plist']);
+    this.oRouter.navigate(['/admin/resenya/plist']);
   }
 
   hideModal = () => {
     this.myModal.hide();
-    this.oRouter.navigate(['/admin/artista/plist']);
+    this.oRouter.navigate(['/admin/resenya/plist']);
   };
 }

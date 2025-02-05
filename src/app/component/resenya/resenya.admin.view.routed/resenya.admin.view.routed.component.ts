@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ArtistaService } from '../../../service/artista.service';
-import { IArtista } from '../../../model/artista.interface';
+import { ResenyaService } from '../../../service/resenya.service';
+import { IResenya } from '../../../model/resenya.interface';
 
 @Component({
   selector: 'app-resenya.admin.view.routed',
@@ -12,18 +12,18 @@ import { IArtista } from '../../../model/artista.interface';
 export class ResenyaAdminViewRoutedComponent implements OnInit {
   //
   id: number = 0;
-  oArtista: IArtista = {} as IArtista;
+  oResenya: IResenya = {} as IResenya;
   //
   constructor(
     private oActivatedRoute: ActivatedRoute,
-    private oArtistaService: ArtistaService
+    private oResenyaService: ResenyaService
   ) {}
 
   ngOnInit() {
     this.id = this.oActivatedRoute.snapshot.params['id'];
-    this.oArtistaService.get(this.id).subscribe({
-      next: (data: IArtista) => {
-        this.oArtista = data;
+    this.oResenyaService.get(this.id).subscribe({
+      next: (data: IResenya) => {
+        this.oResenya = data;
       },
     });
   }
