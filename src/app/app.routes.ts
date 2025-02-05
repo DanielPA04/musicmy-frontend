@@ -29,6 +29,9 @@ import { ResenyaAdminCreateRoutedComponent } from './component/resenya/resenya.a
 import { ResenyaAdminEditRoutedComponent } from './component/resenya/resenya.admin.edit.routed/resenya.admin.edit.routed.component';
 import { ResenyaAdminDeleteRoutedComponent } from './component/resenya/resenya.admin.delete.routed/resenya.admin.delete.routed.component';
 import { ResenyaAdminViewRoutedComponent } from './component/resenya/resenya.admin.view.routed/resenya.admin.view.routed.component';
+import { NoUserGuard } from './guard/nouser.guard';
+import { UserGuard } from './guard/user.guard';
+import { SharedRegisterRoutedComponent } from './component/shared/shared.register.routed/shared.register.routed.component';
 
 
 
@@ -38,30 +41,31 @@ export const routes: Routes = [
     // Menu
     { path: '', component: SharedHomeRoutedComponent },
     { path: 'home', component: SharedHomeRoutedComponent },
-    { path: 'login', component: SharedLoginRoutedComponent },
-    { path: 'logout', component: SharedLogoutRoutedComponent },
-    { path: 'perfil/:email', component: SharedPerfilRoutedComponent },
+    // { path: 'register', component: SharedRegisterRoutedComponent, canActivate: [NoUserGuard] },
+    { path: 'login', component: SharedLoginRoutedComponent , canActivate: [NoUserGuard] },
+    { path: 'logout', component: SharedLogoutRoutedComponent, canActivate: [UserGuard] },
+    { path: 'perfil/:email', component: SharedPerfilRoutedComponent, canActivate: [UserGuard] },
 
     //Album
-    { path: 'admin/album/plist', component: AlbumAdminPlistRoutedComponent },
-    { path: 'admin/album/create', component: AlbumAdminCreateRoutedComponent },
-    { path: 'admin/album/view/:id', component: AlbumAdminViewRoutedComponent },
-    { path: 'admin/album/edit/:id', component: AlbumAdminEditRoutedComponent },
-    { path: 'admin/album/delete/:id', component: AlbumAdminDeleteRoutedComponent },
+    { path: 'admin/album/plist', component: AlbumAdminPlistRoutedComponent, canActivate: [AdminGuard] },
+    { path: 'admin/album/create', component: AlbumAdminCreateRoutedComponent, canActivate: [AdminGuard] },
+    { path: 'admin/album/view/:id', component: AlbumAdminViewRoutedComponent, canActivate: [AdminGuard] },
+    { path: 'admin/album/edit/:id', component: AlbumAdminEditRoutedComponent, canActivate: [AdminGuard] },
+    { path: 'admin/album/delete/:id', component: AlbumAdminDeleteRoutedComponent, canActivate: [AdminGuard] },
 
     //Artista
-    { path: 'admin/artista/plist', component: ArtistaAdminPlistRoutedComponent },
+    { path: 'admin/artista/plist', component: ArtistaAdminPlistRoutedComponent, canActivate: [AdminGuard] },
     { path: 'admin/artista/create', component: ArtistaAdminCreateRoutedComponent, canActivate: [AdminGuard] },
-    { path: 'admin/artista/view/:id', component: ArtistaAdminViewRoutedComponent },
-    { path: 'admin/artista/edit/:id', component: ArtistaAdminEditRoutedComponent },
-    { path: 'admin/artista/delete/:id', component: ArtistaAdminDeleteRoutedComponent },
+    { path: 'admin/artista/view/:id', component: ArtistaAdminViewRoutedComponent, canActivate: [AdminGuard] },
+    { path: 'admin/artista/edit/:id', component: ArtistaAdminEditRoutedComponent, canActivate: [AdminGuard] },
+    { path: 'admin/artista/delete/:id', component: ArtistaAdminDeleteRoutedComponent, canActivate: [AdminGuard] },
 
-     //Resenya
-     { path: 'admin/resenya/plist', component: ResenyaAdminPlistRoutedComponent },
-     { path: 'admin/resenya/create', component: ResenyaAdminCreateRoutedComponent},
-     { path: 'admin/resenya/view/:id', component: ResenyaAdminViewRoutedComponent },
-     { path: 'admin/resenya/edit/:id', component: ResenyaAdminEditRoutedComponent },
-     { path: 'admin/resenya/delete/:id', component: ResenyaAdminDeleteRoutedComponent },
+    //Resenya
+    { path: 'admin/resenya/plist', component: ResenyaAdminPlistRoutedComponent },
+    { path: 'admin/resenya/create', component: ResenyaAdminCreateRoutedComponent },
+    { path: 'admin/resenya/view/:id', component: ResenyaAdminViewRoutedComponent },
+    { path: 'admin/resenya/edit/:id', component: ResenyaAdminEditRoutedComponent },
+    { path: 'admin/resenya/delete/:id', component: ResenyaAdminDeleteRoutedComponent },
 
 
 ];

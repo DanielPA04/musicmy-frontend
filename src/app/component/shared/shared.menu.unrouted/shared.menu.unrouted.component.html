@@ -9,7 +9,6 @@
     </button>
     @if (permisos === "Administrador") {
     <div class="hidden lg:flex  space-x-4">
-      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta == '/home' || strRuta == '/' || strRuta == ''" href="/home">Inicio</a>
       <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/album/')" href="/admin/album/plist">Album</a>
       <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/artista/')" href="/admin/artista/plist">Artista</a>
       <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/resenya/')" href="/admin/resenya/plist">Reseña</a>
@@ -17,10 +16,8 @@
 
 
     </div>
-    } @else if(permisos === 'Usuario') {
-      <div>eres usuario</div>
     } @else {
-      no log
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta == '/home' || strRuta == '/' || strRuta == ''" href="/home">Inicio</a>
     }
     <div class="hidden lg:flex space-x-4">
       @if (!activeSession) {

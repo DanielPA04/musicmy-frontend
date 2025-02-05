@@ -12,18 +12,13 @@ import { Modal } from 'flowbite';
 import type { ModalOptions, ModalInterface } from 'flowbite';
 import type { InstanceOptions } from 'flowbite';
 
-
 @Component({
-  selector: 'app-shared.login.routed',
-  imports: [
-    ReactiveFormsModule,
-    RouterModule,
-  ],
+  selector: 'app-shared.register.routed',
+  templateUrl: './shared.register.routed.component.html',
   standalone: true,
-  templateUrl: './shared.login.routed.component.html',
-  styleUrls: ['./shared.login.routed.component.css']
+  styleUrls: ['./shared.register.routed.component.css']
 })
-export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
+export class SharedRegisterRoutedComponent implements OnInit, AfterViewInit {
 
   loginmodal: HTMLElement | null = null;
   modal: ModalInterface | null = null;
@@ -31,6 +26,15 @@ export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
   message: string = '';
   passwordVisible: boolean = false;
 
+  constructor(
+    private oLoginService: LoginService,
+    private oSessionService: SessionService,
+    private oRouter: Router
+  ) {}
+
+  ngOnInit() {
+    this.createForm();
+  }
 
   modalOptions: ModalOptions = {
     placement: 'bottom-right',
@@ -53,28 +57,16 @@ export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
     override: true
   };
 
-  constructor(
-    private oLoginService: LoginService,
-    private oSessionService: SessionService,
-    private oRouter: Router
-  ) {}
+ 
 
-  ngOnInit() {
-    this.createForm();
-  }
-
-  ngAfterViewInit() {
-    // Asegúrate de que el DOM ya está listo
-    this.loginmodal = document.querySelector('#login-modal');
-    if (this.loginmodal) {
-      this.modal = new Modal(this.loginmodal, this.modalOptions, this.instanceOptions);
-    } else {
-      console.error('Modal element not found!');
-    }
+  ngAfterViewInit(): void {
   }
 
   createForm() {
     this.oAuthForm = new FormGroup({
+      nombre: new FormControl('', [
+        Validators.required,
+      ]),
       email: new FormControl('', [
         Validators.required,
         Validators.email,
@@ -89,8 +81,7 @@ export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit() {
-   
-
+  
     this.oLoginService.login(this.oAuthForm?.value).subscribe({
       next: (oAuth: string) => {
         console.log(oAuth);
@@ -108,4 +99,5 @@ export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
   trogglePassword(){
     this.passwordVisible = !this.passwordVisible;
   }
+
 }

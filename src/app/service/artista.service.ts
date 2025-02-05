@@ -54,6 +54,13 @@ export class ArtistaService {
     return this.oHttp.get<IArtista>(URL);
   }
 
+  getByAlbum(id: number): Observable<IArtista[]> {
+    let URL: string = '';
+    URL += this.serverURL;
+    URL += '/byalbum/' + id;
+    return this.oHttp.get<IArtista[]>(URL);
+  }
+
   create(oArtista: IArtista): Observable<IArtista> {
     let URL: string = '';
     URL += this.serverURL;
