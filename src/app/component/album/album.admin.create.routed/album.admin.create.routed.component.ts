@@ -1,21 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { CALENDAR_ES } from '../../../environment/environment';
 import { AlbumService } from '../../../service/album.service';
 import { IAlbum } from '../../../model/album.interface';
 import { CalendarModule } from 'primeng/calendar';
+import { BlobToUrlPipe } from '../../../pipe/blob.pipe';
+import { MatDialog } from '@angular/material/dialog';
+import { IArtista } from '../../../model/artista.interface';
+import { ArtistaAdminSelectorRoutedComponent } from '../../artista/artista.admin.selector.routed/artista.admin.selector.routed.component';
 //import { PrimeNGConfig } from 'primeng/api';
 
 declare let bootstrap: any;
+
 
 @Component({
   standalone: true,
@@ -26,6 +28,7 @@ declare let bootstrap: any;
     ReactiveFormsModule,
     RouterModule,
     CalendarModule,
+    BlobToUrlPipe,
   ],
   styleUrls: ['./album.admin.create.routed.component.css'],
 })
@@ -33,9 +36,12 @@ export class AlbumAdminCreateRoutedComponent implements OnInit {
   id: number = 0;
   oAlbumForm: FormGroup | undefined = undefined;
   oAlbum: IAlbum | null = null;
+  oArtistas: IArtista[] = [];
   strMessage: string = '';
   date: string = '';
   myModal: any;
+  readonly dialog = inject(MatDialog);
+  isFileSelected: boolean = false;
 
 
 
@@ -74,6 +80,7 @@ export class AlbumAdminCreateRoutedComponent implements OnInit {
         Validators.maxLength(255),
       ]),
       img: new FormControl(null),
+      artistas: new FormControl([]),
     });
   }
 
@@ -84,6 +91,7 @@ export class AlbumAdminCreateRoutedComponent implements OnInit {
     this.oAlbumForm?.controls['descripcion'].setValue('');
     this.oAlbumForm?.controls['discografica'].setValue('');
     this.oAlbumForm?.controls['img'].setValue(null);
+    this.oAlbumForm?.controls['artistas'].setValue(null);
   }
 
  
@@ -98,6 +106,7 @@ export class AlbumAdminCreateRoutedComponent implements OnInit {
     if (file) {
       const blob = new Blob([file], { type: file.type });
       this.oAlbumForm?.controls['img'].setValue(blob);
+      this.isFileSelected = true;
     }
     console.log(this.oAlbumForm?.value);
 }
@@ -137,4 +146,28 @@ export class AlbumAdminCreateRoutedComponent implements OnInit {
       });
     }
   }
+
+  showTipocuentaSelectorModal() {
+    const dialogRef = this.dialog.open(ArtistaAdminSelectorRoutedComponent, {
+      height: '800px',
+      maxHeight: '1200px',
+      width: '80%',
+      maxWidth: '90%',
+      data: { origen: '', idBalance: '' },
+
+
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if (result !== undefined) {
+        console.log(result);
+        this.oAlbumForm?.controls['artistas'].setValue(result);
+        console.log(this.oAlbumForm?.value);
+      }
+    });
+    return false;
+  }
+
+
 }

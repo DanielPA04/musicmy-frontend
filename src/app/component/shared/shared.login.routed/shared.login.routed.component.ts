@@ -30,6 +30,7 @@ export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
   oAuthForm: FormGroup | undefined = undefined;
   message: string = '';
   passwordVisible: boolean = false;
+  isLog: boolean = false;
 
 
   modalOptions: ModalOptions = {
@@ -39,6 +40,9 @@ export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
     closable: true,
     onHide: () => {
       console.log('Modal is hidden');
+      if (this.isLog) {
+        this.oRouter.navigate(['/']);
+      }
     },
     onShow: () => {
       console.log('Modal is shown');
@@ -48,7 +52,7 @@ export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
     },
   };
 
-   instanceOptions: InstanceOptions = {
+  instanceOptions: InstanceOptions = {
     id: 'login-modal',
     override: true
   };
@@ -57,7 +61,7 @@ export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
     private oLoginService: LoginService,
     private oSessionService: SessionService,
     private oRouter: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.createForm();
@@ -89,23 +93,53 @@ export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit() {
-   
+    if (this.oAuthForm?.invalid) {
+      const controls = this.oAuthForm.controls;
 
-    this.oLoginService.login(this.oAuthForm?.value).subscribe({
-      next: (oAuth: string) => {
-        console.log(oAuth);
-        this.oSessionService.login(oAuth);
-        this.message = 'Login exitoso';
-        this.modal?.show();
-      },
-      error: (err) => {
-        console.log(err);
-        this.message = 'Error al iniciar sesión';
-      },
-    });
+      // Verificar errores en cada control
+      for (const controlName in controls) {
+        if (controls[controlName].errors) {
+          const errors = controls[controlName].errors;
+          if (errors['required']) {
+            this.message = `El campo ${controlName} es requerido.`;
+          } else if (errors['email']) {
+            this.message = `El campo ${controlName} debe ser un email válido.`;
+          } else if (errors['minlength']) {
+            this.message = `El campo ${controlName} debe tener al menos ${errors['minlength'].requiredLength} caracteres.`;
+          } else if (errors['maxlength']) {
+            this.message = `El campo ${controlName} no puede tener más de ${errors['maxlength'].requiredLength} caracteres.`;
+          } else if (errors['pattern']) {
+            this.message =
+              'El campo ${controlName} no cumple con el formato requerido. Debe usar por lo menos 1 número, 1 mayúscula y 1 minúscula';
+          } else {
+            this.message = `El campo ${controlName} es inválido.`;
+          }
+          this.modal?.show();
+          break;
+        }
+      }
+      return;
+    } else {
+
+
+      this.oLoginService.login(this.oAuthForm?.value).subscribe({
+        next: (oAuth: string) => {
+          console.log(oAuth);
+          this.oSessionService.login(oAuth);
+          this.message = 'Login exitoso';
+          this.isLog = true;
+          this.modal?.show();
+        },
+        error: (err) => {
+          console.log(err);
+          this.message = 'Error al iniciar sesión';
+          this.modal?.show();
+        },
+      });
+    }
   }
 
-  trogglePassword(){
+  trogglePassword() {
     this.passwordVisible = !this.passwordVisible;
   }
 }

@@ -11,6 +11,7 @@ import {
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CalendarModule } from 'primeng/calendar';
+import { BlobToUrlPipe } from '../../../pipe/blob.pipe';
 
 declare let bootstrap: any;
 
@@ -25,6 +26,7 @@ declare let bootstrap: any;
     ReactiveFormsModule,
     RouterModule,
     CalendarModule,
+    BlobToUrlPipe,
   ],
 })
 export class AlbumAdminEditRoutedComponent implements OnInit {
@@ -32,7 +34,7 @@ export class AlbumAdminEditRoutedComponent implements OnInit {
   oAlbumForm: FormGroup | undefined = undefined;
   oAlbum: IAlbum | null = null;
   strMessage: string = '';
-
+  isFileSelected: boolean = false;
   myModal: any;
 
   constructor(
@@ -122,6 +124,7 @@ export class AlbumAdminEditRoutedComponent implements OnInit {
     if (file) {
       const blob = new Blob([file], { type: file.type });
       this.oAlbumForm?.controls['img'].setValue(blob);
+      this.isFileSelected = true;
     }
     console.log(this.oAlbumForm?.value);
   }

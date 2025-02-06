@@ -29,7 +29,7 @@ export class SharedMenuUnroutedComponent implements OnInit {
         next: (data: IUsuario) => {
           this.permisos = data.tipousuario.nombre
         }
-      })
+      });
 
     }
 
@@ -40,12 +40,18 @@ export class SharedMenuUnroutedComponent implements OnInit {
       next: () => {
         this.activeSession = true;
         this.userEmail = this.oSessionService.getSessionEmail();
+        this.oUsuarioService.getUsuarioByEmail(this.userEmail).subscribe({
+          next: (data: IUsuario) => {
+            this.permisos = data.tipousuario.nombre
+          }
+        });
       },
     });
     this.oSessionService.onLogout().subscribe({
       next: () => {
         this.activeSession = false;
         this.userEmail = '';
+        this.permisos = '';
       },
     });
   }
