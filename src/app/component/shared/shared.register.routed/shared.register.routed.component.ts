@@ -6,28 +6,29 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { LoginService } from '../../../service/login.service';
 import { SessionService } from '../../../service/session.service';
 import { Modal } from 'flowbite';
 import type { ModalOptions, ModalInterface } from 'flowbite';
 import type { InstanceOptions } from 'flowbite';
+import { UsuarioService } from '../../../service/usuario.service';
+import { IUsuario } from '../../../model/usuario.interface';
 
 @Component({
   selector: 'app-shared.register.routed',
   templateUrl: './shared.register.routed.component.html',
   standalone: true,
-  styleUrls: ['./shared.register.routed.component.css']
+  imports: [ReactiveFormsModule, RouterModule],
+  styleUrls: ['./shared.register.routed.component.css'],
 })
 export class SharedRegisterRoutedComponent implements OnInit, AfterViewInit {
-
   loginmodal: HTMLElement | null = null;
   modal: ModalInterface | null = null;
-  oAuthForm: FormGroup | undefined = undefined;
+  oRegisterForm: FormGroup | undefined = undefined;
   message: string = '';
   passwordVisible: boolean = false;
 
   constructor(
-    private oLoginService: LoginService,
+    private oUsuarioService: UsuarioService,
     private oSessionService: SessionService,
     private oRouter: Router
   ) {}
@@ -52,25 +53,27 @@ export class SharedRegisterRoutedComponent implements OnInit, AfterViewInit {
     },
   };
 
-   instanceOptions: InstanceOptions = {
-    id: 'login-modal',
-    override: true
+  instanceOptions: InstanceOptions = {
+    id: 'register-modal',
+    override: true,
   };
 
- 
-
-  ngAfterViewInit(): void {
+  ngAfterViewInit() {
+    // Asegúrate de que el DOM ya está listo
+    this.loginmodal = document.querySelector('#register-modal');
+    if (this.loginmodal) {
+      this.modal = new Modal(
+        this.loginmodal,
+        this.modalOptions,
+        this.instanceOptions
+      );
+    } else {
+      console.error('Modal element not found!');
+    }
   }
-
   createForm() {
-    this.oAuthForm = new FormGroup({
-      nombre: new FormControl('', [
-        Validators.required,
-      ]),
-      email: new FormControl('', [
-        Validators.required,
-        Validators.email,
-      ]),
+    this.oRegisterForm = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [
         Validators.required,
         Validators.minLength(8),
@@ -81,23 +84,68 @@ export class SharedRegisterRoutedComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit() {
-  
-    this.oLoginService.login(this.oAuthForm?.value).subscribe({
-      next: (oAuth: string) => {
-        console.log(oAuth);
-        this.oSessionService.login(oAuth);
-        this.message = 'Login exitoso';
-        this.modal?.show();
-      },
-      error: (err) => {
-        console.log(err);
-        this.message = 'Error al iniciar sesión';
-      },
-    });
+    if (this.oRegisterForm?.invalid) {
+      const controls = this.oRegisterForm.controls;
+
+      // Verificar errores en cada control
+      for (const controlName in controls) {
+        if (controls[controlName].errors) {
+          const errors = controls[controlName].errors;
+
+          if (errors['required']) {
+            this.message = `El campo ${controlName} es requerido.`;
+          } else if (errors['email']) {
+            this.message = `El campo ${controlName} debe ser un email válido.`;
+          } else if (errors['minlength']) {
+            this.message = `El campo ${controlName} debe tener al menos ${errors['minlength'].requiredLength} caracteres.`;
+          } else if (errors['maxlength']) {
+            this.message = `El campo ${controlName} no puede tener más de ${errors['maxlength'].requiredLength} caracteres.`;
+          } else if (errors['pattern']) {
+            this.message =
+              'El campo ${controlName} no cumple con el formato requerido. Debe usar por lo menos 1 número, 1 mayúscula y 1 minúscula';
+          } else {
+            this.message = `El campo ${controlName} es inválido.`;
+          }
+          this.modal?.show();
+          break;
+        }
+      }
+
+      return;
+    } else {
+      this.oUsuarioService.checkIfEmailExists(this.oRegisterForm?.controls["email"].value).subscribe({
+        next: (data:boolean) => {
+          if (data){
+            this.message = 'El email '+this.oRegisterForm?.controls["email"].value+' ya esta registrado';
+            this.modal?.show();
+          } else {
+            this.oUsuarioService.register(this.oRegisterForm?.value).subscribe({
+              next: (data: IUsuario) => {
+                console.log(data);
+                this.message = 'Registro exitoso';
+                this.modal?.show();
+              },
+              error: (err) => {
+                console.log(err);
+                this.message = 'Error al iniciar sesión';
+                this.modal?.show();
+              },
+            });
+          }
+
+        },
+        error: (err) => {
+          console.log(err);
+          this.message = 'Error al iniciar sesión' + err;
+        },
+      });
+
+
+      
+    }
   }
 
-  trogglePassword(){
+  trogglePassword() {
     this.passwordVisible = !this.passwordVisible;
   }
-
 }

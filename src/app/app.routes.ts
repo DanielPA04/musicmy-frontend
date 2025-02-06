@@ -41,7 +41,7 @@ export const routes: Routes = [
     // Menu
     { path: '', component: SharedHomeRoutedComponent },
     { path: 'home', component: SharedHomeRoutedComponent },
-    // { path: 'register', component: SharedRegisterRoutedComponent, canActivate: [NoUserGuard] },
+    { path: 'register', component: SharedRegisterRoutedComponent, canActivate: [NoUserGuard] },
     { path: 'login', component: SharedLoginRoutedComponent , canActivate: [NoUserGuard] },
     { path: 'logout', component: SharedLogoutRoutedComponent, canActivate: [UserGuard] },
     { path: 'perfil/:email', component: SharedPerfilRoutedComponent, canActivate: [UserGuard] },

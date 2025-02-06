@@ -4,6 +4,7 @@ import { httpOptions, serverURL } from '../environment/environment';
 import { IUsuario } from '../model/usuario.interface';
 import { Observable } from 'rxjs/internal/Observable';
 import { IPage } from '../environment/model.interface';
+import { CryptoService } from './crypto.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class UsuarioService {
 
   serverURL: string = serverURL + '/usuario';
 
-constructor(private oHttp: HttpClient) { }
+constructor(private oHttp: HttpClient, private oCryptoService: CryptoService) { }
 
 
 getPage(
@@ -54,12 +55,32 @@ get(id: number): Observable<IUsuario> {
 }
 
 create(oUsuario: IUsuario): Observable<IUsuario> {
+  oUsuario.password = this.oCryptoService.getHashSHA256(oUsuario.password);
+
   let URL: string = '';
   URL += this.serverURL;
   return this.oHttp.post<IUsuario>(URL, oUsuario);
 }
 
+register(oUsuario: IUsuario): Observable<IUsuario> {
+  oUsuario.password = this.oCryptoService.getHashSHA256(oUsuario.password);
+
+  let URL: string = '';
+  URL += this.serverURL + '/register';
+  return this.oHttp.post<IUsuario>(URL, oUsuario);
+}
+
+
+checkIfEmailExists(email: string): Observable<boolean> {
+  let URL: string = '';
+  URL += this.serverURL;
+  URL += '/check/email/' + email;
+  return this.oHttp.get<boolean>(URL);
+}
+
 update(oUsuario: IUsuario): Observable<IUsuario> {
+  oUsuario.password = this.oCryptoService.getHashSHA256(oUsuario.password);
+
   let URL: string = '';
   URL += this.serverURL;
   return this.oHttp.put<IUsuario>(URL, oUsuario);
