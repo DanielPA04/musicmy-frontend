@@ -7,8 +7,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { ArtistaService } from '../../../service/artista.service';
-import { IArtista } from '../../../model/artista.interface';
+import { ResenyaService } from '../../../service/resenya.service';
+import { IResenya } from '../../../model/resenya.interface';
 
 declare let bootstrap: any;
 
@@ -25,8 +25,8 @@ declare let bootstrap: any;
 })
 export class ResenyaAdminCreateRoutedComponent implements OnInit {
   id: number = 0;
-  oArtistaForm: FormGroup | undefined = undefined;
-  oArtista: IArtista | null = null;
+  oResenyaForm: FormGroup | undefined = undefined;
+  oResenya: IResenya | null = null;
   strMessage: string = '';
 
   myModal: any;
@@ -35,45 +35,38 @@ export class ResenyaAdminCreateRoutedComponent implements OnInit {
 
 
   constructor(
-    private oArtistaService: ArtistaService,
+    private oResenyaService: ResenyaService,
     private oRouter: Router,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.createForm();
-    this.oArtistaForm?.markAllAsTouched();
+    this.oResenyaForm?.markAllAsTouched();
   }
 
   createForm() {
-    this.oArtistaForm = new FormGroup({
-      nombre: new FormControl('', [
-        Validators.required,
-        Validators.minLength(5),
-        Validators.maxLength(255),
-      ]),
-      nombreReal: new FormControl('', [Validators.required]),
-      descripcion: new FormControl('', [
-        Validators.required,
-        Validators.minLength(0),
-        Validators.maxLength(255),
-      ]),
-      spotify: new FormControl('', [
-        Validators.minLength(0),
-        Validators.maxLength(255),
-      ]),
-      img: new FormControl(null),
+    this.oResenyaForm = new FormGroup({
+      nota: new FormControl('', [Validators.required]),
+      descripcion: new FormControl('', [Validators.required, Validators.maxLength(255)]),
+      fecha: new FormControl(Date.now()),
+      website: new FormControl(''),
+      album: new FormControl('', [Validators.required]),
+      usuario: new FormControl('', [Validators.required]),
+
     });
   }
 
   updateForm() {
-    this.oArtistaForm?.controls['nombre'].setValue('');
-    this.oArtistaForm?.controls['nombreReal'].setValue('');
-    this.oArtistaForm?.controls['descripcion'].setValue('');
-    this.oArtistaForm?.controls['spotify'].setValue('');
-    this.oArtistaForm?.controls['img'].setValue(null);
+    this.oResenyaForm?.controls['nota'].setValue('');
+    this.oResenyaForm?.controls['descripcion'].setValue('');
+    this.oResenyaForm?.controls['fecha'].setValue(Date.now());
+    this.oResenyaForm?.controls['website'].setValue('');
+    this.oResenyaForm?.controls['album'].setValue('');
+    this.oResenyaForm?.controls['usuario'].setValue('');
+
   }
 
- 
+
 
   onReset() {
     this.updateForm();
@@ -84,10 +77,10 @@ export class ResenyaAdminCreateRoutedComponent implements OnInit {
     const file = event.target.files[0];
     if (file) {
       const blob = new Blob([file], { type: file.type });
-      this.oArtistaForm?.controls['img'].setValue(blob);
+      this.oResenyaForm?.controls['img'].setValue(blob);
     }
-    console.log(this.oArtistaForm?.value);
-}
+    console.log(this.oResenyaForm?.value);
+  }
 
   showModal(mensaje: string) {
     this.strMessage = mensaje;
@@ -99,26 +92,26 @@ export class ResenyaAdminCreateRoutedComponent implements OnInit {
 
   hideModal = () => {
     this.myModal.hide();
-    this.oRouter.navigate(['/admin/artista/view/' + this.oArtista?.id]);
+    this.oRouter.navigate(['/admin/resenya/view/' + this.oResenya?.id]);
   };
 
 
 
   onSubmit() {
-    if (this.oArtistaForm?.invalid) {
+    if (this.oResenyaForm?.invalid) {
       this.showModal('Formulario inválido');
       return;
     } else {
 
-      
 
-      this.oArtistaService.create(this.oArtistaForm?.value).subscribe({
-        next: (oArtista: IArtista) => {
-          this.oArtista = oArtista;
-          this.showModal('Artista creado con el id: ' + this.oArtista.id);
+
+      this.oResenyaService.create(this.oResenyaForm?.value).subscribe({
+        next: (oResenya: IResenya) => {
+          this.oResenya = oResenya;
+          this.showModal('Resenya creado con el id: ' + this.oResenya.id);
         },
         error: (err) => {
-          this.showModal('Error al crear el artista');
+          this.showModal('Error al crear el resenya');
           console.log(err);
         },
       });

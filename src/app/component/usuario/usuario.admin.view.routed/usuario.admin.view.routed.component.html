@@ -1,0 +1,79 @@
+<div class="row justify-content-center m-3">
+  <div class="col-lg-7 col-md-10 col-sm-12">
+    <h1 class="my-5 text-center">
+      <i class="bi bi-card-list"></i>
+      Detalle de usuario
+      <i class="bi bi-person-circle"></i>
+    </h1>
+    <br />
+    <table class="table table-striped table-bordered my-5 text-center">
+      <tbody>
+        <tr class="text-center">
+          <th scope="row" class="bg-danger text-white text-end pe-5">Id</th>
+          <td class="text-start ps-5">{{ oUsuario.id }}</td>
+        </tr>
+        <tr class="text-center">
+          <th scope="row" class="bg-primary text-white text-end pe-5">
+            Nombre
+          </th>
+          <td class="text-start ps-5">{{ oUsuario.nombre }}</td>
+        </tr>
+        <tr class="text-center">
+          <th scope="row" class="bg-primary text-white text-end pe-5">Fecha</th>
+          <td class="text-start ps-5">{{ oUsuario.fecha }}</td>
+        </tr>
+        <tr class="text-center">
+          <th scope="row" class="bg-primary text-white text-end pe-5">
+            Descripcion
+          </th>
+          <td class="text-start ps-5">{{ oUsuario.descripcion }}</td>
+        </tr>
+        <tr class="text-center">
+          <th scope="row" class="bg-primary text-white text-end pe-5">Email</th>
+          <td class="text-start ps-5">{{ oUsuario.email }}</td>
+        </tr>
+        <tr class="text-center">
+          <th scope="row" class="bg-primary text-white text-end pe-5">
+            Website
+          </th>
+          <td class="text-start ps-5">
+            {{ oUsuario.website }}
+          </td>
+        </tr>
+        <tr class="text-center">
+          <th scope="row" class="bg-primary text-white text-end pe-5">
+            Tipo Usuario
+          </th>
+          <td class="text-start ps-5">
+            {{ oUsuario.tipousuario.nombre }} ({{ oUsuario.tipousuario.id }})
+          </td>
+        </tr>
+        <tr class="text-center">
+          <th scope="row" class="bg-primary text-white text-end pe-5">Reseñas</th>
+          <td class="text-start ps-5">{{ oUsuario.resenyas }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="d-flex justify-content-center mt-4">
+    <a class="btn btn-warning mt-4 mx-1" href="admin/usuario/plist">
+      <i class="bi bi-list"></i>
+      Ir a listado de Artistas
+    </a>
+    <a
+      class="btn btn-primary mt-4 mx-1"
+      href="admin/usuario/edit/{{ oUsuario.id }}"
+    >
+      <i class="bi bi-pencil"></i>
+      Editar
+    </a>
+    <a
+      class="btn btn-danger mt-4 mx-1"
+      href="admin/usuario/delete/{{ oUsuario.id }}"
+    >
+      <i class="bi bi-trash"></i>
+      Borrar
+    </a>
+  </div>
+</div>
