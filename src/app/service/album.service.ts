@@ -59,6 +59,13 @@ export class AlbumService {
     return this.oHttp.get(URL, { responseType: 'blob' });
   }
 
+  getMedia(id: number): Observable<number> {
+    let URL: string = '';
+    URL += this.serverURL;
+    URL +=  '/media' + '/' + id;
+    return this.oHttp.get<number>(URL);
+  }
+
   create(oAlbum: IAlbum): Observable<IAlbum> {
     oAlbum.fecha = new Date(oAlbum.fecha).toISOString().split('T')[0];
     let URL: string = '';

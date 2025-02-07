@@ -28,3 +28,18 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
     background-color: #007bff;
 }
 
+
+
+
+.low-grade {
+    background-color: red;
+}
+
+.medium-grade {
+    background-color: yellow;
+}
+
+.high-grade {
+    background-color: #28a745;
+}
+

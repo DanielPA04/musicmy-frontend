@@ -17,7 +17,9 @@
 
     </div>
     } @else {
-      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta == '/home' || strRuta == '/' || strRuta == ''" href="/home">Inicio</a>
+      <div class="hidden lg:flex space-x-4">
+        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta == '/home' || strRuta == '/' || strRuta == ''" href="/home">Inicio</a>
+      </div>
     }
     <div class="hidden lg:flex space-x-4">
       @if (!activeSession) {

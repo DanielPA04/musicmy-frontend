@@ -17,6 +17,7 @@ import { IArtista } from '../../../model/artista.interface';
 export class SharedHomeRoutedComponent implements OnInit {
   oPage: IPage<IAlbum> = {} as IPage<IAlbum>
   nombresArtista: Map<number, IArtista[]> = new Map<number, IArtista[]>()
+  mediasArtista: Map<number, number> = new Map<number, number>()
   nPage: number = 0
   nRpp: number = 10
   strField: string = ''
@@ -57,6 +58,14 @@ export class SharedHomeRoutedComponent implements OnInit {
                 console.log(err);
               },
 
+            });
+            this.oAlbumService.getMedia(oAlbum.id).subscribe({
+              next: (data: number) => {
+                this.mediasArtista.set(oAlbum.id, data)
+              },
+              error: (err) => {
+                console.log(err);
+              },
             })
             this.oAlbumService.getImg(oAlbum.id).subscribe({
               next: (data) => {
@@ -75,6 +84,13 @@ export class SharedHomeRoutedComponent implements OnInit {
         },
       });
   }
+
+
+  // In your component class
+getMedia(albumId: number): number {
+  return this.mediasArtista.get(albumId) ?? 0;
+}
+
 
 
 }
