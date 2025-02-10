@@ -3,7 +3,7 @@
     <div class="col text-center">
       <h2 class="my-2">
         <i class="bi bi-plus-square"></i>
-        Creación de Artista
+        Creación de Resenya
         <i class="bi bi-journal-text"></i>
       </h2>
       <form [formGroup]="oResenyaForm!" (ngSubmit)="onSubmit()" novalidate>
@@ -44,7 +44,7 @@
             <mat-form-field>
               <mat-label>Album</mat-label>
               <div class="d-flex justify-content-end">
-                <button class="btn btn-primary" (click)="showTipocuentaSelectorModal()">
+                <button class="btn btn-primary" (click)="showAlbumSelectorModal()">
                   <i class="bi bi-search"></i>
                   Buscar
                 </button>
@@ -58,6 +58,26 @@
           </div>
         </div>
         <br />
+
+        <div formGroupName="usuario">
+          <div class="row mt-4">
+            <mat-form-field>
+              <mat-label>Usuario</mat-label>
+              <div class="d-flex justify-content-end">
+                <button class="btn btn-primary" (click)="showUsuarioSelectorModal()">
+                  <i class="bi bi-search"></i>
+                  Buscar
+                </button>
+              </div>
+              <div class="d-flex justify-content-start">
+                <span>{{oUsuario.nombre}}</span>
+              </div>
+
+              <input matInput formControlName="id" placeholder="Usuario" />
+            </mat-form-field>
+          </div>
+        </div>
+        <br />
        
 
    
@@ -67,10 +87,10 @@
         <div class="mt-4">
           <button
             class="btn btn-warning mt-4 mx-1"
-            [routerLink]="['/admin', 'artista', 'plist']"
+            [routerLink]="['/admin', 'resenya', 'plist']"
           >
             <i class="bi bi-list"></i>
-            Ir a listado de artistas
+            Ir a listado de resenya
           </button>
 
           <button class="btn btn-secondary mt-4 mx-1" (click)="onReset()">

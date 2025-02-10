@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { AlbumService } from '../../../service/album.service';
-import { IAlbum } from '../../../model/album.interface';
+import { UsuarioService } from '../../../service/usuario.service';
+import { IUsuario } from '../../../model/usuario.interface';
 import { CommonModule } from '@angular/common';
 import { IPage } from '../../../environment/model.interface';
 import { FormsModule } from '@angular/forms';
@@ -8,18 +8,18 @@ import { BotoneraService } from '../../../service/botonera.service';
 import { debounceTime, Subject } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
 import { TrimPipe } from '../../../pipe/trim.pipe';
+import { AlbumAdminSelectorUnroutedComponent } from '../../album/album.admin.selector.unrouted/album.admin.selector.unrouted.component';
 import { MatDialogRef } from '@angular/material/dialog';
-import { BlobToUrlPipe } from '../../../pipe/blob.pipe';
 
 @Component({
-  selector: 'app-album.admin.selector.unrouted',
+  selector: 'app-usuario.admin.selector.unrouted',
   standalone: true,
-  templateUrl: './album.admin.selector.unrouted.component.html',
-  styleUrls: ['./album.admin.selector.unrouted.component.css'],
-  imports: [CommonModule, FormsModule, TrimPipe, RouterModule, BlobToUrlPipe],
+  templateUrl: './usuario.admin.selector.unrouted.component.html',
+  styleUrls: ['./usuario.admin.selector.unrouted.component.css'],
+  imports: [CommonModule, FormsModule, TrimPipe, RouterModule],
 })
-export class AlbumAdminSelectorUnroutedComponent implements OnInit {
-  oPage: IPage<IAlbum> | null = null;
+export class UsuarioAdminSelectorUnroutedComponent implements OnInit {
+  oPage: IPage<IUsuario> | null = null;
   //
   nPage: number = 0; // 0-based server count
   nRpp: number = 10;
@@ -32,11 +32,12 @@ export class AlbumAdminSelectorUnroutedComponent implements OnInit {
   arrBotonera: string[] = [];
   //
   private debounceSubject = new Subject<string>();
-  //
+
   readonly dialogRef = inject(MatDialogRef<AlbumAdminSelectorUnroutedComponent>);
 
+
   constructor(
-    private oAlbumService: AlbumService,
+    private oUsuarioService: UsuarioService,
     private oBotoneraService: BotoneraService,
     private oRouter: Router
   ) {
@@ -50,7 +51,7 @@ export class AlbumAdminSelectorUnroutedComponent implements OnInit {
   }
 
   getPage() {
-    this.oAlbumService
+    this.oUsuarioService
       .getPage(
         this.nPage,
         this.nRpp,
@@ -59,35 +60,17 @@ export class AlbumAdminSelectorUnroutedComponent implements OnInit {
         this.strFiltro
       )
       .subscribe({
-        next: (oPageFromServer: IPage<IAlbum>) => {
+        next: (oPageFromServer: IPage<IUsuario>) => {
           this.oPage = oPageFromServer;
           this.arrBotonera = this.oBotoneraService.getBotonera(
             this.nPage,
             oPageFromServer.totalPages
           );
-
-          this.oPage.content.forEach((oAlbum) => {
-            this.oAlbumService.getImg(oAlbum.id).subscribe({
-              next: (data) => {
-                oAlbum.img = data;
-              },
-            });
-
-          });
-
-
-
-
         },
         error: (err) => {
           console.log(err);
         },
       });
-  }
-
-
-  select(oAlbum: IAlbum) {
-    this.dialogRef.close(oAlbum);
   }
 
   goToPage(p: number) {
@@ -127,7 +110,9 @@ export class AlbumAdminSelectorUnroutedComponent implements OnInit {
     this.debounceSubject.next(this.strFiltro);
   }
 
-
-
+  select(oUsuario: IUsuario) {
+    oUsuario.password = '';
+    this.dialogRef.close(oUsuario);
+  }
 }
 

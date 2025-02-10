@@ -15,6 +15,7 @@ import { IUsuario } from '../../../model/usuario.interface';
 import { UsuarioService } from '../../../service/usuario.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AlbumAdminSelectorUnroutedComponent } from '../../album/album.admin.selector.unrouted/album.admin.selector.unrouted.component';
+import { UsuarioAdminSelectorUnroutedComponent } from '../../usuario/usuario.admin.selector.unrouted/usuario.admin.selector.unrouted.component';
 
 declare let bootstrap: any;
 
@@ -111,7 +112,6 @@ export class ResenyaAdminCreateRoutedComponent implements OnInit {
     this.oResenyaForm = new FormGroup({
       nota: new FormControl('', [Validators.required]),
       descripcion: new FormControl('', [Validators.required, Validators.maxLength(255)]),
-      fecha: new FormControl(Date.now()),
       website: new FormControl(''),
       album: new FormGroup( {
         id: new FormControl('', Validators.required),
@@ -142,7 +142,6 @@ export class ResenyaAdminCreateRoutedComponent implements OnInit {
   updateForm() {
     this.oResenyaForm?.controls['nota'].setValue('');
     this.oResenyaForm?.controls['descripcion'].setValue('');
-    this.oResenyaForm?.controls['fecha'].setValue(Date.now());
     this.oResenyaForm?.controls['website'].setValue('');
     this.oResenyaForm?.controls['album'].setValue('');
     this.oResenyaForm?.controls['usuario'].setValue('');
@@ -185,6 +184,7 @@ export class ResenyaAdminCreateRoutedComponent implements OnInit {
       this.showModal('Formulario inválido');
       return;
     } else {
+      console.log(this.oResenyaForm?.value);
 
 
 
@@ -201,7 +201,7 @@ export class ResenyaAdminCreateRoutedComponent implements OnInit {
     }
   }
 
-  showTipocuentaSelectorModal() {
+  showAlbumSelectorModal() {
     const dialogRef = this.dialog.open(AlbumAdminSelectorUnroutedComponent, {
       height: '800px',
       maxHeight: '1200px',
@@ -217,7 +217,27 @@ export class ResenyaAdminCreateRoutedComponent implements OnInit {
         console.log(result);
         this.oResenyaForm?.controls['album'].setValue(result);
         this.oAlbum = result;
-        //this.animal.set(result);
+      }
+    });
+    return false;
+  }
+
+  showUsuarioSelectorModal() {
+    const dialogRef = this.dialog.open(UsuarioAdminSelectorUnroutedComponent, {
+      height: '800px',
+      maxHeight: '1200px',
+      width: '80%',
+      maxWidth: '90%',
+
+
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if (result !== undefined) {
+        console.log(result);
+        this.oResenyaForm?.controls['usuario'].setValue(result);
+        this.oAlbum = result;
       }
     });
     return false;

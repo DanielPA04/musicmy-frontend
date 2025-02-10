@@ -14,6 +14,7 @@ import { BlobToUrlPipe } from '../../../pipe/blob.pipe';
 import { MatDialog } from '@angular/material/dialog';
 import { IArtista } from '../../../model/artista.interface';
 import { ArtistaAdminSelectorUnroutedComponent } from '../../artista/artista.admin.selector.unrouted/artista.admin.selector.unrouted.component';
+import { GrupoalbumartistaService } from '../../../service/grupoalbumartista.service';
 //import { PrimeNGConfig } from 'primeng/api';
 
 declare let bootstrap: any;
@@ -48,6 +49,7 @@ export class AlbumAdminCreateRoutedComponent implements OnInit {
   constructor(
     private oAlbumService: AlbumService,
     private oRouter: Router,
+    private oGrupoalbumartistaService: GrupoalbumartistaService
     //private oPrimeconfig: PrimeNGConfig
   ) {}
 
@@ -136,8 +138,18 @@ export class AlbumAdminCreateRoutedComponent implements OnInit {
 
       this.oAlbumService.create(this.oAlbumForm?.value).subscribe({
         next: (oAlbum: IAlbum) => {
-          this.oAlbum = oAlbum;
-          this.showModal('Album creado con el id: ' + this.oAlbum.id);
+          this.oAlbum = oAlbum;          
+          this.oGrupoalbumartistaService.updateArtistasToAlbum(this.oAlbum.id, this.oAlbumForm?.value.artistas).subscribe({
+            next: (data) => {
+              console.log(data);
+              this.showModal('Album con id ' + this.oAlbum!.id + ' creado');
+            },
+            error: (err) => {
+              console.log(err);
+            },
+            
+          })
+
         },
         error: (err) => {
           this.showModal('Error al crear el album');

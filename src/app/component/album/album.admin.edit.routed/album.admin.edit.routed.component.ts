@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AlbumService } from '../../../service/album.service';
 import { IAlbum } from '../../../model/album.interface';
@@ -12,6 +12,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CalendarModule } from 'primeng/calendar';
 import { BlobToUrlPipe } from '../../../pipe/blob.pipe';
+import { ArtistaAdminSelectorUnroutedComponent } from '../../artista/artista.admin.selector.unrouted/artista.admin.selector.unrouted.component';
+import { MatDialog } from '@angular/material/dialog';
+import { ArtistaService } from '../../../service/artista.service';
+import { IArtista } from '../../../model/artista.interface';
+import { GrupoalbumartistaService } from '../../../service/grupoalbumartista.service';
 
 declare let bootstrap: any;
 
@@ -32,14 +37,20 @@ declare let bootstrap: any;
 export class AlbumAdminEditRoutedComponent implements OnInit {
   id: number = 0;
   oAlbumForm: FormGroup | undefined = undefined;
-  oAlbum: IAlbum | null = null;
+  oAlbum: IAlbum = {} as IAlbum;
+  img: Blob = {} as Blob;
+  oArtistas: IArtista[] = [];
   strMessage: string = '';
+  // TODO mirar que esto quiza no hace falta ni en el create
   isFileSelected: boolean = false;
   myModal: any;
+  readonly dialog = inject(MatDialog);
 
   constructor(
     private oActivatedRoute: ActivatedRoute,
     private oAlbumService: AlbumService,
+    private oArtistaService: ArtistaService,
+    private oGrupoalbumartistaService: GrupoalbumartistaService,
     private oRouter: Router
   ) {
     this.oActivatedRoute.params.subscribe((params) => {
@@ -90,21 +101,24 @@ export class AlbumAdminEditRoutedComponent implements OnInit {
         Validators.maxLength(255),
       ]),
       img: new FormControl(null),
+      artistas: new FormControl([]),
     });
   }
 
   updateForm() {
-    this.oAlbumForm?.controls['id'].setValue(this.oAlbum?.id);
-    this.oAlbumForm?.controls['nombre'].setValue(this.oAlbum?.nombre);
+    this.oAlbumForm?.controls['id'].setValue(this.oAlbum.id);
+    this.oAlbumForm?.controls['nombre'].setValue(this.oAlbum.nombre);
     this.oAlbumForm?.controls['fecha'].setValue(
-      this.oAlbum?.fecha ? new Date(this.oAlbum.fecha) : null
+      this.oAlbum.fecha ? new Date(this.oAlbum.fecha) : null
     );
-    this.oAlbumForm?.controls['genero'].setValue(this.oAlbum?.genero);
-    this.oAlbumForm?.controls['descripcion'].setValue(this.oAlbum?.descripcion);
+    this.oAlbumForm?.controls['genero'].setValue(this.oAlbum.genero);
+    this.oAlbumForm?.controls['descripcion'].setValue(this.oAlbum.descripcion);
     this.oAlbumForm?.controls['discografica'].setValue(
-      this.oAlbum?.discografica
+      this.oAlbum.discografica
     );
-    this.oAlbumForm?.controls['img'].setValue(null);
+    this.oAlbumForm?.controls['img'].setValue(this.oAlbum.img);
+    this.oAlbumForm?.controls['artistas'].setValue(this.oArtistas);
+
   }
 
   get() {
@@ -112,11 +126,32 @@ export class AlbumAdminEditRoutedComponent implements OnInit {
       next: (oAlbum: IAlbum) => {
         this.oAlbum = oAlbum;
         this.updateForm();
+
       },
       error: (error) => {
         console.error(error);
       },
     });
+    this.oAlbumService.getImg(this.id).subscribe({
+      next: (data) => {
+        this.oAlbum!.img = data;
+        this.updateForm();
+
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+    this.oArtistaService.getByAlbum(this.id).subscribe({
+      next: (oArtistas: IArtista[]) => {
+        this.oArtistas = oArtistas;
+        this.updateForm();
+
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    })
   }
 
   onFileSelected(event: any): void {
@@ -139,7 +174,7 @@ export class AlbumAdminEditRoutedComponent implements OnInit {
 
   hideModal = () => {
     this.myModal.hide();
-    this.oRouter.navigate(['/admin/album/view/' + this.oAlbum?.id]);
+    this.oRouter.navigate(['/admin/album/view/' + this.oAlbum.id]);
   };
 
   onSubmit() {
@@ -150,8 +185,19 @@ export class AlbumAdminEditRoutedComponent implements OnInit {
       this.oAlbumService.update(this.oAlbumForm?.value).subscribe({
         next: (oAlbum: IAlbum) => {
           this.oAlbum = oAlbum;
-          this.updateForm();
-          this.showModal('Album ' + this.oAlbum.id + ' actualizado');
+          this.oGrupoalbumartistaService.updateArtistasToAlbum(this.oAlbum.id, this.oAlbumForm?.value.artistas).subscribe({
+            next: (data) => {
+              this.oArtistas = data;
+              this.updateForm();
+              this.showModal('Album con id ' + this.oAlbum!.id + ' actualizado');
+
+              
+            },
+            error: (err) => {
+              console.log(err);
+            },
+          })
+         
         },
         error: (error) => {
           this.showModal('Error al actualizar el album');
@@ -159,5 +205,25 @@ export class AlbumAdminEditRoutedComponent implements OnInit {
         },
       });
     }
+  }
+
+  showArtistaSelectorModal() {
+    const dialogRef = this.dialog.open(ArtistaAdminSelectorUnroutedComponent, {
+      height: '800px',
+      maxHeight: '1200px',
+      width: '80%',
+      maxWidth: '90%',
+      data: this.oAlbumForm?.value.artistas
+
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if (result !== undefined) {
+        this.oAlbumForm?.controls['artistas'].setValue(result);
+        console.log(this.oAlbumForm?.value);
+      }
+    });
+    return false;
   }
 }
