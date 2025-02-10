@@ -13,7 +13,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { BlobToUrlPipe } from '../../../pipe/blob.pipe';
 import { MatDialog } from '@angular/material/dialog';
 import { IArtista } from '../../../model/artista.interface';
-import { ArtistaAdminSelectorRoutedComponent } from '../../artista/artista.admin.selector.routed/artista.admin.selector.routed.component';
+import { ArtistaAdminSelectorUnroutedComponent } from '../../artista/artista.admin.selector.unrouted/artista.admin.selector.unrouted.component';
 //import { PrimeNGConfig } from 'primeng/api';
 
 declare let bootstrap: any;
@@ -147,14 +147,13 @@ export class AlbumAdminCreateRoutedComponent implements OnInit {
     }
   }
 
-  showTipocuentaSelectorModal() {
-    const dialogRef = this.dialog.open(ArtistaAdminSelectorRoutedComponent, {
+  showArtistaSelectorModal() {
+    const dialogRef = this.dialog.open(ArtistaAdminSelectorUnroutedComponent, {
       height: '800px',
       maxHeight: '1200px',
       width: '80%',
       maxWidth: '90%',
-      data: { origen: '', idBalance: '' },
-
+      data: this.oAlbumForm?.value.artistas
 
     });
 

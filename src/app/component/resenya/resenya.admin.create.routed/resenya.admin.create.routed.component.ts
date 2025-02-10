@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import {
@@ -9,6 +9,12 @@ import {
 } from '@angular/forms';
 import { ResenyaService } from '../../../service/resenya.service';
 import { IResenya } from '../../../model/resenya.interface';
+import { AlbumService } from '../../../service/album.service';
+import { IAlbum } from '../../../model/album.interface';
+import { IUsuario } from '../../../model/usuario.interface';
+import { UsuarioService } from '../../../service/usuario.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AlbumAdminSelectorUnroutedComponent } from '../../album/album.admin.selector.unrouted/album.admin.selector.unrouted.component';
 
 declare let bootstrap: any;
 
@@ -33,15 +39,72 @@ export class ResenyaAdminCreateRoutedComponent implements OnInit {
 
   form: FormGroup = new FormGroup({});
 
+  oAlbum: IAlbum = {} as IAlbum;
+  oUsuario: IUsuario = {} as IUsuario;
+
+  readonly dialog = inject(MatDialog);
+
+
+
 
   constructor(
     private oResenyaService: ResenyaService,
     private oRouter: Router,
+    private oAlbumService: AlbumService,
+    private oUsuarioService: UsuarioService
   ) { }
 
   ngOnInit() {
     this.createForm();
     this.oResenyaForm?.markAllAsTouched();
+
+    this.oResenyaForm?.controls['album'].valueChanges.subscribe(change => {
+      if (change) {
+        if (change.id) {
+          // obtener el objeto tipocuenta del servidor
+          this.oAlbumService.get(change.id).subscribe({
+            next: (oAlbum: IAlbum) => {
+              this.oAlbum = oAlbum;
+            },
+            error: (err) => {
+              console.log(err);
+              this.oAlbum = {} as IAlbum;
+              // marcar el campo como inválido
+              this.oResenyaForm?.controls['album'].setErrors({
+                invalid: true,
+              });
+            }
+          });
+        } else {
+          this.oAlbum = {} as IAlbum;
+        }
+      }
+    });
+
+    this.oResenyaForm?.controls['usuario'].valueChanges.subscribe(change => {
+      if (change) {
+        if (change.id) {
+          // obtener el objeto tipocuenta del servidor
+          this.oUsuarioService.get(change.id).subscribe({
+            next: (oUsuario: IUsuario) => {
+              this.oUsuario = oUsuario;
+            },
+            error: (err) => {
+              console.log(err);
+              this.oUsuario = {} as IUsuario;
+              // marcar el campo como inválido
+              this.oResenyaForm?.controls['usuario'].setErrors({
+                invalid: true,
+              });
+            }
+          });
+        } else {
+          this.oUsuario = {} as IUsuario;
+        }
+      }
+    });
+
+    
   }
 
   createForm() {
@@ -50,8 +113,28 @@ export class ResenyaAdminCreateRoutedComponent implements OnInit {
       descripcion: new FormControl('', [Validators.required, Validators.maxLength(255)]),
       fecha: new FormControl(Date.now()),
       website: new FormControl(''),
-      album: new FormControl('', [Validators.required]),
-      usuario: new FormControl('', [Validators.required]),
+      album: new FormGroup( {
+        id: new FormControl('', Validators.required),
+        nombre: new FormControl(''),
+        fecha: new FormControl(''),
+        genero: new FormControl(''),
+        descripcion: new FormControl(''),
+        discografica: new FormControl(''),
+        img: new FormControl(null), 
+        grupoalbumartistas: new FormControl([]),
+        resenyas: new FormControl([]),
+      }),
+      usuario: new FormGroup({
+        id: new FormControl('', Validators.required),
+        nombre: new FormControl(''),
+        fecha: new FormControl(''),
+        descripcion: new FormControl(''),
+        email: new FormControl(''),
+        password: new FormControl(''),
+        website: new FormControl(''),
+        tipousuario: new FormControl([]),
+        resenyas: new FormControl([]),
+      }),
 
     });
   }
@@ -117,4 +200,27 @@ export class ResenyaAdminCreateRoutedComponent implements OnInit {
       });
     }
   }
+
+  showTipocuentaSelectorModal() {
+    const dialogRef = this.dialog.open(AlbumAdminSelectorUnroutedComponent, {
+      height: '800px',
+      maxHeight: '1200px',
+      width: '80%',
+      maxWidth: '90%',
+
+
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if (result !== undefined) {
+        console.log(result);
+        this.oResenyaForm?.controls['album'].setValue(result);
+        this.oAlbum = result;
+        //this.animal.set(result);
+      }
+    });
+    return false;
+  }
+
 }

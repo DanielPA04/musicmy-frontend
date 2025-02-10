@@ -9,16 +9,6 @@
       <form [formGroup]="oResenyaForm!" (ngSubmit)="onSubmit()" novalidate>
         <div class="row mt-4">
           <mat-form-field>
-            <mat-label>Nombre</mat-label>
-            <input matInput formControlName="nombre" placeholder="Nombre" />
-            <mat-hint align="end">De 5 a 255 caracteres</mat-hint>
-          </mat-form-field>
-        </div>
-        <br />
-       
-
-        <div class="row mt-4">
-          <mat-form-field>
             <mat-label>Nota</mat-label>
             <input matInput formControlName="nota" placeholder="Nota" />
             <mat-hint align="end">Del 0 a 10</mat-hint> 
@@ -42,11 +32,33 @@
 
         <div class="row mt-4">
           <mat-form-field>
-            <mat-label>Spotify</mat-label>
-            <input matInput formControlName="spotify" placeholder="Spotify" />
+            <mat-label>Website</mat-label>
+            <input matInput formControlName="website" placeholder="Website" />
             <mat-hint align="end">De 0 a 255 caracteres</mat-hint>
           </mat-form-field>
         </div>
+
+
+        <div formGroupName="album">
+          <div class="row mt-4">
+            <mat-form-field>
+              <mat-label>Album</mat-label>
+              <div class="d-flex justify-content-end">
+                <button class="btn btn-primary" (click)="showTipocuentaSelectorModal()">
+                  <i class="bi bi-search"></i>
+                  Buscar
+                </button>
+              </div>
+              <div class="d-flex justify-content-start">
+                <span>{{oAlbum.nombre}}</span>
+              </div>
+
+              <input matInput formControlName="id" placeholder="Album" />
+            </mat-form-field>
+          </div>
+        </div>
+        <br />
+       
 
    
       

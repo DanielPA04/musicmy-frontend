@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { ResenyaService } from '../../../service/resenya.service';
-import { IResenya } from '../../../model/resenya.interface';
+import { Component, inject, OnInit } from '@angular/core';
+import { AlbumService } from '../../../service/album.service';
+import { IAlbum } from '../../../model/album.interface';
 import { CommonModule } from '@angular/common';
 import { IPage } from '../../../environment/model.interface';
 import { FormsModule } from '@angular/forms';
@@ -8,16 +8,18 @@ import { BotoneraService } from '../../../service/botonera.service';
 import { debounceTime, Subject } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
 import { TrimPipe } from '../../../pipe/trim.pipe';
+import {  MatDialogRef } from '@angular/material/dialog';
+import { BlobToUrlPipe } from '../../../pipe/blob.pipe';
 
 @Component({
-  selector: 'app-resenya.admin.plist.routed',
+  selector: 'app-album.admin.selector.unrouted',
   standalone: true,
-  templateUrl: './resenya.admin.plist.routed.component.html',
-  styleUrls: ['./resenya.admin.plist.routed.component.css'],
-  imports: [CommonModule, FormsModule, TrimPipe, RouterModule],
+  templateUrl: './album.admin.selector.unrouted.component.html',
+  styleUrls: ['./album.admin.selector.unrouted.component.css'],
+  imports: [CommonModule, FormsModule, TrimPipe, RouterModule, BlobToUrlPipe],
 })
-export class ResenyaAdminPlistRoutedComponent implements OnInit {
-  oPage: IPage<IResenya> | null = null;
+export class AlbumAdminSelectorUnroutedComponent implements OnInit {
+  oPage: IPage<IAlbum> | null = null;
   //
   nPage: number = 0; // 0-based server count
   nRpp: number = 10;
@@ -30,9 +32,11 @@ export class ResenyaAdminPlistRoutedComponent implements OnInit {
   arrBotonera: string[] = [];
   //
   private debounceSubject = new Subject<string>();
+  //
+  readonly dialogRef = inject(MatDialogRef<AlbumAdminSelectorUnroutedComponent>);
 
   constructor(
-    private oResenyaService: ResenyaService,
+    private oAlbumService: AlbumService,
     private oBotoneraService: BotoneraService,
     private oRouter: Router
   ) {
@@ -46,7 +50,7 @@ export class ResenyaAdminPlistRoutedComponent implements OnInit {
   }
 
   getPage() {
-    this.oResenyaService
+    this.oAlbumService
       .getPage(
         this.nPage,
         this.nRpp,
@@ -55,13 +59,25 @@ export class ResenyaAdminPlistRoutedComponent implements OnInit {
         this.strFiltro
       )
       .subscribe({
-        next: (oPageFromServer: IPage<IResenya>) => {
+        next: (oPageFromServer: IPage<IAlbum>) => {
           this.oPage = oPageFromServer;
-          console.log(oPageFromServer);
           this.arrBotonera = this.oBotoneraService.getBotonera(
             this.nPage,
             oPageFromServer.totalPages
           );
+
+          this.oPage.content.forEach((oAlbum) => {
+            this.oAlbumService.getImg(oAlbum.id).subscribe({
+              next: (data) => {
+                oAlbum.img = data;
+              },
+            });
+
+          });
+
+
+
+
         },
         error: (err) => {
           console.log(err);
@@ -69,17 +85,16 @@ export class ResenyaAdminPlistRoutedComponent implements OnInit {
       });
   }
 
-  edit(oResenya: IResenya) {
-    this.oRouter.navigate(['admin/resenya/edit', oResenya.id]);
-  }
+ 
+  select(oAlbum: IAlbum) {
+    
+    // estamos en ventana emergente: no navegar
+    // emitir el objeto seleccionado
 
-  view(oResenya: IResenya) {
-    this.oRouter.navigate(['admin/resenya/view', oResenya.id]);
-  }
+    this.dialogRef.close(oAlbum);
 
-  remove(oResenya: IResenya) {
-    this.oRouter.navigate(['admin/resenya/delete/', oResenya.id]);
-  }
+
+}
 
   goToPage(p: number) {
     if (p) {
@@ -117,5 +132,8 @@ export class ResenyaAdminPlistRoutedComponent implements OnInit {
   filter(event: KeyboardEvent) {
     this.debounceSubject.next(this.strFiltro);
   }
+
+
+
 }
 

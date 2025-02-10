@@ -12,13 +12,13 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 
 @Component({
-  selector: 'app-artista.admin.selector.routed',
+  selector: 'app-artista-admin-selector-unrouted',
   standalone: true,
-  templateUrl: './artista.admin.selector.routed.component.html',
-  styleUrls: ['./artista.admin.selector.routed.component.css'],
+  templateUrl: './artista.admin.selector.unrouted.component.html',
+  styleUrls: ['./artista.admin.selector.unrouted.component.css'],
   imports: [CommonModule, FormsModule, TrimPipe, RouterModule],
 })
-export class ArtistaAdminSelectorRoutedComponent implements OnInit {
+export class ArtistaAdminSelectorUnroutedComponent implements OnInit {
   oPage: IPage<IArtista> | null = null;
   //
   nPage: number = 0; // 0-based server count
@@ -34,7 +34,7 @@ export class ArtistaAdminSelectorRoutedComponent implements OnInit {
   private debounceSubject = new Subject<string>();
   //
   artistas: IArtista[] = [];
-  readonly dialogRef = inject(MatDialogRef<ArtistaAdminSelectorRoutedComponent>);
+  readonly dialogRef = inject(MatDialogRef<ArtistaAdminSelectorUnroutedComponent>);
   readonly data = inject(MAT_DIALOG_DATA);
 
   constructor(
@@ -42,6 +42,7 @@ export class ArtistaAdminSelectorRoutedComponent implements OnInit {
     private oBotoneraService: BotoneraService,
     private oRouter: Router
   ) {
+    this.artistas = this.data;
     this.debounceSubject.pipe(debounceTime(10)).subscribe((value) => {
       this.getPage();
     });
@@ -63,7 +64,6 @@ export class ArtistaAdminSelectorRoutedComponent implements OnInit {
       .subscribe({
         next: (oPageFromServer: IPage<IArtista>) => {
           this.oPage = oPageFromServer;
-          console.log(oPageFromServer.content[1].nombrereal);
           this.arrBotonera = this.oBotoneraService.getBotonera(
             this.nPage,
             oPageFromServer.totalPages
