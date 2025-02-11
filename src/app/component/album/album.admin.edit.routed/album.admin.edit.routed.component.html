@@ -9,6 +9,12 @@
       <form [formGroup]="oAlbumForm!" (ngSubmit)="onSubmit()" novalidate>
         <div class="row mt-4">
           <mat-form-field>
+            <mat-label>Id</mat-label>
+            <input matInput formControlName="id" placeholder="Id" readonly/>
+          </mat-form-field>
+        </div>
+        <div class="row mt-4">
+          <mat-form-field>
             <mat-label>Nombre</mat-label>
             <input matInput formControlName="nombre" placeholder="Nombre" />
             <mat-hint align="end">De 5 a 255 caracteres</mat-hint>

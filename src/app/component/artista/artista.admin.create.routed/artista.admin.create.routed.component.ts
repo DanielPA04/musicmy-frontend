@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import {
@@ -9,6 +9,12 @@ import {
 } from '@angular/forms';
 import { ArtistaService } from '../../../service/artista.service';
 import { IArtista } from '../../../model/artista.interface';
+import { BlobToUrlPipe } from '../../../pipe/blob.pipe';
+import { IAlbum } from '../../../model/album.interface';
+import { MatDialog } from '@angular/material/dialog';
+import { AlbumAdminSelectorUnroutedComponent } from '../../album/album.admin.selector.unrouted/album.admin.selector.unrouted.component';
+import { AlbumAdminMulselectorUnroutedComponent } from '../../album/album.admin.mulselector.unrouted/album.admin.mulselector.unrouted.component';
+import { GrupoalbumartistaService } from '../../../service/grupoalbumartista.service';
 
 declare let bootstrap: any;
 
@@ -20,6 +26,7 @@ declare let bootstrap: any;
     MatInputModule,
     ReactiveFormsModule,
     RouterModule,
+    BlobToUrlPipe,
   ],
   styleUrls: ['./artista.admin.create.routed.component.css'],
 })
@@ -28,6 +35,8 @@ export class ArtistaAdminCreateRoutedComponent implements OnInit {
   oArtistaForm: FormGroup | undefined = undefined;
   oArtista: IArtista | null = null;
   strMessage: string = '';
+  oAlbumes: IAlbum[] = [];
+  readonly dialog = inject(MatDialog);
 
   myModal: any;
 
@@ -36,8 +45,9 @@ export class ArtistaAdminCreateRoutedComponent implements OnInit {
 
   constructor(
     private oArtistaService: ArtistaService,
+    private oGrupoalbumartistaService: GrupoalbumartistaService,
     private oRouter: Router,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.createForm();
@@ -62,6 +72,7 @@ export class ArtistaAdminCreateRoutedComponent implements OnInit {
         Validators.maxLength(255),
       ]),
       img: new FormControl(null),
+      albumes: new FormControl([]),
     });
   }
 
@@ -71,9 +82,11 @@ export class ArtistaAdminCreateRoutedComponent implements OnInit {
     this.oArtistaForm?.controls['descripcion'].setValue('');
     this.oArtistaForm?.controls['spotify'].setValue('');
     this.oArtistaForm?.controls['img'].setValue(null);
+    this.oArtistaForm?.controls['albumes'].setValue(null);
+
   }
 
- 
+
 
   onReset() {
     this.updateForm();
@@ -87,7 +100,7 @@ export class ArtistaAdminCreateRoutedComponent implements OnInit {
       this.oArtistaForm?.controls['img'].setValue(blob);
     }
     console.log(this.oArtistaForm?.value);
-}
+  }
 
   showModal(mensaje: string) {
     this.strMessage = mensaje;
@@ -110,12 +123,20 @@ export class ArtistaAdminCreateRoutedComponent implements OnInit {
       return;
     } else {
 
-      
+
 
       this.oArtistaService.create(this.oArtistaForm?.value).subscribe({
         next: (oArtista: IArtista) => {
           this.oArtista = oArtista;
-          this.showModal('Artista creado con el id: ' + this.oArtista.id);
+          this.oGrupoalbumartistaService.updateAlbumesToArtista(this.oArtista.id, this.oArtistaForm?.value.albumes).subscribe({
+            next: (data) => {
+              console.log(data);
+              this.showModal('Artista creado con el id: ' + this.oArtista?.id);
+            },
+            error: (err) => {
+              console.log(err);
+            },
+          })
         },
         error: (err) => {
           this.showModal('Error al crear el artista');
@@ -123,5 +144,27 @@ export class ArtistaAdminCreateRoutedComponent implements OnInit {
         },
       });
     }
+  }
+
+
+  showAlbumSelectorModal() {
+    const dialogRef = this.dialog.open(AlbumAdminMulselectorUnroutedComponent, {
+      height: '800px',
+      maxHeight: '1200px',
+      width: '80%',
+      maxWidth: '90%',
+      data: this.oArtistaForm?.value.artistas
+
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if (result !== undefined) {
+        console.log(result);
+        this.oArtistaForm?.controls['albumes'].setValue(result);
+        console.log(this.oArtistaForm?.value);
+      }
+    });
+    return false;
   }
 }

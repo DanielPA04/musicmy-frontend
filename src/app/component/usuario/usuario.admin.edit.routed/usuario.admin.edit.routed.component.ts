@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { ArtistaService } from '../../../service/artista.service';
-import { IArtista } from '../../../model/artista.interface';
+import { UsuarioService } from '../../../service/usuario.service';
+import { IUsuario } from '../../../model/usuario.interface';
 import {
   FormControl,
   FormGroup,
@@ -10,6 +10,11 @@ import {
 } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { CalendarModule } from 'primeng/calendar';
+import { IPage } from '../../../environment/model.interface';
+import { ITipousuario } from '../../../model/tipousuario.iterface';
+import { TipousuarioService } from '../../../service/tipousuario.service';
 
 declare let bootstrap: any;
 
@@ -22,20 +27,24 @@ declare let bootstrap: any;
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    MatSelectModule,
+    CalendarModule,
   ],
 })
 export class UsuarioAdminEditRoutedComponent implements OnInit {
   id: number = 0;
-  oArtistaForm: FormGroup | undefined = undefined;
-  oArtista: IArtista | null = null;
+  oUsuarioForm: FormGroup | undefined = undefined;
+  oUsuario: IUsuario | null = null;
   strMessage: string = '';
-
+  oPageUsuario: IPage<ITipousuario> | null = null;
+  selected: ITipousuario | null = null;
   myModal: any;
 
   constructor(
     private oActivatedRoute: ActivatedRoute,
-    private oArtistaService: ArtistaService,
+    private oUsuarioService: UsuarioService,
+    private oTipoUsuarioService: TipousuarioService,
     private oRouter: Router
   ) {
     this.oActivatedRoute.params.subscribe((params) => {
@@ -45,15 +54,20 @@ export class UsuarioAdminEditRoutedComponent implements OnInit {
 
   ngOnInit() {
     this.createForm();
-    this.get();
-    this.oArtistaForm?.markAllAsTouched();
+    this.oTipoUsuarioService.getPage(0, 10, "", "", "").subscribe((oPage) => {
+      this.oPageUsuario = oPage;
+      this.get();
+
+    });
+    this.oUsuarioForm?.markAllAsTouched();
+
   }
 
-  
+
   onReset() {
-    this.oArtistaService.get(this.id).subscribe({
-      next: (oArtista: IArtista) => {
-        this.oArtista = oArtista;
+    this.oUsuarioService.get(this.id).subscribe({
+      next: (oUsuario: IUsuario) => {
+        this.oUsuario = oUsuario;
         this.updateForm();
       },
       error: (error) => {
@@ -64,40 +78,50 @@ export class UsuarioAdminEditRoutedComponent implements OnInit {
   }
 
   createForm() {
-    this.oArtistaForm = new FormGroup({
+    this.oUsuarioForm = new FormGroup({
       id: new FormControl('', [Validators.required]),
       nombre: new FormControl('', [
         Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(255),
+      ]),
+      fecha: new FormControl('', [Validators.required]),
+      descripcion: new FormControl('', [Validators.maxLength(255)]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [
         Validators.minLength(5),
         Validators.maxLength(255),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/),
       ]),
-      nombreReal: new FormControl('', [Validators.required]),
-      descripcion: new FormControl('', [
-        Validators.required,
-        Validators.minLength(0),
-        Validators.maxLength(255),
-      ]),
-      spotify: new FormControl('', [
-        Validators.minLength(0),
-        Validators.maxLength(255),
-      ]),
-      img: new FormControl(null),
+      website: new FormControl(''),
+      tipousuario: new FormControl([], [Validators.required]),
     });
   }
 
+
   updateForm() {
-    this.oArtistaForm?.controls['id'].setValue(this.oArtista?.id);
-    this.oArtistaForm?.controls['nombre'].setValue(this.oArtista?.nombre);
-    this.oArtistaForm?.controls['nombreReal'].setValue(this.oArtista?.nombrereal);
-    this.oArtistaForm?.controls['descripcion'].setValue(this.oArtista?.descripcion);
-    this.oArtistaForm?.controls['spotify'].setValue(this.oArtista?.spotify);
-    this.oArtistaForm?.controls['img'].setValue(null);
+    if (!this.oUsuario) return;
+    this.oUsuarioForm?.patchValue({
+      id: this.oUsuario.id,
+      nombre: this.oUsuario.nombre,
+      fecha: this.oUsuario.fecha,
+      descripcion: this.oUsuario.descripcion,
+      email: this.oUsuario.email,
+      password: this.oUsuario.password,
+      website: this.oUsuario.website,
+    });
+    if (this.oPageUsuario?.content) {
+      const matchedTipoUsuario = this.oPageUsuario.content.find(
+        (tipo) => tipo.id === this.oUsuario?.tipousuario?.id
+      );
+      this.oUsuarioForm?.controls['tipousuario'].setValue(matchedTipoUsuario || null);
+    }
   }
 
   get() {
-    this.oArtistaService.get(this.id).subscribe({
-      next: (oArtista: IArtista) => {
-        this.oArtista = oArtista;
+    this.oUsuarioService.get(this.id).subscribe({
+      next: (oUsuario: IUsuario) => {
+        this.oUsuario = oUsuario;
         this.updateForm();
       },
       error: (error) => {
@@ -110,10 +134,10 @@ export class UsuarioAdminEditRoutedComponent implements OnInit {
     const file = event.target.files[0];
     if (file) {
       const blob = new Blob([file], { type: file.type });
-      this.oArtistaForm?.controls['img'].setValue(blob);
+      this.oUsuarioForm?.controls['img'].setValue(blob);
     }
-    console.log(this.oArtistaForm?.value);
-}
+    console.log(this.oUsuarioForm?.value);
+  }
 
   showModal(mensaje: string) {
     this.strMessage = mensaje;
@@ -125,22 +149,22 @@ export class UsuarioAdminEditRoutedComponent implements OnInit {
 
   hideModal = () => {
     this.myModal.hide();
-    this.oRouter.navigate(['/admin/artista/view/' + this.oArtista?.id]);
+    this.oRouter.navigate(['/admin/usuario/view/' + this.oUsuario?.id]);
   };
 
   onSubmit() {
-    if (!this.oArtistaForm?.valid) {
+    if (!this.oUsuarioForm?.valid) {
       this.showModal('Formulario no válido');
       return;
     } else {
-      this.oArtistaService.update(this.oArtistaForm?.value).subscribe({
-        next: (oArtista: IArtista) => {
-          this.oArtista = oArtista;
+      this.oUsuarioService.update(this.oUsuarioForm?.value).subscribe({
+        next: (oUsuario: IUsuario) => {
+          this.oUsuario = oUsuario;
           this.updateForm();
-          this.showModal('Artista ' + this.oArtista.id + ' actualizado');
+          this.showModal('usuario ' + this.oUsuario.id + ' actualizado');
         },
         error: (error) => {
-          this.showModal('Error al actualizar el artista');
+          this.showModal('Error al actualizar el usuario');
           console.error(error);
         },
       });

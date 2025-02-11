@@ -7,6 +7,13 @@
         <i class="bi bi-journal-text"></i>
       </h2>
       <form [formGroup]="oArtistaForm!" (ngSubmit)="onSubmit()" novalidate>
+
+        <div class="row mt-4">
+          <mat-form-field>
+            <mat-label>Id</mat-label>
+            <input matInput formControlName="id" placeholder="Id" readonly/>
+          </mat-form-field>
+        </div>
         <div class="row mt-4">
           <mat-form-field>
             <mat-label>Nombre</mat-label>

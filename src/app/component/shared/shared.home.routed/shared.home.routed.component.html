@@ -1,23 +1,42 @@
-<div class="flex flex-row flex-wrap justify-center m-auto justify-items-center items-center w-[100vh]">
-  @for (album of oPage.content; track album.id) {
-  <div class="flex flex-col justify-center m-4 justify-items-center items-center">
-    <div>
-      <img src="{{ album.img | blobToUrl }}" width="200" height="200" />
-    </div>
-    <div class="col-lg-4 col-md-6 col-sm-12">{{ album.nombre }}</div>
-    <div class="col-lg-4 col-md-6 col-sm-12 flex flex-row">
-      @for (artista of nombresArtista.get(album.id); track $index) {
-      <div>{{ artista.nombre }}/ </div>
-      }
-    </div>
-    <div class="col-lg-4 col-md-6 col-sm-12">{{ album.genero }}</div>
-    <div class="col-lg-4 col-md-6 col-sm-12 text-gray-900 px-2 py-1 rounded-md text-sm font-medium" 
-    [class.low-grade]="getMedia(album.id) < 5"
-    [class.medium-grade]="getMedia(album.id) >= 5 && getMedia(album.id) < 7"
-    [class.high-grade]="getMedia(album.id) >= 7"
-    > Nota: {{
-      mediasArtista.get(album.id) }}</div>
-
+<div class="flex flex-col items-center p-4">
+  <!-- Título y enlace "VIEW ALL" -->
+  <div class="flex justify-between items-center w-full mb-6">
+    <h1 class="text-2xl font-bold">NEW RELEASES</h1>
+    <a href="#" class="text-blue-500 hover:underline">VIEW ALL</a>
   </div>
-  }
+
+  <!-- Contenedor de álbumes -->
+  <div class="flex flex-row flex-wrap justify-center gap-6">
+    <!-- Iteración sobre cada álbum -->
+    @for (album of oPage.content; track album.id) {
+    <div class="flex flex-col w-48">
+      <!-- Imagen del álbum -->
+      <img
+        src="{{ album.img | blobToUrl }}"
+        width="200"
+        height="200"
+        class="rounded-lg"
+      />
+
+      <!-- Nombre del álbum -->
+      <div class="text-center mt-2 font-semibold">{{ album.nombre }}</div>
+
+      <!-- Nombre del artista -->
+      <div class="text-center text-sm text-gray-600">
+        @for (artista of nombresArtista.get(album.id); track $index) {
+        <div>{{ artista.nombre }}/</div>
+        }
+      </div>
+
+      <!-- Puntuación de la crítica -->
+      <div class="text-center text-sm text-gray-500 mt-1">
+        Nota: {{
+      mediasArtista.get(album.id) }}
+      </div>
+
+      <!-- Puntuación del usuario -->
+
+    </div>
+    }
+  </div>
 </div>

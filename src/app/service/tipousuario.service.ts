@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { httpOptions, serverURL } from '../environment/environment';
-import { ITipousuario } from '../model/tipousuario.iterface'; 
+import { ITipousuario } from '../model/tipousuario.iterface';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IPage } from '../environment/model.interface';
@@ -12,14 +12,16 @@ export class TipousuarioService {
   serverURL: string = serverURL + '/tipousuario';
 
   constructor(private oHttp: HttpClient) { }
+
+
   
 
- getPage(
+  getPage(
     page: number,
     size: number,
-    field: string,
-    dir: string,
-    filtro: string
+    field: string ,
+    dir: string ,
+    filtro: string 
   ): Observable<IPage<ITipousuario>> {
     let URL: string = '';
     URL += this.serverURL;

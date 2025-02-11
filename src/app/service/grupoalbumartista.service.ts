@@ -93,7 +93,7 @@ export class GrupoalbumartistaService {
       })
       let URL: string = '';
       URL += this.serverURL;
-      URL += '/artistas/' + idArtista;
+      URL += '/albumes/' + idArtista;
       return this.oHttp.put<IAlbum[]>(URL, albumes);
     }
   }

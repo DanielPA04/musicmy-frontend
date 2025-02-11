@@ -56,6 +56,8 @@ get(id: number): Observable<IUsuario> {
 
 create(oUsuario: IUsuario): Observable<IUsuario> {
   oUsuario.password = this.oCryptoService.getHashSHA256(oUsuario.password);
+  oUsuario.fecha = new Date(oUsuario.fecha).toISOString().split('T')[0];
+  oUsuario.tipousuario.usuarios = [];
 
   let URL: string = '';
   URL += this.serverURL;
@@ -80,7 +82,7 @@ checkIfEmailExists(email: string): Observable<boolean> {
 
 update(oUsuario: IUsuario): Observable<IUsuario> {
   oUsuario.password = this.oCryptoService.getHashSHA256(oUsuario.password);
-
+  oUsuario.tipousuario.usuarios = [];
   let URL: string = '';
   URL += this.serverURL;
   return this.oHttp.put<IUsuario>(URL, oUsuario);
