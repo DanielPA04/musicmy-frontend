@@ -174,7 +174,6 @@ export class ResenyaAdminCreateRoutedComponent implements OnInit {
 
   hideModal = () => {
     this.myModal.hide();
-    this.oRouter.navigate(['/admin/resenya/view/' + this.oResenya?.id]);
   };
 
 
@@ -192,6 +191,7 @@ export class ResenyaAdminCreateRoutedComponent implements OnInit {
         next: (oResenya: IResenya) => {
           this.oResenya = oResenya;
           this.showModal('Resenya creado con el id: ' + this.oResenya.id);
+          this.oRouter.navigate(['/admin/resenya/view/' + this.oResenya?.id]);
         },
         error: (err) => {
           this.showModal('Error al crear el resenya');

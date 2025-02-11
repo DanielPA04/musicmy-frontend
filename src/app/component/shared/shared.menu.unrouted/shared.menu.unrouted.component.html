@@ -13,6 +13,7 @@
       <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/artista/')" href="/admin/artista/plist">Artista</a>
       <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/resenya/')" href="/admin/resenya/plist">Reseña</a>
       <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/usuario/')" href="/admin/usuario/plist">Usuario</a>
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/tipousuario/')" href="/admin/tipousuario/plist">Tipo Usuario</a>
 
 
     </div>
@@ -48,15 +49,22 @@
     <span class="sr-only">Close menu</span>
  </button>
 <div class="py-4 space-y-4 overflow-y-auto flex flex-col ">
-  
-  <div class="flex flex-col space-y-4">
-    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta == '/home' || strRuta == '/' || strRuta == ''" href="/home">Inicio</a>
-    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/album/')" href="/admin/album/plist">Album</a>
-    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/artista/')" href="/admin/artista/plist">Artista</a>
-    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/resenya/')" href="/admin/resenya/plist">Reseña</a>
-    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/usuario/')" href="/admin/usuario/plist">Usuario</a>
 
-  </div>
+  @if (permisos === "Administrador") {
+    <div class="flex flex-col space-y-4">
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/album/')" href="/admin/album/plist">Album</a>
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/artista/')" href="/admin/artista/plist">Artista</a>
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/resenya/')" href="/admin/resenya/plist">Reseña</a>
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/usuario/')" href="/admin/usuario/plist">Usuario</a>
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/tipousuario/')" href="/admin/tipousuario/plist">Tipo Usuario</a>
+    </div>
+    } @else {
+      <div class="flex flex-col space-x-4">
+        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta == '/home' || strRuta == '/' || strRuta == ''" href="/home">Inicio</a>
+      </div>
+    }
+  
+
   <div class="flex flex-col space-y-4">
     @if (!activeSession) {
     <a class="text-gray-600  px-3 py-2 rounded-lg border-1 border-solid border-[#f84525] hover:bg-[#f84525] hover:text-white" [class.activeTW]="strRuta == '/login'" href="/login">Login</a>

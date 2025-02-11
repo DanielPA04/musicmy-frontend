@@ -68,6 +68,10 @@ export class ResenyaService {
     }
   
     update(oResenya: IResenya): Observable<IResenya> {
+      oResenya.album.resenyas = [];
+      oResenya.album.grupoalbumartistas = [];
+      oResenya.usuario.resenyas = [];
+      oResenya.usuario.tipousuario.usuarios = [];
       let URL: string = '';
       URL += this.serverURL;
       return this.oHttp.put<IResenya>(URL, oResenya);

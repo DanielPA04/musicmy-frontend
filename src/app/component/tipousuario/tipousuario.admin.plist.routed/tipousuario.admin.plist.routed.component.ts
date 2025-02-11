@@ -1,6 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { AlbumService } from '../../../service/album.service';
-import { IAlbum } from '../../../model/album.interface';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IPage } from '../../../environment/model.interface';
 import { FormsModule } from '@angular/forms';
@@ -8,18 +6,18 @@ import { BotoneraService } from '../../../service/botonera.service';
 import { debounceTime, Subject } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
 import { TrimPipe } from '../../../pipe/trim.pipe';
-import { MatDialogRef } from '@angular/material/dialog';
-import { BlobToUrlPipe } from '../../../pipe/blob.pipe';
+import { ITipousuario } from '../../../model/tipousuario.iterface';
+import { TipousuarioService } from '../../../service/tipousuario.service';
 
 @Component({
-  selector: 'app-album.admin.selector.unrouted',
+  selector: 'app-tipousuario.admin.plist.routed',
   standalone: true,
-  templateUrl: './album.admin.selector.unrouted.component.html',
-  styleUrls: ['./album.admin.selector.unrouted.component.css'],
-  imports: [CommonModule, FormsModule, TrimPipe, RouterModule, BlobToUrlPipe],
+  templateUrl: './tipousuario.admin.plist.routed.component.html',
+  styleUrls: ['./tipousuario.admin.plist.routed.component.css'],
+  imports: [CommonModule, FormsModule, TrimPipe, RouterModule],
 })
-export class AlbumAdminSelectorUnroutedComponent implements OnInit {
-  oPage: IPage<IAlbum> | null = null;
+export class TipousuarioAdminPlistRoutedComponent implements OnInit {
+  oPage: IPage<ITipousuario> | null = null;
   //
   nPage: number = 0; // 0-based server count
   nRpp: number = 10;
@@ -32,11 +30,9 @@ export class AlbumAdminSelectorUnroutedComponent implements OnInit {
   arrBotonera: string[] = [];
   //
   private debounceSubject = new Subject<string>();
-  //
-  readonly dialogRef = inject(MatDialogRef<AlbumAdminSelectorUnroutedComponent>);
 
   constructor(
-    private oAlbumService: AlbumService,
+    private oTipousuarioService: TipousuarioService,
     private oBotoneraService: BotoneraService,
     private oRouter: Router
   ) {
@@ -50,7 +46,7 @@ export class AlbumAdminSelectorUnroutedComponent implements OnInit {
   }
 
   getPage() {
-    this.oAlbumService
+    this.oTipousuarioService
       .getPage(
         this.nPage,
         this.nRpp,
@@ -59,25 +55,12 @@ export class AlbumAdminSelectorUnroutedComponent implements OnInit {
         this.strFiltro
       )
       .subscribe({
-        next: (oPageFromServer: IPage<IAlbum>) => {
+        next: (oPageFromServer: IPage<ITipousuario>) => {
           this.oPage = oPageFromServer;
           this.arrBotonera = this.oBotoneraService.getBotonera(
             this.nPage,
             oPageFromServer.totalPages
           );
-
-          this.oPage.content.forEach((oAlbum) => {
-            this.oAlbumService.getImg(oAlbum.id).subscribe({
-              next: (data) => {
-                oAlbum.img = data;
-              },
-            });
-
-          });
-
-
-
-
         },
         error: (err) => {
           console.log(err);
@@ -85,11 +68,18 @@ export class AlbumAdminSelectorUnroutedComponent implements OnInit {
       });
   }
 
+  edit(oTipousuario: ITipousuario) {
+    //navegar a la página de edición
+    this.oRouter.navigate(['admin/tipousuario/edit', oTipousuario.id]);
+  }
 
-  select(oAlbum: IAlbum) {
-    // TODO hacer img posible null y password en usuario igual
-    oAlbum.img = {} as Blob;
-    this.dialogRef.close(oAlbum);
+  view(oTipousuario: ITipousuario) {
+    //navegar a la página de edición
+    this.oRouter.navigate(['admin/tipousuario/view', oTipousuario.id]);
+  }
+
+  remove(oTipousuario: ITipousuario) {
+    this.oRouter.navigate(['admin/tipousuario/delete/', oTipousuario.id]);
   }
 
   goToPage(p: number) {
@@ -128,8 +118,5 @@ export class AlbumAdminSelectorUnroutedComponent implements OnInit {
   filter(event: KeyboardEvent) {
     this.debounceSubject.next(this.strFiltro);
   }
-
-
-
 }
 

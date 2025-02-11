@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { ArtistaService } from '../../../service/artista.service';
-import { IArtista } from '../../../model/artista.interface';
+import { ResenyaService } from '../../../service/resenya.service';
+import { IResenya } from '../../../model/resenya.interface';
 import {
   FormControl,
   FormGroup,
@@ -10,6 +10,13 @@ import {
 } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { UsuarioAdminSelectorUnroutedComponent } from '../../usuario/usuario.admin.selector.unrouted/usuario.admin.selector.unrouted.component';
+import { MatDialog } from '@angular/material/dialog';
+import { AlbumAdminSelectorUnroutedComponent } from '../../album/album.admin.selector.unrouted/album.admin.selector.unrouted.component';
+import { AlbumService } from '../../../service/album.service';
+import { UsuarioService } from '../../../service/usuario.service';
+import { IAlbum } from '../../../model/album.interface';
+import { IUsuario } from '../../../model/usuario.interface';
 
 declare let bootstrap: any;
 
@@ -22,21 +29,23 @@ declare let bootstrap: any;
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
   ],
 })
 export class ResenyaAdminEditRoutedComponent implements OnInit {
   id: number = 0;
-  oArtistaForm: FormGroup | undefined = undefined;
-  oArtista: IArtista | null = null;
+  oResenyaForm: FormGroup | undefined = undefined;
+  oResenya: IResenya | null = null;
   strMessage: string = '';
-
   myModal: any;
+  readonly dialog = inject(MatDialog);
 
   constructor(
     private oActivatedRoute: ActivatedRoute,
-    private oArtistaService: ArtistaService,
-    private oRouter: Router
+    private oResenyaService: ResenyaService,
+    private oRouter: Router,
+    private oAlbumService: AlbumService,
+    private oUsuarioService: UsuarioService
   ) {
     this.oActivatedRoute.params.subscribe((params) => {
       this.id = params['id'];
@@ -46,14 +55,59 @@ export class ResenyaAdminEditRoutedComponent implements OnInit {
   ngOnInit() {
     this.createForm();
     this.get();
-    this.oArtistaForm?.markAllAsTouched();
+    this.oResenyaForm?.markAllAsTouched();
+
+    this.oResenyaForm?.controls['album'].valueChanges.subscribe((change) => {
+      if (change) {
+        if (change.id) {
+          // obtener el objeto tipocuenta del servidor
+          this.oAlbumService.get(change.id).subscribe({
+            next: (oAlbum: IAlbum) => {
+              this.oResenya!.album = oAlbum;
+            },
+            error: (err) => {
+              console.log(err);
+              this.oResenya!.album = {} as IAlbum;
+              // marcar el campo como inválido
+              this.oResenyaForm?.controls['album'].setErrors({
+                invalid: true,
+              });
+            },
+          });
+        } else {
+          this.oResenya!.album = {} as IAlbum;
+        }
+      }
+    });
+
+    this.oResenyaForm?.controls['usuario'].valueChanges.subscribe((change) => {
+      if (change) {
+        if (change.id) {
+          // obtener el objeto tipocuenta del servidor
+          this.oUsuarioService.get(change.id).subscribe({
+            next: (oUsuario: IUsuario) => {
+              this.oResenya!.usuario = oUsuario;
+            },
+            error: (err) => {
+              console.log(err);
+              this.oResenya!.usuario = {} as IUsuario;
+              // marcar el campo como inválido
+              this.oResenyaForm?.controls['usuario'].setErrors({
+                invalid: true,
+              });
+            },
+          });
+        } else {
+          this.oResenya!.usuario = {} as IUsuario;
+        }
+      }
+    });
   }
 
-  
   onReset() {
-    this.oArtistaService.get(this.id).subscribe({
-      next: (oArtista: IArtista) => {
-        this.oArtista = oArtista;
+    this.oResenyaService.get(this.id).subscribe({
+      next: (oResenya: IResenya) => {
+        this.oResenya = oResenya;
         this.updateForm();
       },
       error: (error) => {
@@ -64,40 +118,52 @@ export class ResenyaAdminEditRoutedComponent implements OnInit {
   }
 
   createForm() {
-    this.oArtistaForm = new FormGroup({
+    this.oResenyaForm = new FormGroup({
       id: new FormControl('', [Validators.required]),
-      nombre: new FormControl('', [
-        Validators.required,
-        Validators.minLength(5),
-        Validators.maxLength(255),
-      ]),
-      nombreReal: new FormControl('', [Validators.required]),
+      nota: new FormControl('', [Validators.required]),
       descripcion: new FormControl('', [
         Validators.required,
-        Validators.minLength(0),
         Validators.maxLength(255),
       ]),
-      spotify: new FormControl('', [
-        Validators.minLength(0),
-        Validators.maxLength(255),
-      ]),
-      img: new FormControl(null),
+      website: new FormControl(''),
+      album: new FormGroup({
+        id: new FormControl('', Validators.required),
+        nombre: new FormControl(''),
+        fecha: new FormControl(''),
+        genero: new FormControl(''),
+        descripcion: new FormControl(''),
+        discografica: new FormControl(''),
+        grupoalbumartistas: new FormControl([]),
+        resenyas: new FormControl([]),
+      }),
+      usuario: new FormGroup({
+        id: new FormControl('', Validators.required),
+        nombre: new FormControl(''),
+        fecha: new FormControl(''),
+        descripcion: new FormControl(''),
+        email: new FormControl(''),
+        website: new FormControl(''),
+        tipousuario: new FormControl([]),
+        resenyas: new FormControl([]),
+      }),
     });
   }
 
   updateForm() {
-    this.oArtistaForm?.controls['id'].setValue(this.oArtista?.id);
-    this.oArtistaForm?.controls['nombre'].setValue(this.oArtista?.nombre);
-    this.oArtistaForm?.controls['nombreReal'].setValue(this.oArtista?.nombrereal);
-    this.oArtistaForm?.controls['descripcion'].setValue(this.oArtista?.descripcion);
-    this.oArtistaForm?.controls['spotify'].setValue(this.oArtista?.spotify);
-    this.oArtistaForm?.controls['img'].setValue(null);
+    this.oResenyaForm?.controls['id'].setValue(this.oResenya?.id);
+    this.oResenyaForm?.controls['nota'].setValue(this.oResenya?.nota);
+    this.oResenyaForm?.controls['descripcion'].setValue(
+      this.oResenya?.descripcion
+    );
+    this.oResenyaForm?.controls['website'].setValue(this.oResenya?.website);
+    this.oResenyaForm?.controls['album'].setValue(this.oResenya?.album);
+    this.oResenyaForm?.controls['usuario'].setValue(this.oResenya?.usuario);
   }
 
   get() {
-    this.oArtistaService.get(this.id).subscribe({
-      next: (oArtista: IArtista) => {
-        this.oArtista = oArtista;
+    this.oResenyaService.get(this.id).subscribe({
+      next: (oResenya: IResenya) => {
+        this.oResenya = oResenya;
         this.updateForm();
       },
       error: (error) => {
@@ -105,15 +171,6 @@ export class ResenyaAdminEditRoutedComponent implements OnInit {
       },
     });
   }
-
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      const blob = new Blob([file], { type: file.type });
-      this.oArtistaForm?.controls['img'].setValue(blob);
-    }
-    console.log(this.oArtistaForm?.value);
-}
 
   showModal(mensaje: string) {
     this.strMessage = mensaje;
@@ -125,25 +182,87 @@ export class ResenyaAdminEditRoutedComponent implements OnInit {
 
   hideModal = () => {
     this.myModal.hide();
-    this.oRouter.navigate(['/admin/artista/view/' + this.oArtista?.id]);
+    this.oRouter.navigate(['/admin/resenya/view/' + this.oResenya?.id]);
   };
 
   onSubmit() {
-    if (!this.oArtistaForm?.valid) {
+    if (!this.oResenyaForm?.valid) {
       this.showModal('Formulario no válido');
       return;
     } else {
-      this.oArtistaService.update(this.oArtistaForm?.value).subscribe({
-        next: (oArtista: IArtista) => {
-          this.oArtista = oArtista;
+      this.oResenyaService.update(this.oResenyaForm?.value).subscribe({
+        next: (oResenya: IResenya) => {
+          this.oResenya = oResenya;
           this.updateForm();
-          this.showModal('Artista ' + this.oArtista.id + ' actualizado');
+          this.showModal('Resenya ' + this.oResenya.id + ' actualizado');
         },
         error: (error) => {
-          this.showModal('Error al actualizar el artista');
+          this.showModal('Error al actualizar el resenya');
           console.error(error);
         },
       });
     }
+  }
+
+  showAlbumSelectorModal() {
+    const dialogRef = this.dialog.open(AlbumAdminSelectorUnroutedComponent, {
+      height: '800px',
+      maxHeight: '1200px',
+      width: '80%',
+      maxWidth: '90%',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed');
+      if (result !== undefined) {
+        const newAlbum = {
+          id: result.id,
+          nombre: result.nombre,
+          fecha: result.fecha,
+          genero: result.genero,
+          descripcion: result.descripcion,
+          discografica: result.discografica,
+          grupoalbumartistas: result.grupoalbumartistas,
+          resenyas: result.resenyas
+        };
+
+        this.oResenyaForm?.controls['album'].setValue(newAlbum);
+        this.oResenya!.album = result;
+        console.log(this.oResenyaForm?.value);
+      }
+    });
+  }
+
+  showUsuarioSelectorModal() {
+    const dialogRef = this.dialog.open(UsuarioAdminSelectorUnroutedComponent, {
+      height: '800px',
+      maxHeight: '1200px',
+      width: '80%',
+      maxWidth: '90%',
+    });
+
+   
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed');
+      if (result !== undefined) {
+        console.log(result);
+
+        const newUsuario = {
+          id: result.id,
+          nombre: result.nombre,
+          fecha: result.fecha,
+          descripcion: result.descripcion,
+          email: result.email,
+          website: result.website,
+          tipousuario: result.tipousuario,
+          resenyas: result.resenyas
+        };
+        console.log(result);
+        this.oResenyaForm?.controls['usuario'].setValue(newUsuario);
+        this.oResenya!.usuario = result;
+      }
+    });
+    return false;
   }
 }

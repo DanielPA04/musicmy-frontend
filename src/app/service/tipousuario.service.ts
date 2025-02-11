@@ -8,7 +8,7 @@ import { IPage } from '../environment/model.interface';
 @Injectable({
   providedIn: 'root',
 })
-export class ArtistaService {
+export class TipousuarioService {
   serverURL: string = serverURL + '/tipousuario';
 
   constructor(private oHttp: HttpClient) { }
