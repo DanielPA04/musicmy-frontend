@@ -31,15 +31,36 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
 
 
 
-.low-grade {
+.bg-low-grade {
     background-color: red;
 }
 
-.medium-grade {
+.bg-medium-grade {
     background-color: yellow;
 }
 
-.high-grade {
+.bg-high-grade {
     background-color: #28a745;
+}
+
+.bg-excellent-grade {
+    background-color: rgb(153, 7, 153);
+    color: white;
+}
+
+.low-grade {
+    color: red;
+}
+
+.medium-grade {
+    color: yellow;
+}   
+
+.high-grade {
+    color: #28a745;
+}
+
+.excellent-grade {
+    color: rgb(153, 7, 153);
 }
 

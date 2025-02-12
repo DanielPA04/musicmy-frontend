@@ -154,16 +154,7 @@ export class ResenyaAdminCreateRoutedComponent implements OnInit {
     this.updateForm();
     return false;
   }
-
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      const blob = new Blob([file], { type: file.type });
-      this.oResenyaForm?.controls['img'].setValue(blob);
-    }
-    console.log(this.oResenyaForm?.value);
-  }
-
+  
   showModal(mensaje: string) {
     this.strMessage = mensaje;
     this.myModal = new bootstrap.Modal(document.getElementById('mimodal'), {

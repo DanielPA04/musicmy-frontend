@@ -4,7 +4,7 @@ import { Pipe, PipeTransform  } from '@angular/core';
     name: 'blobToUrl'
   })
   export class BlobToUrlPipe implements PipeTransform {
-    transform(blob: Blob): string | null {
+    transform(blob: Blob | undefined): string | null {
   
       if (!blob) return null;
       return URL.createObjectURL(blob);

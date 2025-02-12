@@ -41,6 +41,8 @@ import { UsuarioAdminDeleteRoutedComponent } from './component/usuario/usuario.a
 
 //Tipousuario
 import { TipousuarioAdminPlistRoutedComponent } from './component/tipousuario/tipousuario.admin.plist.routed/tipousuario.admin.plist.routed.component';
+import { ResenyaUsuarioCreateRoutedComponent } from './component/resenya/resenya.usuario.create.routed/resenya.usuario.create.routed.component';
+import { AlbumUsuarioViewRoutedComponent } from './component/album/album.usuario.view.routed/album.usuario.view.routed.component';
 
 export const routes: Routes = [
     // Menu
@@ -57,6 +59,8 @@ export const routes: Routes = [
     { path: 'admin/album/view/:id', component: AlbumAdminViewRoutedComponent, canActivate: [AdminGuard] },
     { path: 'admin/album/edit/:id', component: AlbumAdminEditRoutedComponent, canActivate: [AdminGuard] },
     { path: 'admin/album/delete/:id', component: AlbumAdminDeleteRoutedComponent, canActivate: [AdminGuard] },
+    { path: 'album/view/:id', component: AlbumUsuarioViewRoutedComponent },
+
 
     //Artista
     { path: 'admin/artista/plist', component: ArtistaAdminPlistRoutedComponent, canActivate: [AdminGuard] },
@@ -71,6 +75,7 @@ export const routes: Routes = [
     { path: 'admin/resenya/view/:id', component: ResenyaAdminViewRoutedComponent, canActivate: [AdminGuard] },
     { path: 'admin/resenya/edit/:id', component: ResenyaAdminEditRoutedComponent, canActivate: [AdminGuard] },
     { path: 'admin/resenya/delete/:id', component: ResenyaAdminDeleteRoutedComponent, canActivate: [AdminGuard] },
+    { path: 'resenya/create/:id', component: ResenyaUsuarioCreateRoutedComponent, canActivate: [UserGuard] },
 
      //Usuario
      { path: 'admin/usuario/plist', component: UsuarioAdminPlistRoutedComponent, canActivate: [AdminGuard] },

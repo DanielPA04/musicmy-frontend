@@ -16,6 +16,7 @@ export class SharedMenuUnroutedComponent implements OnInit {
   userEmail: string = '';
   permisos: string = '';
 
+
   constructor(private oRouter: Router, private oSessionService: SessionService, private oUsuarioService: UsuarioService) {
     this.oRouter.events.subscribe((oEvent) => {
       if (oEvent instanceof NavigationEnd) {

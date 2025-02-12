@@ -45,6 +45,35 @@ export class AlbumService {
     return this.oHttp.get<IPage<IAlbum>>(URL, httpOptions);
   }
 
+  getPageLastMonth(
+    page: number,
+    size: number,
+    field: string,
+    dir: string
+  ): Observable<IPage<IAlbum>> {
+    let URL: string = '';
+    URL += this.serverURL;
+    URL += '/lastmonth';
+    if (!page) {
+      page = 0;
+    }
+    URL += '?page=' + page;
+    if (!size) {
+      size = 10;
+    }
+    URL += '&size=' + size;
+    if (field) {
+      URL += '&sort=' + field;
+      if (dir === 'asc') {
+        URL += ',asc';
+      } else {
+        URL += ',desc';
+      }
+    }
+
+    return this.oHttp.get<IPage<IAlbum>>(URL, httpOptions);
+  }
+
   get(id: number): Observable<IAlbum> {
     let URL: string = '';
     URL += this.serverURL;

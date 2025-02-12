@@ -8,15 +8,10 @@
   <!-- Contenedor de álbumes -->
   <div class="flex flex-row flex-wrap justify-center gap-6">
     <!-- Iteración sobre cada álbum -->
-    @for (album of oPage.content; track album.id) {
+    @for (album of oPageLastMonth.content; track album.id) {
     <div class="flex flex-col w-48">
       <!-- Imagen del álbum -->
-      <img
-        src="{{ album.img | blobToUrl }}"
-        width="200"
-        height="200"
-        class="rounded-lg"
-      />
+      <img src="{{ album.img | blobToUrl }}" width="200" height="200" class="rounded-lg" />
 
       <!-- Nombre del álbum -->
       <div class="text-center mt-2 font-semibold">{{ album.nombre }}</div>
@@ -28,13 +23,56 @@
         }
       </div>
 
-      <!-- Puntuación de la crítica -->
-      <div class="text-center text-sm text-gray-500 mt-1">
+      <div class="text-center text-sm text-gray-900 mt-1" [class.bg-low-grade]="getMedia(album.id) < 5"
+        [class.bg-medium-grade]="getMedia(album.id) >= 5 && getMedia(album.id) < 7"
+        [class.bg-high-grade]="getMedia(album.id) >= 7 && getMedia(album.id) < 8"
+        [class.bg-excellent-grade]="getMedia(album.id) > 8">
         Nota: {{
-      mediasArtista.get(album.id) }}
+        mediasArtista.get(album.id) }}
       </div>
 
-      <!-- Puntuación del usuario -->
+
+    </div>
+    }
+  </div>
+</div>
+
+<div class="flex flex-col items-center p-4">
+  <!-- Título y enlace "VIEW ALL" -->
+  <div class="flex justify-between items-center w-full mb-6">
+    <h1 class="text-2xl font-bold">Best Sellers</h1>
+    <a href="#" class="text-blue-500 hover:underline">VIEW ALL</a>
+  </div>
+
+  <!-- Contenedor de álbumes -->
+  <div class="flex flex-row flex-wrap justify-center gap-6">
+    <!-- Iteración sobre cada álbum -->
+    @for (album of oPage.content; track album.id) {
+    <div class="flex flex-col w-48">
+      <!-- Imagen del álbum -->
+      <a href="/album/view/{{ album.id }}">
+        <img src="{{ album.img | blobToUrl }}" width="200" height="200" class="rounded-lg" />
+      </a>
+      <!-- Nombre del álbum -->
+      <div class="text-center mt-2 font-semibold"><a href="/album/view/{{ album.id }}">{{ album.nombre }}</a>
+      </div>
+
+      <!-- Nombre del artista -->
+      <div class="text-center text-sm text-gray-600">
+        @for (artista of nombresArtista.get(album.id); track $index) {
+        <div><a href="/admin/artista/view/{{ artista.id }}">{{ artista.nombre }}</a>/</div>
+        }
+      </div>
+
+      <div class="text-center text-sm text-gray-900 mt-1" [class.bg-low-grade]="getMedia(album.id) < 5"
+        [class.bg-medium-grade]="getMedia(album.id) >= 5 && getMedia(album.id) < 7"
+        [class.bg-high-grade]="getMedia(album.id) >= 7 && getMedia(album.id) < 8"
+        [class.bg-excellent-grade]="getMedia(album.id) > 8">
+        Nota: {{
+        mediasArtista.get(album.id) }}
+      </div>
+     
+
 
     </div>
     }

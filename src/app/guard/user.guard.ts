@@ -19,7 +19,7 @@ export class UserGuard implements CanActivate {
         if (this.oSessionService.isSessionActive()) {
             return true;
         } else {
-            this.oRouter.navigate(['/']);
+            this.oRouter.navigate(['/login']);
             return false;
         }
        
