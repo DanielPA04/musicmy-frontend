@@ -10,6 +10,7 @@ import {
 } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { BlobToUrlPipe } from '../../../pipe/blob.pipe';
 
 declare let bootstrap: any;
 
@@ -22,7 +23,8 @@ declare let bootstrap: any;
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    BlobToUrlPipe
   ],
 })
 export class ArtistaAdminEditRoutedComponent implements OnInit {
