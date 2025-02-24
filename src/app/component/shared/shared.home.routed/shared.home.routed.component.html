@@ -11,7 +11,12 @@
     @for (album of oPageLastMonth.content; track album.id) {
     <div class="flex flex-col w-48">
       <!-- Imagen del álbum -->
-      <img src="{{ album.img | blobToUrl }}" width="200" height="200" class="rounded-lg" />
+      <img
+        [src]="serverURL + '/album/' + album.id + '/img'"
+        width="200"
+        height="200"
+        class="rounded-lg"
+      />
 
       <!-- Nombre del álbum -->
       <div class="text-center mt-2 font-semibold">{{ album.nombre }}</div>
@@ -23,15 +28,19 @@
         }
       </div>
 
-      <div class="text-center text-sm text-gray-900 mt-1" [class.bg-low-grade]="getMedia(album.id) < 5"
-        [class.bg-medium-grade]="getMedia(album.id) >= 5 && getMedia(album.id) < 7"
-        [class.bg-high-grade]="getMedia(album.id) >= 7 && getMedia(album.id) < 8"
-        [class.bg-excellent-grade]="getMedia(album.id) > 8">
-        Nota: {{
-        mediasArtista.get(album.id) }}
+      <div
+        class="text-center text-sm text-gray-900 mt-1"
+        [class.bg-low-grade]="getMedia(album.id) < 5"
+        [class.bg-medium-grade]="
+          getMedia(album.id) >= 5 && getMedia(album.id) < 7
+        "
+        [class.bg-high-grade]="
+          getMedia(album.id) >= 7 && getMedia(album.id) < 8
+        "
+        [class.bg-excellent-grade]="getMedia(album.id) > 8"
+      >
+        Nota: {{ mediasArtista.get(album.id) }}
       </div>
-
-
     </div>
     }
   </div>
@@ -51,29 +60,41 @@
     <div class="flex flex-col w-48">
       <!-- Imagen del álbum -->
       <a href="/album/view/{{ album.id }}">
-        <img src="{{ album.img | blobToUrl }}" width="200" height="200" class="rounded-lg" />
+        <img
+          src="{{ album.img | blobToUrl }}"
+          width="200"
+          height="200"
+          class="rounded-lg"
+        />
       </a>
       <!-- Nombre del álbum -->
-      <div class="text-center mt-2 font-semibold"><a href="/album/view/{{ album.id }}">{{ album.nombre }}</a>
+      <div class="text-center mt-2 font-semibold">
+        <a href="/album/view/{{ album.id }}">{{ album.nombre }}</a>
       </div>
 
       <!-- Nombre del artista -->
       <div class="text-center text-sm text-gray-600">
         @for (artista of nombresArtista.get(album.id); track $index) {
-        <div><a href="/admin/artista/view/{{ artista.id }}">{{ artista.nombre }}</a>/</div>
+        <div>
+          <a href="/admin/artista/view/{{ artista.id }}">{{ artista.nombre }}</a
+          >/
+        </div>
         }
       </div>
 
-      <div class="text-center text-sm text-gray-900 mt-1" [class.bg-low-grade]="getMedia(album.id) < 5"
-        [class.bg-medium-grade]="getMedia(album.id) >= 5 && getMedia(album.id) < 7"
-        [class.bg-high-grade]="getMedia(album.id) >= 7 && getMedia(album.id) < 8"
-        [class.bg-excellent-grade]="getMedia(album.id) > 8">
-        Nota: {{
-        mediasArtista.get(album.id) }}
+      <div
+        class="text-center text-sm text-gray-900 mt-1"
+        [class.bg-low-grade]="getMedia(album.id) < 5"
+        [class.bg-medium-grade]="
+          getMedia(album.id) >= 5 && getMedia(album.id) < 7
+        "
+        [class.bg-high-grade]="
+          getMedia(album.id) >= 7 && getMedia(album.id) < 8
+        "
+        [class.bg-excellent-grade]="getMedia(album.id) > 8"
+      >
+        Nota: {{ mediasArtista.get(album.id) }}
       </div>
-     
-
-
     </div>
     }
   </div>

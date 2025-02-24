@@ -22,7 +22,6 @@
     "@angular/router": "^19.0.5",
     "@ng-icons/heroicons": "^30.2.0",
     "@popperjs/core": "^2.11.8",
-    "@primeng/themes": "^19.0.2",
     "@tailwindcss/postcss": "^4.0.0",
     "angular-calendar": "^0.31.1",
     "bootstrap": "^5.3.3",
@@ -32,7 +31,7 @@
     "flowbite": "^3.0.0",
     "jquery": "^3.7.1",
     "primeicons": "^7.0.0",
-    "primeng": "^19.0.2",
+    "primeng": "^17.18.11",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

@@ -15,7 +15,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { IArtista } from '../../../model/artista.interface';
 import { ArtistaAdminSelectorUnroutedComponent } from '../../artista/artista.admin.selector.unrouted/artista.admin.selector.unrouted.component';
 import { GrupoalbumartistaService } from '../../../service/grupoalbumartista.service';
-//import { PrimeNGConfig } from 'primeng/api';
+import { PrimeNGConfig } from 'primeng/api';
+import { CALENDAR_ES } from '../../../environment/environment';
 
 declare let bootstrap: any;
 
@@ -49,14 +50,14 @@ export class AlbumAdminCreateRoutedComponent implements OnInit {
   constructor(
     private oAlbumService: AlbumService,
     private oRouter: Router,
-    private oGrupoalbumartistaService: GrupoalbumartistaService
-    //private oPrimeconfig: PrimeNGConfig
+    private oGrupoalbumartistaService: GrupoalbumartistaService,
+    private oPrimeconfig: PrimeNGConfig
   ) {}
 
   ngOnInit() {
     this.createForm();
     this.oAlbumForm?.markAllAsTouched();
-   // this.oPrimeconfig.setTranslation(CALENDAR_ES);
+   this.oPrimeconfig.setTranslation(CALENDAR_ES);
   }
 
   createForm() {

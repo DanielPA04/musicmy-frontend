@@ -11,7 +11,6 @@ import {
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CalendarModule } from 'primeng/calendar';
-import { BlobToUrlPipe } from '../../../pipe/blob.pipe';
 import { ArtistaAdminSelectorUnroutedComponent } from '../../artista/artista.admin.selector.unrouted/artista.admin.selector.unrouted.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ArtistaService } from '../../../service/artista.service';
@@ -31,7 +30,6 @@ declare let bootstrap: any;
     ReactiveFormsModule,
     RouterModule,
     CalendarModule,
-    BlobToUrlPipe,
   ],
 })
 export class AlbumAdminEditRoutedComponent implements OnInit {

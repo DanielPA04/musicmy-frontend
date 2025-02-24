@@ -5,6 +5,7 @@ import { IAlbum } from "../../../model/album.interface";
 import { BlobToUrlPipe } from "../../../pipe/blob.pipe";
 import { ArtistaService } from "../../../service/artista.service";
 import { IArtista } from '../../../model/artista.interface';
+import { serverURL } from "../../../environment/environment";
 import { SessionService } from "../../../service/session.service";
 
 @Component({
@@ -25,6 +26,7 @@ export class SharedHomeRoutedComponent implements OnInit {
   strField: string = ''
   strDir: string = ''
   strFiltro: string = ''
+  serverURL: string = serverURL
 
   constructor(private oAlbumService: AlbumService, private oArtistaService: ArtistaService) { }
 
@@ -125,11 +127,6 @@ export class SharedHomeRoutedComponent implements OnInit {
                 console.log(err);
               },
             })
-            this.oAlbumService.getImg(oAlbum.id).subscribe({
-              next: (data) => {
-                oAlbum.img = data;
-              },
-            });
 
           });
 
