@@ -1,51 +1,87 @@
-<div class="overflow-x-auto">
-  <table class="table-auto w-full">
-    <thead>
-      <tr class="bg-gray-100">
-        <th class="px-4 py-2">Nombre</th>
-        <th class="px-4 py-2">Fecha</th>
-        <th class="px-4 py-2">Descripcion</th>
-        <th class="px-4 py-2">Email</th>
-        <th class="px-4 py-2">Website</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="border px-4 py-2">{{usuario.nombre}}</td>
-        <td class="border px-4 py-2">{{usuario.fecha}}</td>
-        <td class="border px-4 py-2">{{usuario.descripcion}}</td>
-        <td class="border px-4 py-2">{{usuario.email}}</td>
-        <td class="border px-4 py-2">{{usuario.website}}</td>
-      </tr>
+<div class="bg-gray-900 text-white">
+    <!-- Header section with user info -->
+    <div class="relative">
+        <!-- User header with avatar and basic info -->
+        <div class="flex items-start p-6 pb-0">
+            <div class="w-24 h-24 bg-gray-700 rounded-full overflow-hidden mr-6">
+                <img src="/placeholder.svg?height=96&width=96" alt="Avatar de usuario"
+                    class="w-full h-full object-cover" />
+            </div>
+            <div class="flex-1">
+                <h1 class="text-5xl font-bold mb-1">{{ usuario.nombre }}</h1>
+                <div class="flex items-center text-gray-400 mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span>Se unió el sept 2024?¿?¿</span>
+                </div>
+                <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">Editar perfil</button>
+            </div>
 
-    </tbody>
-  </table>
+            <!-- Stats cards -->
+            <div class="flex space-x-2 absolute right-6 top-6">
+                <div class="bg-gray-800 p-4 rounded-md text-center w-36">
+                    <div class="text-gray-400">Calificaciones</div>
+                    <div class="text-2xl font-bold">{{ usuario.resenyas }}</div>
+                </div>
+                <!-- <div class="bg-gray-800 p-4 rounded-md text-center w-36">
+                    <div class="text-gray-400">Lista de seguimiento</div>
+                    <div class="text-2xl font-bold">1</div>
+                </div> -->
+            </div>
 
-  <table class="table-auto w-full mt-8">
-    <thead>
-      <tr class="bg-gray-100">
-        <th class="px-4 py-2">Id</th>
-        <th class="px-4 py-2">Nota</th>
-        <th class="px-4 py-2">Descripcion</th>
-        <th class="px-4 py-2">Fecha</th>
-        <th class="px-4 py-2">Website</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (resenya of pageResenya?.content; track resenya.id) {
-      <tr>
-        <td class="border px-4 py-2">{{resenya.id}}</td>
-        <td class="border px-4 py-2">{{resenya.nota}}</td>
-        <td class="border px-4 py-2">{{resenya.descripcion}}</td>
-        <td class="border px-4 py-2">{{resenya.fecha}}</td>
-        <td class="border px-4 py-2">{{resenya.website}}</td>
+            <!-- Second row of stats 
+            <div class="flex space-x-2 absolute right-6 top-28">
+                <div class="bg-gray-800 p-4 rounded-md text-center w-36">
+                    <div class="text-gray-400">Listas</div>
+                    <div class="text-2xl font-bold">0</div>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-md text-center w-36">
+                    <div class="text-gray-400">Más</div>
+                    <div class="flex justify-center mt-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            -->
+        </div>
 
-      </tr>
-      }
+        <!-- Welcome message
+        <div class="bg-gray-800 border-l-4 border-blue-500 p-4 mx-6 my-6 rounded-md">
+            <div class="flex items-start">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
 
-    </tbody>
-  </table>
+            </div>
+        </div>
+         -->
+    </div>
 
+    <!-- Main content -->
+    <div class="flex px-6 pb-6">
+        <!-- Left column - Calificaciones -->
+        <div class="w-full">
+            <div class="flex items-center mb-4">
+                <h2 class="text-2xl font-bold">Calificaciones</h2>
+                <span class="bg-gray-700 text-sm px-2 py-1 rounded-full ml-2">{{ usuario.resenyas}}</span>
+            </div>
 
+            <!-- Movie ratings grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Añadir resenyas-->
+            </div>
 
+            <!-- User's reviews from the database -->
+           
+        </div>
+    </div>
 </div>
