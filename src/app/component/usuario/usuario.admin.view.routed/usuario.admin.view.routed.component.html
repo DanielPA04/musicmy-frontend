@@ -14,6 +14,12 @@
         </tr>
         <tr class="text-center">
           <th scope="row" class="bg-primary text-white text-end pe-5">
+            Username
+          </th>
+          <td class="text-start ps-5">{{ oUsuario?.username }}</td>
+        </tr>
+        <tr class="text-center">
+          <th scope="row" class="bg-primary text-white text-end pe-5">
             Nombre
           </th>
           <td class="text-start ps-5">{{ oUsuario?.nombre }}</td>
@@ -42,6 +48,14 @@
         </tr>
         <tr class="text-center">
           <th scope="row" class="bg-primary text-white text-end pe-5">
+            Img
+          </th>
+          <td class="text-start ps-5"> <img [src]="serverURL + '/usuario/' + oUsuario?.id + '/img'"
+              class="w-full h-full object-cover hover:opacity-80 transition-opacity" alt="{{ oUsuario?.nombre }}" />
+          </td>
+        </tr>
+        <tr class="text-center">
+          <th scope="row" class="bg-primary text-white text-end pe-5">
             Tipo Usuario
           </th>
           <td class="text-start ps-5">
@@ -61,17 +75,11 @@
       <i class="bi bi-list"></i>
       Ir a listado de Artistas
     </a>
-    <a
-      class="btn btn-primary mt-4 mx-1"
-      href="admin/usuario/edit/{{ oUsuario?.id }}"
-    >
+    <a class="btn btn-primary mt-4 mx-1" href="admin/usuario/edit/{{ oUsuario?.id }}">
       <i class="bi bi-pencil"></i>
       Editar
     </a>
-    <a
-      class="btn btn-danger mt-4 mx-1"
-      href="admin/usuario/delete/{{ oUsuario?.id }}"
-    >
+    <a class="btn btn-danger mt-4 mx-1" href="admin/usuario/delete/{{ oUsuario?.id }}">
       <i class="bi bi-trash"></i>
       Borrar
     </a>
@@ -81,35 +89,19 @@
 
 <!-- mimodal tenia "'mimodal'", comprobar si era eso -->
 
-<div
-  class="modal fade"
-  id="mimodal"  
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade" id="mimodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">MusicMy</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-          (click)="hideModal()"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+          (click)="hideModal()"></button>
       </div>
       <div class="modal-body">
         <p>{{ strMessage }}</p>
       </div>
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-primary"
-          data-bs-dismiss="modal"
-          (click)="hideModal()"
-        >
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="hideModal()">
           Cerrar
         </button>
       </div>

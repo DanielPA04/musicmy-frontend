@@ -7,103 +7,138 @@ import { IPage } from '../environment/model.interface';
 import { CryptoService } from './crypto.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UsuarioService {
-
   serverURL: string = serverURL + '/usuario';
 
-constructor(private oHttp: HttpClient, private oCryptoService: CryptoService) { }
+  constructor(
+    private oHttp: HttpClient,
+    private oCryptoService: CryptoService
+  ) {}
 
-
-getPage(
-  page: number,
-  size: number,
-  field: string,
-  dir: string,
-  filtro: string
-): Observable<IPage<IUsuario>> {
-  let URL: string = '';
-  URL += this.serverURL;
-  if (!page) {
-    page = 0;
-  }
-  URL += '?page=' + page;
-  if (!size) {
-    size = 10;
-  }
-  URL += '&size=' + size;
-  if (field) {
-    URL += '&sort=' + field;
-    if (dir === 'asc') {
-      URL += ',asc';
-    } else {
-      URL += ',desc';
+  getPage(
+    page: number,
+    size: number,
+    field: string,
+    dir: string,
+    filtro: string
+  ): Observable<IPage<IUsuario>> {
+    let URL: string = '';
+    URL += this.serverURL;
+    if (!page) {
+      page = 0;
     }
+    URL += '?page=' + page;
+    if (!size) {
+      size = 10;
+    }
+    URL += '&size=' + size;
+    if (field) {
+      URL += '&sort=' + field;
+      if (dir === 'asc') {
+        URL += ',asc';
+      } else {
+        URL += ',desc';
+      }
+    }
+    if (filtro) {
+      URL += '&filter=' + filtro;
+    }
+    return this.oHttp.get<IPage<IUsuario>>(URL, httpOptions);
   }
-  if (filtro) {
-    URL += '&filter=' + filtro;
+
+  get(id: number): Observable<IUsuario> {
+    let URL: string = '';
+    URL += this.serverURL;
+    URL += '/' + id;
+    return this.oHttp.get<IUsuario>(URL);
   }
-  return this.oHttp.get<IPage<IUsuario>>(URL, httpOptions);
-}
 
-get(id: number): Observable<IUsuario> {
-  let URL: string = '';
-  URL += this.serverURL;
-  URL += '/' + id;
-  return this.oHttp.get<IUsuario>(URL);
-}
+  create(oUsuario: IUsuario): Observable<IUsuario> {
 
-create(oUsuario: IUsuario): Observable<IUsuario> {
-  oUsuario.password = this.oCryptoService.getHashSHA256(oUsuario.password);
-  oUsuario.fecha = new Date(oUsuario.fecha).toISOString().split('T')[0];
-  oUsuario.tipousuario.usuarios = [];
+    let URL: string = '';
+    URL += this.serverURL;
 
-  let URL: string = '';
-  URL += this.serverURL;
-  return this.oHttp.post<IUsuario>(URL, oUsuario);
-}
+    oUsuario.password = this.oCryptoService.getHashSHA256(oUsuario.password);
+    oUsuario.fecha = new Date(oUsuario.fecha).toISOString().split('T')[0];
+    oUsuario.tipousuario.usuarios = [];
 
-register(oUsuario: IUsuario): Observable<IUsuario> {
-  oUsuario.password = this.oCryptoService.getHashSHA256(oUsuario.password);
+    if (oUsuario.img) {
+      URL += '/img';
+      const formData = new FormData();
+      formData.append('username', oUsuario.username);
+      formData.append('nombre', oUsuario.nombre);
+      formData.append('fecha', oUsuario.fecha);
+      formData.append('descripcion', oUsuario.descripcion);
+      formData.append('email', oUsuario.email);
+      formData.append('password', oUsuario.password);
+      formData.append('website', oUsuario.website);
+      formData.append('img', oUsuario.img as Blob);
+      formData.append('tipousuario', JSON.stringify(oUsuario.tipousuario));
+      return this.oHttp.post<IUsuario>(URL, formData);
+    }
 
-  let URL: string = '';
-  URL += this.serverURL + '/register';
-  return this.oHttp.post<IUsuario>(URL, oUsuario);
-}
+   
+    return this.oHttp.post<IUsuario>(URL, oUsuario);
+  }
 
+  register(oUsuario: IUsuario): Observable<IUsuario> {
+    oUsuario.password = this.oCryptoService.getHashSHA256(oUsuario.password);
 
-checkIfEmailExists(email: string): Observable<boolean> {
-  let URL: string = '';
-  URL += this.serverURL;
-  URL += '/check/email/' + email;
-  return this.oHttp.get<boolean>(URL);
-}
+    let URL: string = '';
+    URL += this.serverURL + '/register';
+    return this.oHttp.post<IUsuario>(URL, oUsuario);
+  }
 
-update(oUsuario: IUsuario): Observable<IUsuario> {
-  oUsuario.password = this.oCryptoService.getHashSHA256(oUsuario.password);
-  oUsuario.tipousuario.usuarios = [];
-  let URL: string = '';
-  URL += this.serverURL;
-  return this.oHttp.put<IUsuario>(URL, oUsuario);
-}
+  checkIfEmailExists(email: string): Observable<boolean> {
+    let URL: string = '';
+    URL += this.serverURL;
+    URL += '/check/email/' + email;
+    return this.oHttp.get<boolean>(URL);
+  }
 
-getOne(id: number): Observable<IUsuario> {
-  let URL: string = '';
-  URL += this.serverURL;
-  URL += '/' + id;
-  return this.oHttp.get<IUsuario>(URL);
-}
+  update(oUsuario: IUsuario): Observable<IUsuario> {
+    oUsuario.password = this.oCryptoService.getHashSHA256(oUsuario.password);
+    oUsuario.fecha = new Date(oUsuario.fecha).toISOString().split('T')[0];
+    oUsuario.tipousuario.usuarios = [];
+    let URL: string = '';
+    URL += this.serverURL;
 
-getUsuarioByEmail(email: string): Observable<IUsuario> {
-  let URL: string = '';
-  URL += this.serverURL + '/byemail';
-  URL += '/' + email;
-  return this.oHttp.get<IUsuario>(URL);
-}
+    if (oUsuario.img) {
+      URL += '/img';
+      const formData = new FormData();
+      formData.append('id', oUsuario.id.toString());
+      formData.append('username', oUsuario.username);
+      formData.append('nombre', oUsuario.nombre);
+      formData.append('fecha', oUsuario.fecha);
+      formData.append('descripcion', oUsuario.descripcion);
+      formData.append('email', oUsuario.email);
+      formData.append('password', oUsuario.password);
+      formData.append('website', oUsuario.website);
+      formData.append('img', oUsuario.img as Blob);
+      formData.append('tipousuario', JSON.stringify(oUsuario.tipousuario));
+      return this.oHttp.put<IUsuario>(URL, formData);
+    }
 
-delete(id: number) {
-  return this.oHttp.delete(this.serverURL + '/' + id);
-}
+    return this.oHttp.put<IUsuario>(URL, oUsuario);
+  }
 
+  getOne(id: number): Observable<IUsuario> {
+    let URL: string = '';
+    URL += this.serverURL;
+    URL += '/' + id;
+    return this.oHttp.get<IUsuario>(URL);
+  }
+
+  getUsuarioByEmail(email: string): Observable<IUsuario> {
+    let URL: string = '';
+    URL += this.serverURL + '/byemail';
+    URL += '/' + email;
+    return this.oHttp.get<IUsuario>(URL);
+  }
+
+  delete(id: number) {
+    return this.oHttp.delete(this.serverURL + '/' + id);
+  }
 }

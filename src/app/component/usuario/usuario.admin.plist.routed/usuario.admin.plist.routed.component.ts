@@ -8,6 +8,7 @@ import { BotoneraService } from '../../../service/botonera.service';
 import { debounceTime, Subject } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
 import { TrimPipe } from '../../../pipe/trim.pipe';
+import { serverURL } from '../../../environment/environment';
 
 @Component({
   selector: 'app-usuario.admin.plist.routed',
@@ -30,6 +31,8 @@ export class UsuarioAdminPlistRoutedComponent implements OnInit {
   arrBotonera: string[] = [];
   //
   private debounceSubject = new Subject<string>();
+  serverURL: string = serverURL
+
 
   constructor(
     private oUsuarioService: UsuarioService,

@@ -117,7 +117,7 @@
               </td>
              
               <td class="text-start">
-                  {{ artista.img }}
+                <img [src]="serverURL + '/artista/' + artista.id + '/img'" class="w-full h-full object-cover hover:opacity-80 transition-opacity" alt="{{ artista.nombre }}" />
               </td>
               <td class="text-center">
                 {{ artista.grupoalbumartistas }}

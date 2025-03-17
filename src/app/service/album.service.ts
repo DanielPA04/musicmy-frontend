@@ -95,6 +95,13 @@ export class AlbumService {
     return this.oHttp.get<number>(URL);
   }
 
+   getByArtista(id: number): Observable<IAlbum[]> {
+      let URL: string = '';
+      URL += this.serverURL;
+      URL += '/byartista/' + id;
+      return this.oHttp.get<IAlbum[]>(URL);
+    }
+
   create(oAlbum: IAlbum): Observable<IAlbum> {
     oAlbum.fecha = new Date(oAlbum.fecha).toISOString().split('T')[0];
     let URL: string = '';

@@ -7,6 +7,24 @@
         <i class="bi bi-journal-text"></i>
       </h2>
       <form [formGroup]="oUsuarioForm!" (ngSubmit)="onSubmit()" novalidate>
+
+
+        <div class="row mt-4">
+          <mat-form-field>
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="username" placeholder="Username" />
+            <mat-hint align="end">De 3 a 255 caracteres</mat-hint>
+            @if (oUsuarioForm?.get('username')?.hasError('required')) {
+            <mat-error>Debes introducir un username</mat-error>
+            } @if (oUsuarioForm?.get('username')?.hasError('minlength')) {
+            <mat-error>Debes introducir una username más largo</mat-error>
+            } @if (oUsuarioForm?.get('username')?.hasError('maxlength')) {
+            <mat-error>Debes introducir una username más corto</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+
         <div class="row mt-4">
           <mat-form-field>
             <mat-label>Nombre</mat-label>
@@ -91,6 +109,23 @@
           </mat-form-field>
         </div>
         <br />
+
+        <div class="flex items-center justify-center w-full">
+          <label for="file-input" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+              @if (!isFileSelected){
+              <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L7 9m3-3 3 3"/>
+              </svg>
+            } @else{
+              <img [src]=" oUsuarioForm?.controls?.['img']?.value | blobToUrl" class="w-8 h-8 mb-4" alt="">
+            }
+              <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Haz clic para subir</span> o arrastra y suelta</p>
+              <p class="text-xs text-gray-500">PNG, JPG, GIF</p>
+            </div>
+            <input id="file-input" (change)="onFileSelected($event)" type="file" class="hidden" />
+          </label>
+        </div>
 
         <div class="row mt-4 mb-36">
           <mat-form-field>

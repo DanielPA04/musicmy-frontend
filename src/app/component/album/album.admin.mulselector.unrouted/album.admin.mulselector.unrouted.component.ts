@@ -18,6 +18,9 @@ import { BlobToUrlPipe } from '../../../pipe/blob.pipe';
   styleUrls: ['./album.admin.mulselector.unrouted.component.css'],
   imports: [CommonModule, FormsModule, TrimPipe, RouterModule, BlobToUrlPipe],
 })
+
+
+// TODO mirar el tema de lso varios selectores
 export class AlbumAdminMulselectorUnroutedComponent implements OnInit {
   oPage: IPage<IAlbum> | null = null;
   //
@@ -43,6 +46,8 @@ export class AlbumAdminMulselectorUnroutedComponent implements OnInit {
     private oBotoneraService: BotoneraService,
     private oRouter: Router
   ) {
+    console.log(this.data);
+    this.albumes = Array.isArray(this.data) ? this.data : [];
     this.debounceSubject.pipe(debounceTime(10)).subscribe((value) => {
       this.getPage();
     });

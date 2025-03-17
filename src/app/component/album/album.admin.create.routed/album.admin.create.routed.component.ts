@@ -15,6 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { IArtista } from '../../../model/artista.interface';
 import { ArtistaAdminSelectorUnroutedComponent } from '../../artista/artista.admin.selector.unrouted/artista.admin.selector.unrouted.component';
 import { GrupoalbumartistaService } from '../../../service/grupoalbumartista.service';
+import { serverURL } from '../../../environment/environment';
 
 declare let bootstrap: any;
 

@@ -94,6 +94,7 @@ export class UsuarioAdminEditRoutedComponent implements OnInit {
         Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/),
       ]),
       website: new FormControl(''),
+      img: new FormControl(null),
       tipousuario: new FormControl([], [Validators.required]),
     });
   }
@@ -109,6 +110,7 @@ export class UsuarioAdminEditRoutedComponent implements OnInit {
       email: this.oUsuario.email,
       password: this.oUsuario.password,
       website: this.oUsuario.website,
+      img: this.oUsuario.img,
     });
     if (this.oPageUsuario?.content) {
       const matchedTipoUsuario = this.oPageUsuario.content.find(

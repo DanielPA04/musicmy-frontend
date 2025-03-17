@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ArtistaService } from '../../../service/artista.service';
 import { IArtista } from '../../../model/artista.interface';
+import { serverURL } from '../../../environment/environment';
 
 @Component({
   selector: 'app-artista.admin.view.routed',
@@ -13,6 +14,7 @@ export class ArtistaAdminViewRoutedComponent implements OnInit {
   //
   id: number = 0;
   oArtista: IArtista = {} as IArtista;
+  serverURL: string = serverURL;
   //
   constructor(
     private oActivatedRoute: ActivatedRoute,

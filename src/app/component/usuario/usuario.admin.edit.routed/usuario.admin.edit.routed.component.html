@@ -98,6 +98,25 @@
         </div>
         <br />
 
+        <div class="flex items-center justify-center w-full">
+          <label for="file-input" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+            
+              <!--Cambiar esto y buscar sitios similares-->
+              <img
+              [src]="'http://localhost:8085/album/' + oUsuario?.id + '/img'"
+              width="200"
+              height="200"
+              class="w-8 h-8 mb-4"
+                />            
+              
+              <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Haz clic para subir</span> o arrastra y suelta</p>
+              <p class="text-xs text-gray-500">PNG, JPG, GIF</p>
+            </div>
+            <input id="file-input" (change)="onFileSelected($event)" type="file" class="hidden" />
+          </label>
+        </div>
+
         <div class="row mt-4 mb-36">
           <mat-form-field>
             <mat-label>Select an option</mat-label>

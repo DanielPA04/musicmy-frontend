@@ -167,6 +167,7 @@
                 {{ album.discografica }}
               </td>
               <td class="text-start">
+                <!-- TODO mirar de hacerlo de la otra manera y mirar de en todo la app de hace if si las img no aparecen-->
                 @if (album.img) {
                 <img
                   [src]="album.img | blobToUrl"

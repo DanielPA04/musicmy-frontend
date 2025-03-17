@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { UsuarioService } from '../../../service/usuario.service';
 import { IUsuario } from '../../../model/usuario.interface';
 import { HttpErrorResponse } from '@angular/common/http';
+import { serverURL } from '../../../environment/environment';
 
 declare let bootstrap: any;
 
@@ -19,6 +20,8 @@ export class UsuarioAdminViewRoutedComponent implements OnInit, AfterViewInit {
   //
   myModal: any;
   strMessage: string = '';
+  serverURL: string = serverURL
+
 
   constructor(
     private oActivatedRoute: ActivatedRoute,

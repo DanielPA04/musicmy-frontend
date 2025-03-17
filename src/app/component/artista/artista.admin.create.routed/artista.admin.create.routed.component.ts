@@ -35,7 +35,6 @@ export class ArtistaAdminCreateRoutedComponent implements OnInit {
   oArtistaForm: FormGroup | undefined = undefined;
   oArtista: IArtista | null = null;
   strMessage: string = '';
-  oAlbumes: IAlbum[] = [];
   readonly dialog = inject(MatDialog);
 
   myModal: any;
@@ -148,12 +147,13 @@ export class ArtistaAdminCreateRoutedComponent implements OnInit {
 
 
   showAlbumSelectorModal() {
+    console.log(this.oArtistaForm?.value.artistas);
     const dialogRef = this.dialog.open(AlbumAdminMulselectorUnroutedComponent, {
       height: '800px',
       maxHeight: '1200px',
       width: '80%',
       maxWidth: '90%',
-      data: this.oArtistaForm?.value.artistas
+      data: this.oArtistaForm?.value.albumes
 
     });
 

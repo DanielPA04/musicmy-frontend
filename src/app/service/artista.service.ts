@@ -44,9 +44,6 @@ export class ArtistaService {
     return this.oHttp.get<IPage<IArtista>>(URL, httpOptions);
   }
 
- 
-
-
   get(id: number): Observable<IArtista> {
     let URL: string = '';
     URL += this.serverURL;
@@ -64,12 +61,39 @@ export class ArtistaService {
   create(oArtista: IArtista): Observable<IArtista> {
     let URL: string = '';
     URL += this.serverURL;
+
+    if (oArtista.img) {
+      URL += '/img';
+      const formData = new FormData();
+      formData.append('nombre', oArtista.nombre);
+      formData.append('nombrereal', oArtista.nombrereal);
+      formData.append('descripcion', oArtista.descripcion);
+      formData.append('spotify', oArtista.spotify);
+      formData.append('img', oArtista.img as Blob);
+      return this.oHttp.post<IArtista>(URL, formData);
+    }
+
     return this.oHttp.post<IArtista>(URL, oArtista);
   }
 
   update(oArtista: IArtista): Observable<IArtista> {
     let URL: string = '';
     URL += this.serverURL;
+
+
+
+    if (oArtista.img) {
+      URL += '/img';
+      const formData = new FormData();
+      formData.append('id', oArtista.id.toString());
+      formData.append('nombre', oArtista.nombre);
+      formData.append('nombrereal', oArtista.nombrereal);
+      formData.append('descripcion', oArtista.descripcion);
+      formData.append('spotify', oArtista.spotify);
+      formData.append('img', oArtista.img as Blob);
+      return this.oHttp.put<IArtista>(URL, formData);
+    }
+
     return this.oHttp.put<IArtista>(URL, oArtista);
   }
 

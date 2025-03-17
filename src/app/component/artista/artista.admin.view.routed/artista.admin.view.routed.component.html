@@ -37,7 +37,7 @@
         <tr class="text-center">
           <th scope="row" class="bg-primary text-white text-end pe-5">img</th>
           <td class="text-start ps-5">
-            {{ oArtista.img }}
+            <img [src]="serverURL + '/artista/' + oArtista.id + '/img'" class="w-full h-full object-cover hover:opacity-80 transition-opacity" alt="{{ oArtista.nombre }}" />
           </td>
         </tr>
 

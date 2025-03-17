@@ -8,6 +8,7 @@ import { BotoneraService } from '../../../service/botonera.service';
 import { debounceTime, Subject } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
 import { TrimPipe } from '../../../pipe/trim.pipe';
+import { serverURL } from '../../../environment/environment';
 
 @Component({
   selector: 'app-artista.admin.plist.routed',
@@ -30,6 +31,7 @@ export class ArtistaAdminPlistRoutedComponent implements OnInit {
   arrBotonera: string[] = [];
   //
   private debounceSubject = new Subject<string>();
+  serverURL: string = serverURL;
 
   constructor(
     private oArtistaService: ArtistaService,
@@ -120,4 +122,3 @@ export class ArtistaAdminPlistRoutedComponent implements OnInit {
     this.debounceSubject.next(this.strFiltro);
   }
 }
-

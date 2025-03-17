@@ -15,7 +15,8 @@ import { IPage } from '../../../environment/model.interface';
 import { TipousuarioService } from '../../../service/tipousuario.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
-
+import { serverURL } from '../../../environment/environment';
+import { BlobToUrlPipe } from '../../../pipe/blob.pipe';
 
 declare let bootstrap: any;
 
@@ -29,9 +30,9 @@ declare let bootstrap: any;
     RouterModule,
     MatSelectModule,
     CalendarModule,
+    BlobToUrlPipe,
   ],
   styleUrls: ['./usuario.admin.create.routed.component.css'],
-  
 })
 export class UsuarioAdminCreateRoutedComponent implements OnInit {
   id: number = 0;
@@ -45,26 +46,33 @@ export class UsuarioAdminCreateRoutedComponent implements OnInit {
 
   oPageUsuario: IPage<ITipousuario> | null = null;
 
-
   form: FormGroup = new FormGroup({});
 
+  isFileSelected: boolean = false;
+
+  serverURL: string = serverURL;
 
   constructor(
     private oUsuarioService: UsuarioService,
     private oTipoUsuarioService: TipousuarioService,
-    private oRouter: Router,
-  ) { }
+    private oRouter: Router
+  ) {}
 
   ngOnInit() {
     this.createForm();
     this.oUsuarioForm?.markAllAsTouched();
-    this.oTipoUsuarioService.getPage(0, 10,"","","").subscribe((oPage) => {
+    this.oTipoUsuarioService.getPage(0, 10, '', '', '').subscribe((oPage) => {
       this.oPageUsuario = oPage;
     });
   }
 
   createForm() {
     this.oUsuarioForm = new FormGroup({
+      username: new FormControl('', [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(255),
+      ]),
       nombre: new FormControl('', [
         Validators.required,
         Validators.minLength(3),
@@ -80,22 +88,22 @@ export class UsuarioAdminCreateRoutedComponent implements OnInit {
         Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/),
       ]),
       website: new FormControl(''),
+      img: new FormControl(null),
       tipousuario: new FormControl([], [Validators.required]),
     });
   }
 
   updateForm() {
+    this.oUsuarioForm?.controls['username'].setValue('');
     this.oUsuarioForm?.controls['nombre'].setValue('');
     this.oUsuarioForm?.controls['fecha'].setValue('');
     this.oUsuarioForm?.controls['descripcion'].setValue('');
     this.oUsuarioForm?.controls['email'].setValue('');
     this.oUsuarioForm?.controls['password'].setValue('');
     this.oUsuarioForm?.controls['website'].setValue('');
+    this.oUsuarioForm?.controls['img'].setValue(null);
     this.oUsuarioForm?.controls['tipousuario'].setValue(null);
-   
   }
-
-
 
   onReset() {
     this.updateForm();
@@ -107,6 +115,7 @@ export class UsuarioAdminCreateRoutedComponent implements OnInit {
     if (file) {
       const blob = new Blob([file], { type: file.type });
       this.oUsuarioForm?.controls['img'].setValue(blob);
+      this.isFileSelected = true;
     }
     console.log(this.oUsuarioForm?.value);
   }
@@ -124,16 +133,11 @@ export class UsuarioAdminCreateRoutedComponent implements OnInit {
     this.oRouter.navigate(['/admin/usuario/view/' + this.oUsuario?.id]);
   };
 
-
-
   onSubmit() {
     if (this.oUsuarioForm?.invalid) {
       this.showModal('Formulario inválido');
       return;
     } else {
-
-
-
       this.oUsuarioService.create(this.oUsuarioForm?.value).subscribe({
         next: (oUsuario: IUsuario) => {
           this.oUsuario = oUsuario;

@@ -108,12 +108,14 @@
                 <i class="bi bi-caret-down-fill"></i>
                 } @else {
                 <i class="bi bi-caret-up-fill"></i>} }
-              </th>   
+              </th>
+              <th class="bg-primary text-white">username</th>   
               <th class="bg-primary text-white">nombre</th>
               <th class="bg-primary text-white">Fecha</th>
               <th class="bg-primary text-white">Descripcion</th>
               <th class="bg-primary text-white">Email</th>
               <th class="bg-primary text-white">Website</th>
+              <th class="bg-primary text-white">Img</th>
               <th class="bg-primary text-white">Tipo Usuario</th>
               <th class="bg-primary text-white">Reseñas</th>
               <th class="bg-warning text-black">Acciones</th>
@@ -124,6 +126,7 @@
             @for (usuario of oPage?.content; track usuario.id) {
             <tr>
               <td class="text-center">{{ usuario.id }}</td>
+              <td class="text-start">{{ usuario.username }}</td>
               <td class="text-start">{{ usuario.nombre }}</td>
               <td class="text-start">{{ usuario.fecha  }}</td>
               <td class="text-center">
@@ -131,6 +134,9 @@
               </td>
               <td class="text-center">
                 {{ usuario.email }}
+              </td>
+              <td class="text-center">
+                <img [src]="serverURL + '/usuario/' + usuario.id + '/img'" class="w-full h-full object-cover hover:opacity-80 transition-opacity" alt="{{ usuario.nombre }}" />
               </td>
               <td class="text-center">
                 {{ usuario.website }}
