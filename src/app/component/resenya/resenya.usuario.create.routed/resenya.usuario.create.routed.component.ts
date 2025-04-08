@@ -131,6 +131,7 @@ export class ResenyaUsuarioCreateRoutedComponent implements OnInit, AfterViewIni
       }),
       usuario: new FormGroup({
         id: new FormControl('', Validators.required),
+        username: new FormControl(''),
         nombre: new FormControl(''),
         fecha: new FormControl(''),
         descripcion: new FormControl(''),

@@ -79,9 +79,8 @@ export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
 
   createForm() {
     this.oAuthForm = new FormGroup({
-      email: new FormControl('', [
+      identifier: new FormControl('', [
         Validators.required,
-        Validators.email,
       ]),
       password: new FormControl('', [
         Validators.required,
@@ -102,8 +101,6 @@ export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
           const errors = controls[controlName].errors;
           if (errors['required']) {
             this.message = `El campo ${controlName} es requerido.`;
-          } else if (errors['email']) {
-            this.message = `El campo ${controlName} debe ser un email válido.`;
           } else if (errors['minlength']) {
             this.message = `El campo ${controlName} debe tener al menos ${errors['minlength'].requiredLength} caracteres.`;
           } else if (errors['maxlength']) {

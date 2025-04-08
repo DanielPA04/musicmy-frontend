@@ -98,6 +98,13 @@ export class UsuarioService {
     return this.oHttp.get<boolean>(URL);
   }
 
+  checkIfUsernameExists(username: string): Observable<boolean> {
+    let URL: string = '';
+    URL += this.serverURL;
+    URL += '/check/username/' + username;
+    return this.oHttp.get<boolean>(URL);
+  }
+
   update(oUsuario: IUsuario): Observable<IUsuario> {
     oUsuario.password = this.oCryptoService.getHashSHA256(oUsuario.password);
     oUsuario.fecha = new Date(oUsuario.fecha).toISOString().split('T')[0];
@@ -134,7 +141,7 @@ export class UsuarioService {
   getUsuarioByEmail(email: string): Observable<IUsuario> {
     let URL: string = '';
     URL += this.serverURL + '/byemail';
-    URL += '/' + email;
+    URL += '/' + email; 
     return this.oHttp.get<IUsuario>(URL);
   }
 

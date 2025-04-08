@@ -11,23 +11,35 @@ import { AlbumService } from '../../../service/album.service';
 import { IArtista } from '../../../model/artista.interface';
 import { IAlbum } from '../../../model/album.interface';
 import { serverURL } from '../../../environment/environment';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-shared.perfil.routed',
   templateUrl: './shared.perfil.routed.component.html',
   styleUrls: ['./shared.perfil.routed.component.css'],
+    imports: [CommonModule],
+  
 })
 export class SharedPerfilRoutedComponent implements OnInit {
   email: string = '';
-  usuario: IUsuario = {} as IUsuario;
-  pageResenya: IPage<IResenya> | null = null;
-  arrBotoneraResenya: string[] = [];
+  usuario: IUsuario | null = null;
+  
+  // paginacion Resenya
+  oPage: IPage<IResenya> | null = null;
+  arrBotonera: string[] = [];  
+  //
   nPage: number = 0; // 0-based server count
+  nRpp: number = 2;
+  //
+  strField: string = '';
+  strDir: string = '';
+  strFiltro: string = '';
+
   nombresAlbumes: Map<number, IAlbum> = new Map<number, IAlbum>();
   nombresArtista: Map<number, IArtista[]> = new Map<number, IArtista[]>();
-  mediasArtista: Map<number, number> = new Map<number, number>()
-  serverURL: string = serverURL
-  
+  mediasArtista: Map<number, number> = new Map<number, number>();
+
+  serverURL: string = serverURL;
 
   constructor(
     private oActivatedRoute: ActivatedRoute,
@@ -38,35 +50,66 @@ export class SharedPerfilRoutedComponent implements OnInit {
     private oBotoneraService: BotoneraService
   ) {
     this.email = this.oActivatedRoute.snapshot.params['email'];
-    this.oUsuarioService
-      .getUsuarioByEmail(this.email)
-      .subscribe((data: IUsuario) => {
-        this.usuario = data;
-        this.oResenyaService
-          .getPageByUsuario(data.id, 0, 10, '', '', '')
-          .subscribe({
-            next: (data: IPage<IResenya>) => {
-              this.pageResenya = data;
-              this.arrBotoneraResenya = this.oBotoneraService.getBotonera(
-                this.nPage,
-                data.totalPages
-              );
-
-              this.pageResenya.content.forEach((oResenya) => {
-                this.oAlbumService.get(oResenya.album.id).subscribe({
-                  next: (album: IAlbum) => {
-                    this.nombresAlbumes.set(oResenya.album.id, album);
-                  },
-                });
-              });
-            },
-          });
-      });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getPage();
+  }
+
+  getPage() {
+  this.oUsuarioService
+    .getUsuarioByEmail(this.email)
+    .subscribe((data: IUsuario) => {
+      this.usuario = data;
+      this.oResenyaService
+        .getPageByUsuario(data.id, this.nPage, this.nRpp, this.strField, this.strDir)
+        .subscribe({
+          next: (data: IPage<IResenya>) => {
+            this.oPage = data;
+            this.arrBotonera = this.oBotoneraService.getBotonera(
+              this.nPage,
+              data.totalPages
+            );
+
+
+            this.oPage.content.forEach((oResenya) => {
+
+              
+              this.oArtistaService.getByAlbum(oResenya.album.id).subscribe({
+                next: (artistas: IArtista[]) => {
+                  this.nombresArtista.set(oResenya.album.id, artistas);
+                },
+              });
+
+            
+
+            });
+          },
+        });
+    });
+}
 
   getMedia(albumId: number): number {
     return this.mediasArtista.get(albumId) || 0;
+  }
+
+  goToPage(p: number) {
+    if (p) {
+      this.nPage = p - 1;
+      this.getPage();
+    }
+    return false;
+  }
+
+  goToNext() {
+    this.nPage++;
+    this.getPage();
+    return false;
+  }
+
+  goToPrev() {
+    this.nPage--;
+    this.getPage();
+    return false;
   }
 }

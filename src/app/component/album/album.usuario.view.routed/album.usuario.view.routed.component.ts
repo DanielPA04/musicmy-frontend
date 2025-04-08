@@ -9,6 +9,8 @@ import { SessionService } from '../../../service/session.service';
 import { ActivatedRoute } from '@angular/router';
 import { ResenyaService } from '../../../service/resenya.service';
 import { UsuarioService } from '../../../service/usuario.service';
+import { IResenya } from '../../../model/resenya.interface';
+import { serverURL } from '../../../environment/environment';
 
 @Component({
   selector: 'app-album.usuario.view.routed',
@@ -21,10 +23,12 @@ export class AlbumUsuarioViewRoutedComponent implements OnInit {
   album : IAlbum | null = null;
   artistas: IArtista[] = [];
   media: number = 0;
+  resenyas: IPage<IResenya> = {} as IPage<IResenya>
   email: string = '';
   id: number = 0;
   activeSession: boolean = false;
   isResenyaExist: boolean = true;
+  serverURL: string = serverURL;
 
   constructor(
     private oAlbumService: AlbumService,
@@ -69,12 +73,6 @@ export class AlbumUsuarioViewRoutedComponent implements OnInit {
             },
           });
 
-          const resenya = {
-            album : {
-              id : this.id
-            }
-          }
-
           this.oResenyaService.checkIfResenyaExistsByEmailAndAlbumId(this.email, album.id).subscribe({
             next: (data: boolean) => {
               this.isResenyaExist = data;
@@ -84,6 +82,16 @@ export class AlbumUsuarioViewRoutedComponent implements OnInit {
             }
             
           });
+
+
+          this.oResenyaService.getPageByAlbum(album.id, 0, 10, '', '').subscribe({
+            next: (data: IPage<IResenya>) => {
+              this.resenyas = data;
+            },
+            error: (err) => {
+              console.log(err);
+            },
+          })
        
       },
       error: (err) => {

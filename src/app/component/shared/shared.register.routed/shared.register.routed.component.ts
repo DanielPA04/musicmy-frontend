@@ -73,6 +73,7 @@ export class SharedRegisterRoutedComponent implements OnInit, AfterViewInit {
   }
   createForm() {
     this.oRegisterForm = new FormGroup({
+      username: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [
         Validators.required,
@@ -113,35 +114,57 @@ export class SharedRegisterRoutedComponent implements OnInit, AfterViewInit {
 
       return;
     } else {
-      this.oUsuarioService.checkIfEmailExists(this.oRegisterForm?.controls["email"].value).subscribe({
-        next: (data:boolean) => {
-          if (data){
-            this.message = 'El email '+this.oRegisterForm?.controls["email"].value+' ya esta registrado';
+      this.oUsuarioService
+        .checkIfUsernameExists(this.oRegisterForm?.controls['username'].value)
+        .subscribe({
+          next: (data: boolean) => {
+            if (data) {
+              this.message =
+                'El username ' +
+                this.oRegisterForm?.controls['username'].value +
+                ' ya esta registrado';
+              this.modal?.show();
+            } else {
+              this.oUsuarioService
+                .checkIfEmailExists(this.oRegisterForm?.controls['email'].value)
+                .subscribe({
+                  next: (data: boolean) => {
+                    if (data) {
+                      this.message =
+                        'El email ' +
+                        this.oRegisterForm?.controls['email'].value +
+                        ' ya esta registrado';
+                      this.modal?.show();
+                    } else {
+                      this.oUsuarioService
+                        .register(this.oRegisterForm?.value)
+                        .subscribe({
+                          next: (data: IUsuario) => {
+                            console.log(data);
+                            this.message = 'Registro exitoso';
+                            this.modal?.show();
+                          },
+                          error: (err) => {
+                            console.log(err);
+                            this.message = 'Error al iniciar sesión';
+                            this.modal?.show();
+                          },
+                        });
+                    }
+                  },
+                  error: (err) => {
+                    console.log(err);
+                    this.message = 'Error al iniciar sesión' + err;
+                  },
+                });
+            }
+          },
+          error: (err) => {
+            console.log(err);
+            this.message = 'Error al iniciar sesión';
             this.modal?.show();
-          } else {
-            this.oUsuarioService.register(this.oRegisterForm?.value).subscribe({
-              next: (data: IUsuario) => {
-                console.log(data);
-                this.message = 'Registro exitoso';
-                this.modal?.show();
-              },
-              error: (err) => {
-                console.log(err);
-                this.message = 'Error al iniciar sesión';
-                this.modal?.show();
-              },
-            });
-          }
-
-        },
-        error: (err) => {
-          console.log(err);
-          this.message = 'Error al iniciar sesión' + err;
-        },
-      });
-
-
-      
+          },
+        });
     }
   }
 
