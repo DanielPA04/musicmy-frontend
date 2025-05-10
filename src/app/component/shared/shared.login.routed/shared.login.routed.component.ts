@@ -11,7 +11,8 @@ import { SessionService } from '../../../service/session.service';
 import { Modal } from 'flowbite';
 import type { ModalOptions, ModalInterface } from 'flowbite';
 import type { InstanceOptions } from 'flowbite';
-
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { SharedSpinnerUnroutedComponent } from '../shared.spinner.unrouted/shared.spinner.unrouted.component';
 
 @Component({
   selector: 'app-shared.login.routed',
@@ -27,6 +28,9 @@ export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
   message: string = '';
   passwordVisible: boolean = false;
   isLog: boolean = false;
+  isLoading: boolean = false;
+  isVerified: boolean | undefined = undefined;
+  dialogRef!: MatDialogRef<SharedSpinnerUnroutedComponent>;
 
   modalOptions: ModalOptions = {
     placement: 'bottom-right',
@@ -41,6 +45,7 @@ export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
     },
     onShow: () => {
       console.log('Modal is shown');
+      this.dialogRef.close();
     },
     onToggle: () => {
       console.log('Modal has been toggled');
@@ -55,7 +60,8 @@ export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
   constructor(
     private oAuthService: AuthService,
     private oSessionService: SessionService,
-    private oRouter: Router
+    private oRouter: Router,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -114,36 +120,67 @@ export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
       }
       return;
     } else {
-      
-      this.oAuthService.isVerified(this.oAuthForm?.get('identifier')?.value).subscribe({
-        next: (data: boolean) => {
-          if (!data) {
-            this.message = 'El usuario no existe';
+      this.dialogRef = this.dialog.open(SharedSpinnerUnroutedComponent, {
+        disableClose: true,
+        panelClass: 'transparent-dialog',
+      });
+      this.oAuthService
+        .isVerified(this.oAuthForm?.get('identifier')?.value)
+        .subscribe({
+          next: (data: boolean) => {
+            if (!data) {
+              this.message = 'El usuario no esta verificado';
+              this.isVerified = false;
+              this.modal?.show();
+            } else {
+              this.isVerified = true;
+              this.oAuthService.login(this.oAuthForm?.value).subscribe({
+                next: (oAuth: string) => {
+                  console.log(oAuth);
+                  this.oSessionService.login(oAuth);
+                  this.message = 'Login exitoso';
+                  this.isLog = true;
+                  this.modal?.show();
+                },
+                error: (err) => {
+                  console.log(err);
+                  this.message = err.error;
+                  this.modal?.show();
+                },
+              });
+            }
+          },
+          error: (err) => {
+            // TODO mirar de manejar el error mejor
+            console.log(err);
+            this.message = err.error;
             this.modal?.show();
-          }
-        },
-        error: (err) => {
-          console.log(err);
-          this.message = err.error;
-          this.modal?.show();
-        },
-      })
+          },
+        });
+    }
+  }
 
-      this.oAuthService.login(this.oAuthForm?.value).subscribe({
-        next: (oAuth: string) => {
-          console.log(oAuth);
-          this.oSessionService.login(oAuth);
-          this.message = 'Login exitoso';
-          this.isLog = true;
+  onSendVerificationEmail() {
+    this.dialogRef = this.dialog.open(SharedSpinnerUnroutedComponent, {
+        disableClose: true,
+        panelClass: 'transparent-dialog',
+      });
+    this.isLoading = true;
+    this.oAuthService
+      .resendVerificationEmail(this.oAuthForm?.get('identifier')?.value)
+      .subscribe({
+        next: (data: string) => {
+          this.message = data;
+          this.isLoading = false;
           this.modal?.show();
         },
         error: (err) => {
           console.log(err);
           this.message = err.error;
+          this.isLoading = false;
           this.modal?.show();
         },
       });
-    }
   }
 
   trogglePassword() {
