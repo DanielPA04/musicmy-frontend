@@ -84,7 +84,9 @@ export class UsuarioService {
   }
 
   register(oUsuario: IUsuario): Observable<IUsuario> {
-    oUsuario.password = this.oCryptoService.getHashSHA256(oUsuario.password);
+    // TODO: mirar que esto se rahasea en caso de error
+    let password = this.oCryptoService.getHashSHA256(oUsuario.password);
+    oUsuario.password = password;
 
     let URL: string = '';
     URL += this.serverURL + '/register';

@@ -14,7 +14,8 @@
       <article class="flex flex-col">
         <!-- Imagen del álbum -->
         <figure class="aspect-square overflow-hidden rounded-lg mb-3">
-          <img [src]="serverURL + '/album/' + album.id + '/img'" class="w-full h-full object-cover hover:opacity-80 transition-opacity" alt="{{ album.nombre }}" />
+          <img [src]="serverURL + '/album/' + album.id + '/img'"
+            class="w-full h-full object-cover hover:opacity-80 transition-opacity" alt="{{ album.nombre }}" />
         </figure>
 
         <!-- Nombre del álbum -->
@@ -23,11 +24,11 @@
         <!-- Nombre del artista - ahora en línea -->
         <div class="text-sm text-gray-600 line-clamp-1">
           @if (nombresArtista.get(album.id)?.length) {
-            <span>
-              @for (artista of nombresArtista.get(album.id); track $index) {
-                {{ $index > 0 ? ', ' : '' }}{{ artista.nombre }}
-              }
-            </span>
+          <span>
+            @for (artista of nombresArtista.get(album.id); track $index) {
+            {{ $index > 0 ? ', ' : '' }}{{ artista.nombre }}
+            }
+          </span>
           }
         </div>
 
@@ -35,17 +36,12 @@
         <div class="mt-2">
           <div class="text-xs font-medium mb-1">Nota: {{ getMedia(album.id) }}</div>
           <div class="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
-            <div class="h-full rounded-full" 
-                [style.width]="(getMedia(album.id) * 10) + '%'"
-                [style.backgroundColor]="getMedia(album.id) < 5 ? '#dc2626' : 
-                                     (getMedia(album.id) >= 5 && getMedia(album.id) < 7) ? '#facc15' : 
-                                     (getMedia(album.id) >= 7 && getMedia(album.id) < 8) ? '#16a34a' : 
-                                     '#9333ea'"
-                role="progressbar"
-                [attr.aria-valuenow]="getMedia(album.id)"
-                aria-valuemin="0"
-                aria-valuemax="10"
-                [attr.aria-label]="'Calificación: ' + getMedia(album.id) + ' de 10'">
+            <div class="h-full rounded-full" [style.width]="(getMedia(album.id) * 10) + '%'" [ngClass]="{
+              'bg-low-grade': getMedia(album.id) < 5,
+              'bg-medium-grade': getMedia(album.id) >= 5 && getMedia(album.id) < 7,
+              'bg-high-grade': getMedia(album.id) >= 7 && getMedia(album.id) < 8,
+              'bg-excellent-grade': getMedia(album.id) >= 8
+          }" aria-valuemin="0" aria-valuemax="10" [attr.aria-label]="'Calificación: ' + getMedia(album.id) + ' de 10'">
             </div>
           </div>
         </div>
@@ -70,7 +66,8 @@
         <!-- Imagen del álbum con enlace -->
         <a href="/album/view/{{ album.id }}" class="block aspect-square overflow-hidden rounded-lg mb-3">
           <figure>
-            <img [src]="serverURL + '/album/' + album.id + '/img'" class="w-full h-full object-cover hover:opacity-80 transition-opacity" alt="{{ album.nombre }}" />
+            <img [src]="serverURL + '/album/' + album.id + '/img'"
+              class="w-full h-full object-cover hover:opacity-80 transition-opacity" alt="{{ album.nombre }}" />
           </figure>
         </a>
 
@@ -84,14 +81,14 @@
         <!-- Nombre del artista - ahora en línea con enlaces -->
         <div class="text-sm text-gray-600 line-clamp-1">
           @if (nombresArtista.get(album.id)?.length) {
-            <span>
-              @for (artista of nombresArtista.get(album.id); track $index) {
-                {{ $index > 0 ? ', ' : '' }}
-                <a href="/admin/artista/view/{{ artista.id }}" class="hover:text-blue-600">
-                  {{ artista.nombre }}
-                </a>
-              }
-            </span>
+          <span>
+            @for (artista of nombresArtista.get(album.id); track $index) {
+            {{ $index > 0 ? ', ' : '' }}
+            <a href="/admin/artista/view/{{ artista.id }}" class="hover:text-blue-600">
+              {{ artista.nombre }}
+            </a>
+            }
+          </span>
           }
         </div>
 
@@ -99,17 +96,13 @@
         <div class="mt-2">
           <div class="text-xs font-medium mb-1">Nota: {{ getMedia(album.id) }}</div>
           <div class="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
-            <div class="h-full rounded-full" 
-                [style.width]="(getMedia(album.id) * 10) + '%'"
-                [style.backgroundColor]="getMedia(album.id) < 5 ? '#dc2626' : 
-                                     (getMedia(album.id) >= 5 && getMedia(album.id) < 7) ? '#facc15' : 
-                                     (getMedia(album.id) >= 7 && getMedia(album.id) < 8) ? '#16a34a' : 
-                                     '#9333ea'"
-                role="progressbar"
-                [attr.aria-valuenow]="getMedia(album.id)"
-                aria-valuemin="0"
-                aria-valuemax="10"
-                [attr.aria-label]="'Calificación: ' + getMedia(album.id) + ' de 10'">
+            <div class="h-full rounded-full" [style.width]="(getMedia(album.id) * 10) + '%'" [ngClass]="{
+                  'bg-low-grade': getMedia(album.id) < 5,
+                  'bg-medium-grade': getMedia(album.id) >= 5 && getMedia(album.id) < 7,
+                  'bg-high-grade': getMedia(album.id) >= 7 && getMedia(album.id) < 8,
+                  'bg-excellent-grade': getMedia(album.id) >= 8
+              }" role="progressbar" [attr.aria-valuenow]="getMedia(album.id)" aria-valuemin="0" aria-valuemax="10"
+              [attr.aria-label]="'Calificación: ' + getMedia(album.id) + ' de 10'">
             </div>
           </div>
         </div>

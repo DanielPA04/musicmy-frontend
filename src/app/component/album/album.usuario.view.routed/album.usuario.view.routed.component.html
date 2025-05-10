@@ -19,10 +19,10 @@
 
     <!-- Album Info -->
     <section class="w-2/3">
-      <h1 class="text-3xl font-bold">{{ album?.nombre }}</h1>
+      <h2 class="text-3xl font-bold">{{ album?.nombre }}</h2>
 
       @for (artista of artistas; track artista.id) {
-      <h2 class="text-xl font-bold text-gray-700">{{ artista.nombre }}</h2>
+      <p class="text-xl font-bold text-gray-700">{{ artista.nombre }}</p>
       }
 
       <!-- Scores -->
@@ -83,8 +83,10 @@
         <div>
           <p class="font-bold text-lg text-gray-900">{{ resenya.usuario.nombre }}</p>
           <div class="flex items-center">
-            <span class="text-sm font-bold bg-green-500 text-white px-2 py-0.5 rounded">{{ resenya.nota }}</span>
-          </div>
+            <span class="text-sm font-bold px-2 py-0.5 rounded" [class]="getBackgroundClass(resenya.nota)">
+              {{ resenya.nota }}
+          </span>
+                    </div>
         </div>
       </div>
 

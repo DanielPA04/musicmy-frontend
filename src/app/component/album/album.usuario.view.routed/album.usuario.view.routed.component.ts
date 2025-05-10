@@ -11,13 +11,14 @@ import { ResenyaService } from '../../../service/resenya.service';
 import { UsuarioService } from '../../../service/usuario.service';
 import { IResenya } from '../../../model/resenya.interface';
 import { serverURL } from '../../../environment/environment';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-album.usuario.view.routed',
   templateUrl: './album.usuario.view.routed.component.html',
   styleUrls: ['./album.usuario.view.routed.component.css'],
-  providers: [AlbumService, ArtistaService],
-  imports: [BlobToUrlPipe]  
+  providers: [AlbumService, ArtistaService, CommonModule],
+  imports: []  
 })
 export class AlbumUsuarioViewRoutedComponent implements OnInit {
   album : IAlbum | null = null;
@@ -102,5 +103,17 @@ export class AlbumUsuarioViewRoutedComponent implements OnInit {
     });
   }
 
+
+  getBackgroundClass(nota: number): string {
+    if (nota < 5) {
+        return 'bg-low-grade';
+    } else if (nota >= 5 && nota < 7) {
+        return 'bg-medium-grade';
+    } else if (nota >= 7 && nota < 8) {
+        return 'bg-high-grade';
+    } else {
+        return 'bg-excellent-grade';
+    }
+}
 
 }

@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { LoginService } from '../../../service/login.service';
+import { AuthService } from '../../../service/auth.service';
 import { SessionService } from '../../../service/session.service';
 import { Modal } from 'flowbite';
 import type { ModalOptions, ModalInterface } from 'flowbite';
@@ -15,23 +15,18 @@ import type { InstanceOptions } from 'flowbite';
 
 @Component({
   selector: 'app-shared.login.routed',
-  imports: [
-    ReactiveFormsModule,
-    RouterModule,
-  ],
+  imports: [ReactiveFormsModule, RouterModule],
   standalone: true,
   templateUrl: './shared.login.routed.component.html',
-  styleUrls: ['./shared.login.routed.component.css']
+  styleUrls: ['./shared.login.routed.component.css'],
 })
 export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
-
   loginmodal: HTMLElement | null = null;
   modal: ModalInterface | null = null;
   oAuthForm: FormGroup | undefined = undefined;
   message: string = '';
   passwordVisible: boolean = false;
   isLog: boolean = false;
-
 
   modalOptions: ModalOptions = {
     placement: 'bottom-right',
@@ -54,14 +49,14 @@ export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
 
   instanceOptions: InstanceOptions = {
     id: 'login-modal',
-    override: true
+    override: true,
   };
 
   constructor(
-    private oLoginService: LoginService,
+    private oAuthService: AuthService,
     private oSessionService: SessionService,
     private oRouter: Router
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.createForm();
@@ -71,7 +66,11 @@ export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
     // Asegúrate de que el DOM ya está listo
     this.loginmodal = document.querySelector('#login-modal');
     if (this.loginmodal) {
-      this.modal = new Modal(this.loginmodal, this.modalOptions, this.instanceOptions);
+      this.modal = new Modal(
+        this.loginmodal,
+        this.modalOptions,
+        this.instanceOptions
+      );
     } else {
       console.error('Modal element not found!');
     }
@@ -79,9 +78,7 @@ export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
 
   createForm() {
     this.oAuthForm = new FormGroup({
-      identifier: new FormControl('', [
-        Validators.required,
-      ]),
+      identifier: new FormControl('', [Validators.required]),
       password: new FormControl('', [
         Validators.required,
         Validators.minLength(8),
@@ -117,9 +114,22 @@ export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
       }
       return;
     } else {
+      
+      this.oAuthService.isVerified(this.oAuthForm?.get('identifier')?.value).subscribe({
+        next: (data: boolean) => {
+          if (!data) {
+            this.message = 'El usuario no existe';
+            this.modal?.show();
+          }
+        },
+        error: (err) => {
+          console.log(err);
+          this.message = err.error;
+          this.modal?.show();
+        },
+      })
 
-
-      this.oLoginService.login(this.oAuthForm?.value).subscribe({
+      this.oAuthService.login(this.oAuthForm?.value).subscribe({
         next: (oAuth: string) => {
           console.log(oAuth);
           this.oSessionService.login(oAuth);
@@ -129,7 +139,7 @@ export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
         },
         error: (err) => {
           console.log(err);
-          this.message = 'Error al iniciar sesión';
+          this.message = err.error;
           this.modal?.show();
         },
       });

@@ -6,6 +6,20 @@
 @tailwind utilities;
 
 
+
+:root {
+    --low-grade-bg: #dc2626;
+    --medium-grade-bg: #facc15;
+    --high-grade-bg: #16a34a;
+    --excellent-grade-bg: #9333ea;
+
+    --low-grade-color: #dc2626;
+    --medium-grade-color: #facc15;
+    --high-grade-color: #16a34a;
+    --excellent-grade-color: #9333ea;
+}
+
+
 a,a:hover,a:active,a:visited,a:link { text-decoration: none; color: inherit; }
 
 html, body { height: 100%; font-size: 0.9rem;}
@@ -32,35 +46,37 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
 
 
 .bg-low-grade {
-    background-color: red;
+    background-color: var(--low-grade-bg);
+    color: white;
 }
 
 .bg-medium-grade {
-    background-color: yellow;
+    background-color: var(--medium-grade-bg);
 }
 
 .bg-high-grade {
-    background-color: #28a745;
+    background-color: var(--high-grade-bg);
+    color: white;
 }
 
 .bg-excellent-grade {
-    background-color: rgb(153, 7, 153);
+    background-color: var(--excellent-grade-bg);
     color: white;
 }
 
 .low-grade {
-    color: red;
+    color: var(--low-grade-color);
 }
 
 .medium-grade {
-    color: yellow;
-}   
+    color: var(--medium-grade-color);
+}
 
 .high-grade {
-    color: #28a745;
+    color: var(--high-grade-color);
 }
 
 .excellent-grade {
-    color: rgb(153, 7, 153);
+    color: var(--excellent-grade-color);
 }
 

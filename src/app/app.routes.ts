@@ -43,15 +43,19 @@ import { UsuarioAdminDeleteRoutedComponent } from './component/usuario/usuario.a
 import { TipousuarioAdminPlistRoutedComponent } from './component/tipousuario/tipousuario.admin.plist.routed/tipousuario.admin.plist.routed.component';
 import { ResenyaUsuarioCreateRoutedComponent } from './component/resenya/resenya.usuario.create.routed/resenya.usuario.create.routed.component';
 import { AlbumUsuarioViewRoutedComponent } from './component/album/album.usuario.view.routed/album.usuario.view.routed.component';
+import { SharedVerifyRoutedComponent } from './component/shared/shared.verify.routed/shared.verify.routed.component';
 
 export const routes: Routes = [
-    // Menu
+    // Menu/Shared
     { path: '', component: SharedHomeRoutedComponent },
     { path: 'home', component: SharedHomeRoutedComponent },
     { path: 'register', component: SharedRegisterRoutedComponent, canActivate: [NoUserGuard] },
     { path: 'login', component: SharedLoginRoutedComponent , canActivate: [NoUserGuard] },
     { path: 'logout', component: SharedLogoutRoutedComponent, canActivate: [UserGuard] },
     { path: 'perfil/:email', component: SharedPerfilRoutedComponent, canActivate: [UserGuard] },
+    { path: 'verify/:token', component: SharedVerifyRoutedComponent, canActivate: [NoUserGuard], data: { hideHeaderFooter: true } },
+
+
 
     //Album
     { path: 'admin/album/plist', component: AlbumAdminPlistRoutedComponent, canActivate: [AdminGuard] },

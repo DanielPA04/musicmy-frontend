@@ -27,6 +27,8 @@ export class SharedRegisterRoutedComponent implements OnInit, AfterViewInit {
   message: string = '';
   passwordVisible: boolean = false;
 
+  isLoading : boolean = false;
+
   constructor(
     private oUsuarioService: UsuarioService,
     private oSessionService: SessionService,
@@ -85,6 +87,7 @@ export class SharedRegisterRoutedComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit() {
+    this.isLoading = true;
     if (this.oRegisterForm?.invalid) {
       const controls = this.oRegisterForm.controls;
 
@@ -111,7 +114,7 @@ export class SharedRegisterRoutedComponent implements OnInit, AfterViewInit {
           break;
         }
       }
-
+      this.isLoading = false;
       return;
     } else {
       this.oUsuarioService
@@ -124,6 +127,7 @@ export class SharedRegisterRoutedComponent implements OnInit, AfterViewInit {
                 this.oRegisterForm?.controls['username'].value +
                 ' ya esta registrado';
               this.modal?.show();
+              this.isLoading = false;
             } else {
               this.oUsuarioService
                 .checkIfEmailExists(this.oRegisterForm?.controls['email'].value)
@@ -135,6 +139,8 @@ export class SharedRegisterRoutedComponent implements OnInit, AfterViewInit {
                         this.oRegisterForm?.controls['email'].value +
                         ' ya esta registrado';
                       this.modal?.show();
+                      this.isLoading = false;
+
                     } else {
                       this.oUsuarioService
                         .register(this.oRegisterForm?.value)
@@ -143,25 +149,31 @@ export class SharedRegisterRoutedComponent implements OnInit, AfterViewInit {
                             console.log(data);
                             this.message = 'Registro exitoso';
                             this.modal?.show();
+                            this.isLoading = false;
+
                           },
                           error: (err) => {
                             console.log(err);
-                            this.message = 'Error al iniciar sesión';
+                            this.message = 'Error';
                             this.modal?.show();
+                            this.isLoading = false;
                           },
                         });
                     }
                   },
                   error: (err) => {
                     console.log(err);
-                    this.message = 'Error al iniciar sesión' + err;
+                    this.message = 'Error' + err;
+                    this.isLoading = false;
+                    this.modal?.show();
                   },
                 });
             }
           },
           error: (err) => {
             console.log(err);
-            this.message = 'Error al iniciar sesión';
+            this.isLoading = false;
+            this.message = 'Error';
             this.modal?.show();
           },
         });

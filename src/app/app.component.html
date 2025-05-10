@@ -1,9 +1,13 @@
+@if (showLayout){
 <header>
   <app-shared-menu-unrouted></app-shared-menu-unrouted>
 </header>
+}
 <main>
     <router-outlet />
 </main>
+@if (showLayout){
 <footer>
   <!-- TODO <app-shared-footer-unrouted></app-shared-footer-unrouted> -->
 </footer>
+}
