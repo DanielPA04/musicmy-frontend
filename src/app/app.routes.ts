@@ -7,10 +7,9 @@ import { UserGuard } from './guard/user.guard';
 
 //Menu
 import { SharedHomeRoutedComponent } from './component/shared/shared.home.routed/shared.home.routed.component';
-import { SharedLoginRoutedComponent } from './component/shared/shared.login.routed/shared.login.routed.component';
-import { SharedLogoutRoutedComponent } from './component/shared/shared.logout.routed/shared.logout.routed.component';
+import { SharedLogoutRoutedComponent } from './component/auth/shared.logout.routed/shared.logout.routed.component';
 import { SharedPerfilRoutedComponent } from './component/shared/shared.perfil.routed/shared.perfil.routed.component';
-import { SharedRegisterRoutedComponent } from './component/shared/shared.register.routed/shared.register.routed.component';
+import { SharedRegisterRoutedComponent } from './component/auth/shared.register.routed/shared.register.routed.component';
 
 
 //Album
@@ -42,8 +41,15 @@ import { UsuarioAdminDeleteRoutedComponent } from './component/usuario/usuario.a
 //Tipousuario
 import { TipousuarioAdminPlistRoutedComponent } from './component/tipousuario/tipousuario.admin.plist.routed/tipousuario.admin.plist.routed.component';
 import { ResenyaUsuarioCreateRoutedComponent } from './component/resenya/resenya.usuario.create.routed/resenya.usuario.create.routed.component';
+
 import { AlbumUsuarioViewRoutedComponent } from './component/album/album.usuario.view.routed/album.usuario.view.routed.component';
-import { SharedVerifyRoutedComponent } from './component/shared/shared.verify.routed/shared.verify.routed.component';
+
+
+import { SharedVerifyRoutedComponent } from './component/auth/shared.verify.routed/shared.verify.routed.component';
+import { SharedLoginRoutedComponent } from './component/auth/shared.login.routed/shared.login.routed.component';
+import { AuthForgotPwdComponent } from './component/auth/auth.forgot.pwd/auth.forgot.pwd.component';
+import { AuthPwdTokenComponent } from './component/auth/auth.pwd.token/auth.pwd.token.component';
+
 
 export const routes: Routes = [
     // Menu/Shared
@@ -54,6 +60,10 @@ export const routes: Routes = [
     { path: 'logout', component: SharedLogoutRoutedComponent, canActivate: [UserGuard] },
     { path: 'perfil/:email', component: SharedPerfilRoutedComponent, canActivate: [UserGuard] },
     { path: 'verify/:token', component: SharedVerifyRoutedComponent, canActivate: [NoUserGuard], data: { hideHeaderFooter: true } },
+
+    //Auth
+    { path: 'forgot-password', component: AuthForgotPwdComponent, canActivate: [NoUserGuard] },
+    { path: 'reset-password/:token', component: AuthPwdTokenComponent, canActivate: [NoUserGuard], data: { hideHeaderFooter: true } },
 
 
 

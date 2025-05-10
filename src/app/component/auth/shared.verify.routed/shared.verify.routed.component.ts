@@ -4,7 +4,7 @@ import { AuthService } from '../../../service/auth.service';
 import { SessionService } from '../../../service/session.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { SharedSpinnerUnroutedComponent } from '../shared.spinner.unrouted/shared.spinner.unrouted.component';
+import { SharedSpinnerUnroutedComponent } from '../../shared/shared.spinner.unrouted/shared.spinner.unrouted.component';
 
 @Component({
   selector: 'app-shared-verify-routed',

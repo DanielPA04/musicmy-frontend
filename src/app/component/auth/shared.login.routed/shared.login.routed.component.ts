@@ -12,7 +12,7 @@ import { Modal } from 'flowbite';
 import type { ModalOptions, ModalInterface } from 'flowbite';
 import type { InstanceOptions } from 'flowbite';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { SharedSpinnerUnroutedComponent } from '../shared.spinner.unrouted/shared.spinner.unrouted.component';
+import { SharedSpinnerUnroutedComponent } from '../../shared/shared.spinner.unrouted/shared.spinner.unrouted.component';
 
 @Component({
   selector: 'app-shared.login.routed',
@@ -110,7 +110,7 @@ export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
             this.message = `El campo ${controlName} no puede tener más de ${errors['maxlength'].requiredLength} caracteres.`;
           } else if (errors['pattern']) {
             this.message =
-              'El campo ${controlName} no cumple con el formato requerido. Debe usar por lo menos 1 número, 1 mayúscula y 1 minúscula';
+              `El campo ${controlName} no cumple con el formato requerido. Debe usar por lo menos 1 número, 1 mayúscula y 1 minúscula`;
           } else {
             this.message = `El campo ${controlName} es inválido.`;
           }
