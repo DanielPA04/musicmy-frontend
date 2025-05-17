@@ -25,7 +25,8 @@
                 <!-- Botón -->
                 @if (isUserLogged()) {
                 <button
-                    class="bg-orange-500 hover:bg-orange-600 text-white font-medium px-6 py-2 rounded-full shadow-lg transition" routerLink="/edit/perfil">
+                    class="bg-orange-500 hover:bg-orange-600 text-white font-medium px-6 py-2 rounded-full shadow-lg transition"
+                    routerLink="/edit/perfil">
                     Editar perfil
                 </button>
                 }
@@ -51,7 +52,8 @@
     <section class="mb-12">
         <div class="flex items-center justify-between mb-4">
             <h2 class="text-2xl font-bold">Calificaciones recientes</h2>
-            <a routerLink="/perfil/{{ usuario?.id }}/recientes" class="text-blue-600 hover:underline text-sm">Ver
+            <a [routerLink]="['/perfil', usuario?.email, 'resenyas']" [queryParams]="{ type: 'recent', page: 0 }"
+                class="text-blue-600 hover:underline text-sm">Ver
                 más</a>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -90,7 +92,8 @@
     <section>
         <div class="flex items-center justify-between mb-4">
             <h2 class="text-2xl font-bold">Calificaciones más altas</h2>
-            <a routerLink="/perfil/{{ usuario?.id }}/mejores" class="text-blue-600 hover:underline text-sm">Ver más</a>
+            <a [routerLink]="['/perfil', usuario?.email, 'resenyas']" [queryParams]="{ type: 'best', page: 0 }"
+                class="text-blue-600 hover:underline text-sm">Ver más</a>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
 

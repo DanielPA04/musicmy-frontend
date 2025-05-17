@@ -1,0 +1,98 @@
+<div class="max-w-screen-lg mx-auto px-4 sm:px-6 py-8">
+
+  <!-- Siempre visible: título y selector -->
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-2xl font-bold">
+      Calificaciones
+      <span *ngIf="usuario">de {{ usuario.username }}</span>
+    </h2>
+    <div class="space-x-4">
+      <button
+        (click)="switchType('recent')"
+        [class.text-blue-600]="pageType==='recent'"
+        class="text-gray-700 hover:underline transition"
+      >
+        Recientes
+      </button>
+      <button
+        (click)="switchType('best')"
+        [class.text-blue-600]="pageType==='best'"
+        class="text-gray-700 hover:underline transition"
+      >
+        Mejores
+      </button>
+    </div>
+  </div>
+
+  <!-- Grid o "Cargando..." -->
+  <div *ngIf="isLoading" class="text-center py-10 text-gray-500">
+    Cargando...
+  </div>
+  <div *ngIf="!isLoading" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+    <article
+      *ngFor="let r of oPage.content"
+      class="flex flex-col bg-gray-50 rounded-lg overflow-hidden shadow"
+    >
+      <a [routerLink]="['/album/view', r.album.id]" class="block aspect-square overflow-hidden">
+        <img
+          [src]="serverURL + '/album/' + r.album.id + '/img'"
+          alt="{{ r.album.nombre }}"
+          class="w-full h-full object-cover hover:opacity-80 transition-opacity"
+        />
+      </a>
+      <div class="p-2 flex-1 flex flex-col">
+        <h3 class="font-semibold truncate mb-1">{{ r.album.nombre }}</h3>
+        <div *ngIf="nombresArtista.get(r.album.id)?.length" class="text-gray-600 text-sm truncate mb-2">
+          <ng-container *ngFor="let artista of nombresArtista.get(r.album.id); let i = index">
+            <span *ngIf="i>0">, </span>
+            <a [routerLink]="['/artista/view', artista.id]" class="hover:text-blue-600">
+              {{ artista.nombre }}
+            </a>
+          </ng-container>
+        </div>
+        <div class="mt-auto">
+          <div class="text-xs mb-1">Nota: {{ r.nota }}</div>
+          <div class="h-1 w-full bg-gray-200 rounded-full overflow-hidden">
+            <div
+              class="h-full rounded-full"
+              [style.width]="(r.nota * 10) + '%'"
+              [ngClass]="{
+                'bg-red-600': r.nota < 5,
+                'bg-yellow-400': r.nota >= 5 && r.nota < 7,
+                'bg-green-600': r.nota >= 7 && r.nota < 9,
+                'bg-purple-600': r.nota >= 9
+              }"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <!-- Siempre visible: paginación -->
+  <nav class="flex justify-center space-x-1">
+    <button
+      (click)="goToPrev()"
+      [disabled]="nPage===0"
+      class="px-2 py-1 bg-white border border-gray-300 rounded hover:bg-gray-100 disabled:opacity-50"
+    >
+      <i class="bi bi-chevron-left"></i>
+    </button>
+    <button
+      *ngFor="let pag of arrBotonera"
+      (click)="goToPage(pag)"
+      [disabled]="pag==='...'"
+      [class.font-bold]="pag!=='...' && nPage+1===+pag"
+      class="px-3 py-1 bg-white border border-gray-300 rounded hover:bg-gray-100 disabled:cursor-default"
+    >
+      {{ pag }}
+    </button>
+    <button
+      (click)="goToNext()"
+      [disabled]="!oPage || nPage+1>=oPage.totalPages"
+      class="px-2 py-1 bg-white border border-gray-300 rounded hover:bg-gray-100 disabled:opacity-50"
+    >
+      <i class="bi bi-chevron-right"></i>
+    </button>
+  </nav>
+</div>

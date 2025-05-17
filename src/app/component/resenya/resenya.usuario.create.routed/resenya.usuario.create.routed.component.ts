@@ -23,14 +23,16 @@ import { InstanceOptions, Modal, ModalInterface, ModalOptions } from 'flowbite';
   styleUrls: ['./resenya.usuario.create.routed.component.css'],
   imports: [MatInputModule, ReactiveFormsModule, RouterModule],
 })
-export class ResenyaUsuarioCreateRoutedComponent implements OnInit, AfterViewInit {
+export class ResenyaUsuarioCreateRoutedComponent
+  implements OnInit, AfterViewInit
+{
   id: number = 0;
   oResenyaForm: FormGroup | undefined = undefined;
   oResenya: IResenya | null = null;
   strMessage: string = '';
   email: string = '';
 
-  resenyamodal : HTMLElement | null = null;
+  resenyamodal: HTMLElement | null = null;
 
   modal: ModalInterface | null = null;
 
@@ -43,29 +45,29 @@ export class ResenyaUsuarioCreateRoutedComponent implements OnInit, AfterViewIni
 
   readonly dialog = inject(MatDialog);
 
-   modalOptions: ModalOptions = {
-      placement: 'bottom-right',
-      backdrop: 'dynamic',
-      backdropClasses: 'bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-40',
-      closable: true,
-      onHide: () => {
-        console.log('Modal is hidden');
-        if (this.isResenyaOk) {
-          this.oRouter.navigate(['/']);
-        }
-      },
-      onShow: () => {
-        console.log('Modal is shown');
-      },
-      onToggle: () => {
-        console.log('Modal has been toggled');
-      },
-    };
-  
-    instanceOptions: InstanceOptions = {
-      id: 'resenya-modal',
-      override: true
-    };
+  modalOptions: ModalOptions = {
+    placement: 'bottom-right',
+    backdrop: 'dynamic',
+    backdropClasses: 'bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-40',
+    closable: true,
+    onHide: () => {
+      console.log('Modal is hidden');
+      if (this.isResenyaOk) {
+        this.oRouter.navigate(['/']);
+      }
+    },
+    onShow: () => {
+      console.log('Modal is shown');
+    },
+    onToggle: () => {
+      console.log('Modal has been toggled');
+    },
+  };
+
+  instanceOptions: InstanceOptions = {
+    id: 'resenya-modal',
+    override: true,
+  };
 
   constructor(
     private oResenyaService: ResenyaService,
@@ -98,14 +100,17 @@ export class ResenyaUsuarioCreateRoutedComponent implements OnInit, AfterViewIni
 
   ngAfterViewInit() {
     this.resenyamodal = document.querySelector('#resenya-modal');
-  
+
     if (this.resenyamodal) {
-      this.modal = new Modal(this.resenyamodal, this.modalOptions, this.instanceOptions);
+      this.modal = new Modal(
+        this.resenyamodal,
+        this.modalOptions,
+        this.instanceOptions
+      );
     } else {
       console.error('Modal element not found!');
     }
   }
-  
 
   createForm() {
     this.oResenyaForm = new FormGroup({
@@ -137,6 +142,8 @@ export class ResenyaUsuarioCreateRoutedComponent implements OnInit, AfterViewIni
         descripcion: new FormControl(''),
         email: new FormControl(''),
         website: new FormControl(''),
+        codresetpwd: new FormControl(''),
+        codverf: new FormControl(''),
         tipousuario: new FormControl([]),
         resenyas: new FormControl([]),
       }),
@@ -172,7 +179,6 @@ export class ResenyaUsuarioCreateRoutedComponent implements OnInit, AfterViewIni
               error: (err) => {
                 this.strMessage = `Error al crear la resenya.`;
                 this.modal?.show();
-
               },
             });
           } else {
@@ -185,8 +191,4 @@ export class ResenyaUsuarioCreateRoutedComponent implements OnInit, AfterViewIni
       this.modal?.show();
     }
   }
-
-
-  
-
 }

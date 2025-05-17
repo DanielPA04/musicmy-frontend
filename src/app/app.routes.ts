@@ -43,6 +43,7 @@ import { UsuarioAdminEditRoutedComponent } from './component/usuario/usuario.adm
 import { UsuarioAdminDeleteRoutedComponent } from './component/usuario/usuario.admin.delete.routed/usuario.admin.delete.routed.component';
 //Tipousuario
 import { TipousuarioAdminPlistRoutedComponent } from './component/tipousuario/tipousuario.admin.plist.routed/tipousuario.admin.plist.routed.component';
+import { UsuarioPerfilAllresenyasRoutedComponent } from './component/usuario/usuario.perfil.allresenyas.routed/usuario.perfil.allresenyas.routed.component';
 //
 
 
@@ -98,6 +99,7 @@ export const routes: Routes = [
      { path: 'admin/usuario/edit/:id', component: UsuarioAdminEditRoutedComponent, canActivate: [AdminGuard] },
      { path: 'admin/usuario/delete/:id', component: UsuarioAdminDeleteRoutedComponent, canActivate: [AdminGuard] },
      { path: 'edit/perfil', component: UsuarioPerfilEditRoutedComponent, canActivate: [UserGuard] },
+     { path: 'perfil/:email/resenyas', component: UsuarioPerfilAllresenyasRoutedComponent, canActivate: [UserGuard] },
 
 
      //Tipousuario
