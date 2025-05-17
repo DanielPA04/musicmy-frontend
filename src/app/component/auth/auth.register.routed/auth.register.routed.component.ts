@@ -20,7 +20,7 @@ import { IUsuario } from '../../../model/usuario.interface';
   imports: [ReactiveFormsModule, RouterModule],
   styleUrls: ['./shared.register.routed.component.css'],
 })
-export class SharedRegisterRoutedComponent implements OnInit, AfterViewInit {
+export class AuthRegisterRoutedComponent implements OnInit, AfterViewInit {
   loginmodal: HTMLElement | null = null;
   modal: ModalInterface | null = null;
   oRegisterForm: FormGroup | undefined = undefined;

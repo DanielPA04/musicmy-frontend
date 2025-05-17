@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { SessionService } from '../../../service/session.service';
 import { UsuarioService } from '../../../service/usuario.service';
 import { IUsuario } from '../../../model/usuario.interface';
@@ -8,6 +8,7 @@ import { IUsuario } from '../../../model/usuario.interface';
   selector: 'app-shared-menu-unrouted',
   templateUrl: './shared.menu.unrouted.component.html',
   styleUrls: ['./shared.menu.unrouted.component.css'],
+  imports: [RouterLink],
   standalone: true,
 })
 export class SharedMenuUnroutedComponent implements OnInit {

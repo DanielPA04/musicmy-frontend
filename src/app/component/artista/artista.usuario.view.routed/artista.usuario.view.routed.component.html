@@ -1,0 +1,79 @@
+<div class="max-w-screen-lg mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+  <!-- ARTISTA HEADER -->
+  <div class="flex flex-col lg:flex-row gap-8">
+    <!-- Foto + Botón Spotify -->
+    <aside class="flex-shrink-0 text-center">
+      <img [src]="serverURL + '/artista/' + oArtista.id + '/img'" alt="Foto de {{ oArtista.nombre }}"
+        class="w-full max-w-xs rounded-lg shadow-md mx-auto lg:mx-0" />
+      <div class="mt-4">
+        <a [href]="oArtista.spotify" target="_blank" rel="noopener"
+          class="inline-flex items-center bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-full shadow transition">
+          <!-- Icono Spotify (SimpleIcons) -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-spotify mr-2"
+            viewBox="0 0 16 16">
+            <path
+              d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.669 11.538a.5.5 0 0 1-.686.165c-1.879-1.147-4.243-1.407-7.028-.77a.499.499 0 0 1-.222-.973c3.048-.696 5.662-.397 7.77.892a.5.5 0 0 1 .166.686m.979-2.178a.624.624 0 0 1-.858.205c-2.15-1.321-5.428-1.704-7.972-.932a.625.625 0 0 1-.362-1.194c2.905-.881 6.517-.454 8.986 1.063a.624.624 0 0 1 .206.858m.084-2.268C10.154 5.56 5.9 5.419 3.438 6.166a.748.748 0 1 1-.434-1.432c2.825-.857 7.523-.692 10.492 1.07a.747.747 0 1 1-.764 1.288" />
+          </svg>
+          Escuchar en Spotify
+        </a>
+      </div>
+    </aside>
+
+    <!-- Información del artista -->
+    <section class="flex-1 flex flex-col justify-between">
+      <div>
+        <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ oArtista.nombre }}</h1>
+        @if (oArtista.nombrereal !== oArtista.nombre) {
+        <p class="text-xl text-gray-700 mb-4">
+          {{ oArtista.nombrereal }}
+        </p>
+        }
+      </div>
+
+      <article class="mt-4 bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold mb-2 text-gray-900">Biografía</h2>
+        <p class="text-gray-700">{{ oArtista.descripcion }}</p>
+      </article>
+
+      <article class="mt-6 bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold mb-2 text-gray-900">Otros detalles</h2>
+        <p class="text-gray-700">
+          <span class="font-semibold">Álbumes/grupos relacionados:</span>
+          {{ oArtista.grupoalbumartistas }}
+        </p>
+      </article>
+    </section>
+  </div>
+
+  <!-- ÁLBUMES DEL ARTISTA -->
+  <section class="mt-10 bg-white rounded-lg shadow-lg p-6">
+    <h2 class="text-2xl font-bold text-gray-900 mb-6">Álbumes del Artista</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8">
+      <div *ngFor="let alb of oAlbumes" class="bg-gray-50 rounded-lg p-6 shadow hover:shadow-lg transition">
+        <a [routerLink]="['/album/view', alb.id]" class="block overflow-hidden rounded-md mb-4">
+          <img [src]="serverURL + '/album/' + alb.id + '/img'" alt="Portada de {{ alb.nombre }}"
+            class="w-full h-48 object-cover hover:opacity-80 transition-opacity" />
+        </a>
+        <h3 class="text-xl font-semibold text-gray-800 mb-2">
+          <a [routerLink]="['/album/view', alb.id]" class="hover:text-blue-600 transition">
+            {{ alb.nombre }}
+          </a>
+        </h3>
+        <p class="text-sm text-gray-500 mb-3">{{ alb.fecha | date:'yyyy' }}</p>
+        <div class="text-xs font-medium mb-2">Nota: {{ getMedia(alb.id) }}</div>
+        <div class="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
+          <div class="h-full rounded-full" [style.width]="(getMedia(alb.id) * 10) + '%'" [ngClass]="{
+      'bg-low-grade': getMedia(alb.id) < 5,
+      'bg-medium-grade': getMedia(alb.id) >= 5 && getMedia(alb.id) < 7,
+      'bg-high-grade': getMedia(alb.id) >= 7 && getMedia(alb.id) < 9,
+      'bg-excellent-grade': getMedia(alb.id) >= 9
+    }"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+</div>

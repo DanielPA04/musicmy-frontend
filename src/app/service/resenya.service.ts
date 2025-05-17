@@ -53,7 +53,7 @@ export class ResenyaService {
   }
 
   getPageByUsuario(
-    id:number,
+    id: number,
     page: number,
     size: number,
     field: string,
@@ -61,7 +61,7 @@ export class ResenyaService {
   ): Observable<IPage<IResenya>> {
     let URL: string = '';
     URL += this.serverURL;
-    URL += "/byusuario/" + id;
+    URL += '/byusuario/' + id;
     if (!page) {
       page = 0;
     }
@@ -81,8 +81,48 @@ export class ResenyaService {
     return this.oHttp.get<IPage<IResenya>>(URL, httpOptions);
   }
 
+  getPageByUsuarioRecent(
+    id: number,
+    page: number,
+    size: number
+  ): Observable<IPage<IResenya>> {
+    let URL: string = '';
+    URL += this.serverURL;
+    URL += '/byusuario/' + id + '/recent';
+    if (!page) {
+      page = 0;
+    }
+    URL += '?page=' + page;
+    if (!size) {
+      size = 10;
+    }
+    URL += '&size=' + size;
+
+    return this.oHttp.get<IPage<IResenya>>(URL, httpOptions);
+  }
+
+  getPageByUsuarioBest(
+    id: number,
+    page: number,
+    size: number
+  ): Observable<IPage<IResenya>> {
+    let URL: string = '';
+    URL += this.serverURL;
+    URL += '/byusuario/' + id + '/best';
+    if (!page) {
+      page = 0;
+    }
+    URL += '?page=' + page;
+    if (!size) {
+      size = 10;
+    }
+    URL += '&size=' + size;
+
+    return this.oHttp.get<IPage<IResenya>>(URL, httpOptions);
+  }
+
   getPageByAlbum(
-    id:number,
+    id: number,
     page: number,
     size: number,
     field: string,
@@ -90,7 +130,7 @@ export class ResenyaService {
   ): Observable<IPage<IResenya>> {
     let URL: string = '';
     URL += this.serverURL;
-    URL += "/byalbum/" + id;
+    URL += '/byalbum/' + id;
     if (!page) {
       page = 0;
     }
@@ -146,8 +186,10 @@ export class ResenyaService {
     return this.oHttp.post<boolean>(URL, resenya);
   }
 
-
-  checkIfResenyaExistsByEmailAndAlbumId(email: string, idAlbum: number): Observable<boolean> {
+  checkIfResenyaExistsByEmailAndAlbumId(
+    email: string,
+    idAlbum: number
+  ): Observable<boolean> {
     let URL: string = '';
     URL += this.serverURL;
     URL += '/check/' + email + '/' + idAlbum;

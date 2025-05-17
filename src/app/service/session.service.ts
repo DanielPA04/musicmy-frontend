@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Subject } from "rxjs";
+import { Observable, of, Subject } from "rxjs";
 import { IJwt } from "../model/jwt.interface";
 
 
@@ -51,6 +51,21 @@ export class SessionService {
             }
         } else {
             return '';
+        }
+    }
+
+      getSessionEmailObv(): Observable<string> {
+        const token = this.getToken();
+        if (token) {
+            if (this.isSessionActive()) {
+                let parsedToken: IJwt;
+                parsedToken = this.parseJwt(token);
+                return of( parsedToken.email);
+            } else {
+                return of('');
+            }
+        } else {
+            return of('');
         }
     }
 

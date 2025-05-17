@@ -12,7 +12,7 @@ import { SharedSpinnerUnroutedComponent } from '../../shared/shared.spinner.unro
   styleUrls: ['./shared.verify.routed.component.css'],
   imports: [MatProgressSpinnerModule],
 })
-export class SharedVerifyRoutedComponent implements OnInit {
+export class AuthVerifyRoutedComponent implements OnInit {
   token: string = '';
   success: boolean = false;
   isError: boolean = false;

@@ -6,7 +6,7 @@ import { BlobToUrlPipe } from '../../../pipe/blob.pipe';
 import { ArtistaService } from '../../../service/artista.service';
 import { IArtista } from '../../../model/artista.interface';
 import { SessionService } from '../../../service/session.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ResenyaService } from '../../../service/resenya.service';
 import { UsuarioService } from '../../../service/usuario.service';
 import { IResenya } from '../../../model/resenya.interface';
@@ -17,8 +17,8 @@ import { CommonModule } from '@angular/common';
   selector: 'app-album.usuario.view.routed',
   templateUrl: './album.usuario.view.routed.component.html',
   styleUrls: ['./album.usuario.view.routed.component.css'],
-  providers: [AlbumService, ArtistaService, CommonModule],
-  imports: []  
+  standalone: true,
+  imports: [CommonModule, RouterLink, CommonModule]  
 })
 export class AlbumUsuarioViewRoutedComponent implements OnInit {
   album : IAlbum | null = null;
@@ -62,6 +62,7 @@ export class AlbumUsuarioViewRoutedComponent implements OnInit {
           });
           this.oAlbumService.getMedia(album.id).subscribe({
             next: (data: number) => {
+              console.log("media"+data);
               this.media = data;
             },
             error: (err) => {

@@ -74,6 +74,124 @@ export class AlbumService {
     return this.oHttp.get<IPage<IAlbum>>(URL, httpOptions);
   }
 
+   getPageNew(
+    page: number,
+    size: number,
+    field: string,
+    dir: string
+  ): Observable<IPage<IAlbum>> {
+    let URL: string = '';
+    URL += this.serverURL;
+    URL += '/new';
+    if (!page) {
+      page = 0;
+    }
+    URL += '?page=' + page;
+    if (!size) {
+      size = 10;
+    }
+    URL += '&size=' + size;
+    if (field) {
+      URL += '&sort=' + field;
+      if (dir === 'asc') {
+        URL += ',asc';
+      } else {
+        URL += ',desc';
+      }
+    }
+
+    return this.oHttp.get<IPage<IAlbum>>(URL, httpOptions);
+  }
+
+    getPagePopular(
+    page: number,
+    size: number,
+    field: string,
+    dir: string
+  ): Observable<IPage<IAlbum>> {
+    let URL: string = '';
+    URL += this.serverURL;
+    URL += '/popular';
+    if (!page) {
+      page = 0;
+    }
+    URL += '?page=' + page;
+    if (!size) {
+      size = 10;
+    }
+    URL += '&size=' + size;
+    if (field) {
+      URL += '&sort=' + field;
+      if (dir === 'asc') {
+        URL += ',asc';
+      } else {
+        URL += ',desc';
+      }
+    }
+
+    return this.oHttp.get<IPage<IAlbum>>(URL, httpOptions);
+  }
+
+    getPagePopularRecent(
+    page: number,
+    size: number,
+    field: string,
+    dir: string
+  ): Observable<IPage<IAlbum>> {
+    let URL: string = '';
+    URL += this.serverURL;
+    URL += '/popular/recent';
+    if (!page) {
+      page = 0;
+    }
+    URL += '?page=' + page;
+    if (!size) {
+      size = 10;
+    }
+    URL += '&size=' + size;
+    if (field) {
+      URL += '&sort=' + field;
+      if (dir === 'asc') {
+        URL += ',asc';
+      } else {
+        URL += ',desc';
+      }
+    }
+
+    return this.oHttp.get<IPage<IAlbum>>(URL, httpOptions);
+  }
+
+
+     getPageTopRated(
+    page: number,
+    size: number,
+    field: string,
+    dir: string
+  ): Observable<IPage<IAlbum>> {
+    let URL: string = '';
+    URL += this.serverURL;
+    URL += '/top-rated';
+    if (!page) {
+      page = 0;
+    }
+    URL += '?page=' + page;
+    if (!size) {
+      size = 10;
+    }
+    URL += '&size=' + size;
+    if (field) {
+      URL += '&sort=' + field;
+      if (dir === 'asc') {
+        URL += ',asc';
+      } else {
+        URL += ',desc';
+      }
+    }
+
+    return this.oHttp.get<IPage<IAlbum>>(URL, httpOptions);
+  }
+
+
   get(id: number): Observable<IAlbum> {
     let URL: string = '';
     URL += this.serverURL;

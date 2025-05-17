@@ -56,7 +56,6 @@ export class UsuarioService {
   }
 
   create(oUsuario: IUsuario): Observable<IUsuario> {
-
     let URL: string = '';
     URL += this.serverURL;
 
@@ -65,7 +64,7 @@ export class UsuarioService {
     oUsuario.tipousuario.usuarios = [];
 
     if (oUsuario.img) {
-      URL += '/img';
+      URL += '/create/img';
       const formData = new FormData();
       formData.append('username', oUsuario.username);
       formData.append('nombre', oUsuario.nombre);
@@ -79,7 +78,6 @@ export class UsuarioService {
       return this.oHttp.post<IUsuario>(URL, formData);
     }
 
-   
     return this.oHttp.post<IUsuario>(URL, oUsuario);
   }
 
@@ -108,14 +106,17 @@ export class UsuarioService {
   }
 
   update(oUsuario: IUsuario): Observable<IUsuario> {
-    oUsuario.password = this.oCryptoService.getHashSHA256(oUsuario.password);
-    oUsuario.fecha = new Date(oUsuario.fecha).toISOString().split('T')[0];
+    if (oUsuario.password) {
+      oUsuario.password = this.oCryptoService.getHashSHA256(oUsuario.password);
+      oUsuario.fecha = new Date(oUsuario.fecha).toISOString().split('T')[0];
+    }
     oUsuario.tipousuario.usuarios = [];
+    oUsuario.resenyas = [];
     let URL: string = '';
     URL += this.serverURL;
 
     if (oUsuario.img) {
-      URL += '/img';
+      URL += '/update/img';
       const formData = new FormData();
       formData.append('id', oUsuario.id.toString());
       formData.append('username', oUsuario.username);
@@ -143,7 +144,7 @@ export class UsuarioService {
   getUsuarioByEmail(email: string): Observable<IUsuario> {
     let URL: string = '';
     URL += this.serverURL + '/byemail';
-    URL += '/' + email; 
+    URL += '/' + email;
     return this.oHttp.get<IUsuario>(URL);
   }
 

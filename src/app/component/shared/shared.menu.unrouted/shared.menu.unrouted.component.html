@@ -1,6 +1,6 @@
 <nav class="bg-gray-100 border-b border-gray-300 h-[6vh]">
   <div class="container mx-auto flex items-center justify-between px-4 py-2">
-    <a class="text-lg font-bold text-gray-800" href="#">Music<span class="bg-[#f84525] text-white rounded-md">My</span></a>
+    <a class="text-lg font-bold text-gray-800" routerLink="/home">Music<span class="bg-[#f84525] text-white rounded-md">My</span></a>
     <button class="lg:hidden flex items-center text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300" type="button" data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation" aria-controls="drawer-navigation">
 
       <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -9,25 +9,28 @@
     </button>
     @if (permisos === "Administrador") {
     <div class="hidden lg:flex  space-x-4">
-      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/album/')" href="/admin/album/plist">Album</a>
-      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/artista/')" href="/admin/artista/plist">Artista</a>
-      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/resenya/')" href="/admin/resenya/plist">Reseña</a>
-      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/usuario/')" href="/admin/usuario/plist">Usuario</a>
-      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/tipousuario/')" href="/admin/tipousuario/plist">Tipo Usuario</a>
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/album/')" routerLink="/admin/album/plist">Album</a>
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/artista/')" routerLink="/admin/artista/plist">Artista</a>
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/resenya/')" routerLink="/admin/resenya/plist">Reseña</a>
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/usuario/')" routerLink="/admin/usuario/plist">Usuario</a>
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/tipousuario/')" routerLink="/admin/tipousuario/plist">Tipo Usuario</a>
 
 
     </div>
     } @else {
       <div class="hidden lg:flex space-x-4">
-        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta == '/home' || strRuta == '/' || strRuta == ''" href="/home">Inicio</a>
+        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta == '/home' || strRuta == '/' || strRuta == ''" routerLink="/home">Inicio</a>
+        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/artista')" routerLink="/artista">Artistas</a>
+        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/album')" routerLink="/album">Albumes</a>
+        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/usuario')" routerLink="/usuario">Usuarios</a>
       </div>
     }
     <div class="hidden lg:flex space-x-4">
       @if (!activeSession) {
-      <a class="text-gray-600  px-3 py-2 rounded-lg border-1 border-solid border-[#f84525] hover:bg-[#f84525] hover:text-white" [class.activeTW]="strRuta == '/login'" href="/login">Login</a>
+      <a class="text-gray-600  px-3 py-2 rounded-lg border-1 border-solid border-[#f84525] hover:bg-[#f84525] hover:text-white" [class.activeTW]="strRuta == '/login'" routerLink="/login">Login</a>
     } @else {
-      <a class="text-gray-600  px-3 py-2 rounded-lg border-1 border-solid border-[#f84525] hover:bg-[#f84525] hover:text-white" [class.activeTW]="strRuta == '/logout'" href="/logout">Logout</a>
-      <a class="text-gray-600 px-3 py-2 rounded-lg border-1 border-solid border-[#f84525] hover:bg-[#f84525] hover:text-white flex items-center" [class.activeTW]="strRuta.startsWith('/perfil/')" href="/perfil/{{userEmail}}"> 
+      <a class="text-gray-600  px-3 py-2 rounded-lg border-1 border-solid border-[#f84525] hover:bg-[#f84525] hover:text-white" [class.activeTW]="strRuta == '/logout'" routerLink="/logout">Logout</a>
+      <a class="text-gray-600 px-3 py-2 rounded-lg border-1 border-solid border-[#f84525] hover:bg-[#f84525] hover:text-white flex items-center" [class.activeTW]="strRuta.startsWith('/perfil/')" routerLink="/perfil/{{userEmail}}"> 
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
         </svg>
@@ -52,25 +55,28 @@
 
   @if (permisos === "Administrador") {
     <div class="flex flex-col space-y-4">
-      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/album/')" href="/admin/album/plist">Album</a>
-      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/artista/')" href="/admin/artista/plist">Artista</a>
-      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/resenya/')" href="/admin/resenya/plist">Reseña</a>
-      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/usuario/')" href="/admin/usuario/plist">Usuario</a>
-      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/tipousuario/')" href="/admin/tipousuario/plist">Tipo Usuario</a>
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/album/')" routerLink="/admin/album/plist">Album</a>
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/artista/')" routerLink="/admin/artista/plist">Artista</a>
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/resenya/')" routerLink="/admin/resenya/plist">Reseña</a>
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/usuario/')" routerLink="/admin/usuario/plist">Usuario</a>
+      <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/admin/tipousuario/')" routerLink="/admin/tipousuario/plist">Tipo Usuario</a>
     </div>
     } @else {
       <div class="flex flex-col space-x-4">
-        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta == '/home' || strRuta == '/' || strRuta == ''" href="/home">Inicio</a>
+        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta == '/home' || strRuta == '/' || strRuta == ''" routerLink="/home">Inicio</a>
+        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/artista')" routerLink="/artista">Artistas</a>
+        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/album')" routerLink="/album">Albumes</a>
+        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg" [class.activeTW]="strRuta.startsWith('/usuario')" routerLink="/usuario">Usuarios</a>
       </div>
     }
   
 
   <div class="flex flex-col space-y-4">
     @if (!activeSession) {
-    <a class="text-gray-600  px-3 py-2 rounded-lg border-1 border-solid border-[#f84525] hover:bg-[#f84525] hover:text-white" [class.activeTW]="strRuta == '/login'" href="/login">Login</a>
+    <a class="text-gray-600  px-3 py-2 rounded-lg border-1 border-solid border-[#f84525] hover:bg-[#f84525] hover:text-white" [class.activeTW]="strRuta == '/login'" routerLink="/login">Login</a>
   } @else {
-    <a class="text-gray-600  px-3 py-2 rounded-lg border-1 border-solid border-[#f84525] hover:bg-[#f84525] hover:text-white" [class.activeTW]="strRuta == '/logout'" href="/logout">Logout</a>
-    <a class="text-gray-600 px-3 py-2 rounded-lg border-1 border-solid border-[#f84525] hover:bg-[#f84525] hover:text-white flex items-center" [class.activeTW]="strRuta == '/perfil'" href="/perfil/{{userEmail}}"> 
+    <a class="text-gray-600  px-3 py-2 rounded-lg border-1 border-solid border-[#f84525] hover:bg-[#f84525] hover:text-white" [class.activeTW]="strRuta == '/logout'" routerLink="/logout">Logout</a>
+    <a class="text-gray-600 px-3 py-2 rounded-lg border-1 border-solid border-[#f84525] hover:bg-[#f84525] hover:text-white flex items-center" [class.activeTW]="strRuta == '/perfil'" routerLink="/perfil/{{userEmail}}"> 
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
       </svg>

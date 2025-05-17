@@ -1,0 +1,166 @@
+<div class="max-w-screen-lg mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <h1 class="text-3xl font-bold text-gray-900 mb-6">Editar perfil</h1>
+
+    <!-- Preview de foto -->
+    <div class="mb-6 flex justify-center">
+      <img [src]="previewUrl" alt="Foto de perfil" class="w-32 h-32 rounded-full object-cover shadow-md" />
+    </div>
+
+    <!-- Subir nueva foto -->
+    <div class="mb-6 flex justify-center">
+      <label for="imgUpload"
+        class="inline-flex items-center bg-orange-500 hover:bg-orange-600 text-white font-medium px-4 py-2 rounded-full shadow transition cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-white" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h4l1-2h8l1 2h4v13H3V7z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11a4 4 0 100 8 4 4 0 000-8z" />
+        </svg>
+        Subir foto
+      </label>
+      <input id="imgUpload" type="file" accept="image/*" (change)="onFileSelected($event)" class="hidden" />
+    </div>
+
+    <!-- Campos de formulario -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Nombre completo</label>
+        <input formControlName="nombre" class="block w-full bg-white border border-gray-300 rounded-md px-3 py-2
+                 focus:outline-none focus:ring-2 focus:ring-orange-500 transition" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Fecha de nacimiento</label>
+        <input formControlName="fecha" type="date" class="block w-full bg-white border border-gray-300 rounded-md px-3 py-2
+                 focus:outline-none focus:ring-2 focus:ring-orange-500 transition" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Sitio web</label>
+        <input formControlName="website" type="url" placeholder="https://" class="block w-full bg-white border border-gray-300 rounded-md px-3 py-2
+                 focus:outline-none focus:ring-2 focus:ring-orange-500 transition" />
+      </div>
+    </div>
+
+    <!-- Descripción -->
+    <div class="mt-6">
+      <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+      <textarea formControlName="descripcion" rows="4" class="block w-full bg-white border border-gray-300 rounded-md px-3 py-2
+               focus:outline-none focus:ring-2 focus:ring-orange-500 transition"></textarea>
+    </div>
+
+    <!-- Acciones -->
+    <div class="mt-8 flex items-center justify-between">
+      <!-- Cambiar contraseña -->
+      <button type="button" (click)="openChangePwdModal()"
+        class="bg-orange-500 hover:bg-orange-600 text-white font-medium px-6 py-2 rounded-full shadow-lg transition">
+        Cambiar contraseña
+      </button>
+
+      <!-- Guardar cambios -->
+      <button type="submit"
+        class="bg-orange-500 hover:bg-orange-600 text-white font-medium px-6 py-2 rounded-full shadow-lg transition">
+        Guardar cambios
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- Modal Cambiar contraseña -->
+<div
+  *ngIf="showPwdModal"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+>
+  <div class="bg-white rounded-lg shadow-lg w-11/12 max-w-md p-6">
+    <h2 class="text-xl font-bold mb-4">Cambiar contraseña</h2>
+
+    <!-- Mensajes -->
+    <div *ngIf="changePwdSuccess" class="mb-4 p-3 bg-green-100 text-green-800 rounded">
+      {{ changePwdSuccess }}
+    </div>
+    <div *ngIf="changePwdError" class="mb-4 p-3 bg-red-100 text-red-800 rounded">
+      {{ changePwdError }}
+    </div>
+
+    <form [formGroup]="pwdForm" (ngSubmit)="onChangePassword()">
+      <!-- Contraseña actual -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">
+          Contraseña actual
+        </label>
+        <input
+          formControlName="oldPassword"
+          type="password"
+          class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-orange-500 transition"
+        />
+        <p
+          *ngIf="pwdForm.get('oldPassword')?.touched && pwdForm.get('oldPassword')?.hasError('required')"
+          class="mt-1 text-xs text-red-600"
+        >
+          Debes introducir tu contraseña actual.
+        </p>
+      </div>
+
+      <!-- Nueva contraseña -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">
+          Nueva contraseña
+        </label>
+        <input
+          formControlName="newPassword"
+          type="password"
+          class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-orange-500 transition"
+        />
+        <div *ngIf="pwdForm.get('newPassword')?.touched" class="mt-1 text-xs text-red-600 space-y-1">
+          <p *ngIf="pwdForm.get('newPassword')?.hasError('required')">
+            Debes introducir una contraseña.
+          </p>
+          <p *ngIf="pwdForm.get('newPassword')?.hasError('minlength')">
+            Mínimo 8 caracteres.
+          </p>
+          <p *ngIf="pwdForm.get('newPassword')?.hasError('maxlength')">
+            Máximo 255 caracteres.
+          </p>
+          <p *ngIf="pwdForm.get('newPassword')?.hasError('pattern')">
+            Debe contener al menos una minúscula, una mayúscula y un dígito.
+          </p>
+        </div>
+      </div>
+
+      <!-- Confirmar contraseña -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">
+          Repetir contraseña
+        </label>
+        <input
+          formControlName="confirmPassword"
+          type="password"
+          class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-orange-500 transition"
+        />
+        <p
+          *ngIf="pwdForm.hasError('mismatch') && pwdForm.get('confirmPassword')?.touched"
+          class="mt-1 text-xs text-red-600"
+        >
+          Las contraseñas no coinciden.
+        </p>
+      </div>
+
+      <!-- Botones -->
+      <div class="mt-6 flex justify-end space-x-2">
+        <button
+          type="button"
+          (click)="showPwdModal = false"
+          class="px-4 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          [disabled]="pwdForm.invalid"
+          class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-full shadow transition disabled:opacity-50"
+        >
+          Cambiar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

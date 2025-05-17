@@ -3,11 +3,11 @@ import { SessionService } from '../../../service/session.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-shared.logout.routed',
-  templateUrl: './shared.logout.routed.component.html',
-  styleUrls: ['./shared.logout.routed.component.css']
+  selector: 'app-auth.logout.routed',
+  templateUrl: './auth.logout.routed.component.html',
+  styleUrls: ['./auth.logout.routed.component.css']
 })
-export class SharedLogoutRoutedComponent implements OnInit {
+export class AuthLogoutRoutedComponent implements OnInit {
 
   constructor(
     private oSessionService: SessionService,

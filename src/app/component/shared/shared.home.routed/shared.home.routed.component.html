@@ -9,62 +9,10 @@
 
     <!-- Contenedor de álbumes con grid responsive -->
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
-      <!-- Iteración sobre cada álbum -->
-      @for (album of oPageLastMonth.content; track album.id) {
-      <article class="flex flex-col">
-        <!-- Imagen del álbum -->
-        <figure class="aspect-square overflow-hidden rounded-lg mb-3">
-          <img [src]="serverURL + '/album/' + album.id + '/img'"
-            class="w-full h-full object-cover hover:opacity-80 transition-opacity" alt="{{ album.nombre }}" />
-        </figure>
-
-        <!-- Nombre del álbum -->
-        <h3 class="font-semibold line-clamp-1 mb-1">{{ album.nombre }}</h3>
-
-        <!-- Nombre del artista - ahora en línea -->
-        <div class="text-sm text-gray-600 line-clamp-1">
-          @if (nombresArtista.get(album.id)?.length) {
-          <span>
-            @for (artista of nombresArtista.get(album.id); track $index) {
-            {{ $index > 0 ? ', ' : '' }}{{ artista.nombre }}
-            }
-          </span>
-          }
-        </div>
-
-        <!-- Barra de progreso con color según nota -->
-        <div class="mt-2">
-          <div class="text-xs font-medium mb-1">Nota: {{ getMedia(album.id) }}</div>
-          <div class="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
-            <div class="h-full rounded-full" [style.width]="(getMedia(album.id) * 10) + '%'" [ngClass]="{
-              'bg-low-grade': getMedia(album.id) < 5,
-              'bg-medium-grade': getMedia(album.id) >= 5 && getMedia(album.id) < 7,
-              'bg-high-grade': getMedia(album.id) >= 7 && getMedia(album.id) < 8,
-              'bg-excellent-grade': getMedia(album.id) >= 8
-          }" aria-valuemin="0" aria-valuemax="10" [attr.aria-label]="'Calificación: ' + getMedia(album.id) + ' de 10'">
-            </div>
-          </div>
-        </div>
-      </article>
-      }
-    </div>
-  </section>
-
-  <!-- BEST SELLERS Section -->
-  <section class="mb-12" aria-labelledby="best-sellers-title">
-    <!-- Título y enlace "VIEW ALL" -->
-    <div class="flex justify-between items-center w-full mb-6">
-      <h2 id="best-sellers-title" class="text-3xl font-bold tracking-tight">Best Sellers</h2>
-      <a href="#" class="text-blue-500 hover:underline font-medium">VIEW ALL</a>
-    </div>
-
-    <!-- Contenedor de álbumes con grid responsive -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
-      <!-- Iteración sobre cada álbum -->
-      @for (album of oPage.content; track album.id) {
+      @for (album of oPageNew.content; track album.id) {
       <article class="flex flex-col">
         <!-- Imagen del álbum con enlace -->
-        <a href="/album/view/{{ album.id }}" class="block aspect-square overflow-hidden rounded-lg mb-3">
+        <a routerLink="/album/view/{{ album.id }}" class="block aspect-square overflow-hidden rounded-lg mb-3">
           <figure>
             <img [src]="serverURL + '/album/' + album.id + '/img'"
               class="w-full h-full object-cover hover:opacity-80 transition-opacity" alt="{{ album.nombre }}" />
@@ -73,18 +21,18 @@
 
         <!-- Nombre del álbum con enlace -->
         <h3 class="mb-1">
-          <a href="/album/view/{{ album.id }}" class="font-semibold line-clamp-1 hover:text-blue-600">
+          <a routerLink="/album/view/{{ album.id }}" class="font-semibold line-clamp-1 hover:text-blue-600">
             {{ album.nombre }}
           </a>
         </h3>
 
-        <!-- Nombre del artista - ahora en línea con enlaces -->
+        <!-- Nombre del artista - con enlaces -->
         <div class="text-sm text-gray-600 line-clamp-1">
           @if (nombresArtista.get(album.id)?.length) {
           <span>
             @for (artista of nombresArtista.get(album.id); track $index) {
             {{ $index > 0 ? ', ' : '' }}
-            <a href="/admin/artista/view/{{ artista.id }}" class="hover:text-blue-600">
+            <a routerLink="/artista/view/{{ artista.id }}" class="hover:text-blue-600">
               {{ artista.nombre }}
             </a>
             }
@@ -97,11 +45,11 @@
           <div class="text-xs font-medium mb-1">Nota: {{ getMedia(album.id) }}</div>
           <div class="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
             <div class="h-full rounded-full" [style.width]="(getMedia(album.id) * 10) + '%'" [ngClass]="{
-                  'bg-low-grade': getMedia(album.id) < 5,
-                  'bg-medium-grade': getMedia(album.id) >= 5 && getMedia(album.id) < 7,
-                  'bg-high-grade': getMedia(album.id) >= 7 && getMedia(album.id) < 8,
-                  'bg-excellent-grade': getMedia(album.id) >= 8
-              }" role="progressbar" [attr.aria-valuenow]="getMedia(album.id)" aria-valuemin="0" aria-valuemax="10"
+           'bg-low-grade': getMedia(album.id) < 5,
+           'bg-medium-grade': getMedia(album.id) >= 5 && getMedia(album.id) < 7,
+           'bg-high-grade': getMedia(album.id) >= 7 && getMedia(album.id) < 9,
+           'bg-excellent-grade': getMedia(album.id) >= 9
+         }" role="progressbar" [attr.aria-valuenow]="getMedia(album.id)" aria-valuemin="0" aria-valuemax="10"
               [attr.aria-label]="'Calificación: ' + getMedia(album.id) + ' de 10'">
             </div>
           </div>
@@ -110,4 +58,128 @@
       }
     </div>
   </section>
+
+
+  <!-- BEST SELLERS Section -->
+  <section class="mb-12" aria-labelledby="best-sellers-title">
+    <!-- Título y enlace "VIEW ALL" -->
+    <div class="flex justify-between items-center w-full mb-6">
+      <h2 id="best-sellers-title" class="text-3xl font-bold tracking-tight">Best Sellers</h2>
+      <a href="#" class="text-blue-500 hover:underline font-medium">VIEW ALL</a>
+    </div>
+
+    <!-- Contenedor de álbumes con grid responsive -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
+      <!-- Iteración sobre cada álbum -->
+      @for (album of oPageTopRated.content; track album.id) {
+      <article class="flex flex-col">
+        <!-- Imagen del álbum con enlace -->
+        <a routerLink="/album/view/{{ album.id }}" class="block aspect-square overflow-hidden rounded-lg mb-3">
+          <figure>
+            <img [src]="serverURL + '/album/' + album.id + '/img'"
+              class="w-full h-full object-cover hover:opacity-80 transition-opacity" alt="{{ album.nombre }}" />
+          </figure>
+        </a>
+
+        <!-- Nombre del álbum con enlace -->
+        <h3 class="mb-1">
+          <a routerLink="/album/view/{{ album.id }}" class="font-semibold line-clamp-1 hover:text-blue-600">
+            {{ album.nombre }}
+          </a>
+        </h3>
+
+        <!-- Nombre del artista - ahora en línea con enlaces -->
+        <div class="text-sm text-gray-600 line-clamp-1">
+          @if (nombresArtista.get(album.id)?.length) {
+          <span>
+            @for (artista of nombresArtista.get(album.id); track $index) {
+            {{ $index > 0 ? ', ' : '' }}
+            <a routerLink="/artista/view/{{ artista.id }}" class="hover:text-blue-600">
+              {{ artista.nombre }}
+            </a>
+            }
+          </span>
+          }
+        </div>
+
+        <!-- Barra de progreso con color según nota -->
+        <div class="mt-2">
+          <div class="text-xs font-medium mb-1">Nota: {{ getMedia(album.id) }}</div>
+          <div class="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
+            <div class="h-full rounded-full" [style.width]="(getMedia(album.id) * 10) + '%'" [ngClass]="{
+           'bg-low-grade': getMedia(album.id) < 5,
+           'bg-medium-grade': getMedia(album.id) >= 5 && getMedia(album.id) < 7,
+           'bg-high-grade': getMedia(album.id) >= 7 && getMedia(album.id) < 9,
+           'bg-excellent-grade': getMedia(album.id) >= 9
+         }" role="progressbar" [attr.aria-valuenow]="getMedia(album.id)" aria-valuemin="0" aria-valuemax="10"
+              [attr.aria-label]="'Calificación: ' + getMedia(album.id) + ' de 10'">
+            </div>
+          </div>
+        </div>
+      </article>
+      }
+    </div>
+  </section>
+
+
+  <section class="mb-12" aria-labelledby="best-sellers-title">
+    <!-- Título y enlace "VIEW ALL" -->
+    <div class="flex justify-between items-center w-full mb-6">
+      <h2 id="best-sellers-title" class="text-3xl font-bold tracking-tight">POPULAR</h2>
+      <a href="#" class="text-blue-500 hover:underline font-medium">VIEW ALL</a>
+    </div>
+
+    <!-- Contenedor de álbumes con grid responsive -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
+      <!-- Iteración sobre cada álbum -->
+      @for (album of oPagePopular.content; track album.id) {
+      <article class="flex flex-col">
+        <!-- Imagen del álbum con enlace -->
+        <a routerLink="/album/view/{{ album.id }}" class="block aspect-square overflow-hidden rounded-lg mb-3">
+          <figure>
+            <img [src]="serverURL + '/album/' + album.id + '/img'"
+              class="w-full h-full object-cover hover:opacity-80 transition-opacity" alt="{{ album.nombre }}" />
+          </figure>
+        </a>
+
+        <!-- Nombre del álbum con enlace -->
+        <h3 class="mb-1">
+          <a routerLink="/album/view/{{ album.id }}" class="font-semibold line-clamp-1 hover:text-blue-600">
+            {{ album.nombre }}
+          </a>
+        </h3>
+
+        <!-- Nombre del artista - ahora en línea con enlaces -->
+        <div class="text-sm text-gray-600 line-clamp-1">
+          @if (nombresArtista.get(album.id)?.length) {
+          <span>
+            @for (artista of nombresArtista.get(album.id); track $index) {
+            {{ $index > 0 ? ', ' : '' }}
+            <a routerLink="/artista/view/{{ artista.id }}" class="hover:text-blue-600">
+              {{ artista.nombre }}
+            </a>
+            }
+          </span>
+          }
+        </div>
+
+        <!-- Barra de progreso con color según nota -->
+        <div class="mt-2">
+          <div class="text-xs font-medium mb-1">Nota: {{ getMedia(album.id) }}</div>
+          <div class="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
+            <div class="h-full rounded-full" [style.width]="(getMedia(album.id) * 10) + '%'" [ngClass]="{
+           'bg-low-grade': getMedia(album.id) < 5,
+           'bg-medium-grade': getMedia(album.id) >= 5 && getMedia(album.id) < 7,
+           'bg-high-grade': getMedia(album.id) >= 7 && getMedia(album.id) < 9,
+           'bg-excellent-grade': getMedia(album.id) >= 9
+         }" role="progressbar" [attr.aria-valuenow]="getMedia(album.id)" aria-valuemin="0" aria-valuemax="10"
+              [attr.aria-label]="'Calificación: ' + getMedia(album.id) + ' de 10'">
+            </div>
+          </div>
+        </div>
+      </article>
+      }
+    </div>
+  </section>
+
 </div>

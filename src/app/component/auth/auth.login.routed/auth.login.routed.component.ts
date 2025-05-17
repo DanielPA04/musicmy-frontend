@@ -15,13 +15,13 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SharedSpinnerUnroutedComponent } from '../../shared/shared.spinner.unrouted/shared.spinner.unrouted.component';
 
 @Component({
-  selector: 'app-shared.login.routed',
+  selector: 'app-auth.login.routed',
   imports: [ReactiveFormsModule, RouterModule],
   standalone: true,
-  templateUrl: './shared.login.routed.component.html',
-  styleUrls: ['./shared.login.routed.component.css'],
+  templateUrl: './auth.login.routed.component.html',
+  styleUrls: ['./auth.login.routed.component.css'],
 })
-export class SharedLoginRoutedComponent implements OnInit, AfterViewInit {
+export class AuthLoginRoutedComponent implements OnInit, AfterViewInit {
   loginmodal: HTMLElement | null = null;
   modal: ModalInterface | null = null;
   oAuthForm: FormGroup | undefined = undefined;

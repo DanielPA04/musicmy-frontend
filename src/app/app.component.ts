@@ -3,11 +3,12 @@ import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/ro
 import { SharedMenuUnroutedComponent } from './component/shared/shared.menu.unrouted/shared.menu.unrouted.component';
 import { initFlowbite } from 'flowbite';
 import { filter, map, mergeMap } from 'rxjs';
+import { SharedFooterUnroutedComponent } from './component/shared/shared.footer.unrouted/shared.footer.unrouted.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SharedMenuUnroutedComponent],
+  imports: [RouterOutlet, SharedMenuUnroutedComponent, SharedFooterUnroutedComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

@@ -1,13 +1,13 @@
-@if (showLayout){
-<header>
-  <app-shared-menu-unrouted></app-shared-menu-unrouted>
-</header>
-}
-<main>
+<div class="flex flex-col min-h-screen">
+  @if (showLayout){
+  <header>
+    <app-shared-menu-unrouted></app-shared-menu-unrouted>
+  </header>
+  }
+  <main class="flex-grow">
     <router-outlet />
-</main>
-@if (showLayout){
-<footer>
-  <!-- TODO <app-shared-footer-unrouted></app-shared-footer-unrouted> -->
-</footer>
-}
+  </main>
+  @if (showLayout){
+  <app-shared-footer-unrouted></app-shared-footer-unrouted>
+  }
+</div>

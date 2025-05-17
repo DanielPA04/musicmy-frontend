@@ -66,6 +66,7 @@ export class AuthService {
     URL += '/changePassword';
     newPassword = this.oCrypto.getHashSHA256(newPassword);
 
+
     let oChangePassword: IChangePwdDTO = { newPassword: newPassword };
 
     if (email && oldPassword) {

@@ -1,102 +1,133 @@
-<div class="max-w-4xl mx-auto p-6">
-  <div class="flex gap-6">
-    <!-- Album Cover -->
-    <aside class="w-1/3">
-      <img [src]="serverURL + '/album/' + album?.id + '/img'" class="rounded-lg" alt="Album cover" />
+<div class="max-w-screen-lg mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-      <div class="mt-4 flex justify-center">
-        @if (activeSession) {
-        @if (!isResenyaExist){
-        <a href="/resenya/create/{{ album?.id }}"
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-5 rounded-full">Valorar</a>
-        } @else {
-        <a href="/resenya/edit/?"
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-5 rounded-full">Editar</a>
-        }
-        }
+  <!-- ALBUM HEADER -->
+  <div class="flex flex-col lg:flex-row gap-8">
+    <!-- Cover + Acción -->
+    <aside class="flex-shrink-0">
+      <img
+        [src]="serverURL + '/album/' + album?.id + '/img'"
+        alt="Portada de {{ album?.nombre }}"
+        class="w-full max-w-xs rounded-lg shadow-md mx-auto lg:mx-0"
+      />
+      <div class="mt-4 text-center">
+        <ng-container *ngIf="activeSession">
+          <a
+            *ngIf="!isResenyaExist"
+            [routerLink]="['/resenya/create', album?.id]"
+            class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-full shadow transition"
+          >
+            Valorar
+          </a>
+          <a
+            *ngIf="isResenyaExist"
+            [routerLink]="['/resenya/edit', album?.id]"
+            class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-full shadow transition"
+          >
+            Editar valoración
+          </a>
+        </ng-container>
       </div>
     </aside>
 
-    <!-- Album Info -->
-    <section class="w-2/3">
-      <h2 class="text-3xl font-bold">{{ album?.nombre }}</h2>
-
-      @for (artista of artistas; track artista.id) {
-      <p class="text-xl font-bold text-gray-700">{{ artista.nombre }}</p>
-      }
-
-      <!-- Scores -->
-      <div class="mt-4 bg-white p-4 rounded-lg shadow-md">
-        <div class="flex justify-between items-center">
-          <div>
-            <p class="text-gray-500">SCORE</p>
-            <p class="text-4xl font-bold" [class.low-grade]="media < 5" [class.medium-grade]="media >= 5 && media < 7"
-              [class.high-grade]="media >= 7 && media < 8" [class.excellent-grade]="media > 8">{{ media }}</p>
-          </div>
-        </div>
+    <!-- Información del álbum -->
+    <section class="flex-1 flex flex-col justify-between">
+      <!-- Título y artistas -->
+      <div>
+        <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ album?.nombre }}</h1>
+        <p class="text-xl text-gray-700 mb-4">
+          <ng-container *ngFor="let artista of artistas; let last = last">
+            <a
+              [routerLink]="['/artista/view', artista.id]"
+              class="font-semibold hover:text-blue-600 transition"
+            >
+              {{ artista.nombre }}
+            </a><span *ngIf="!last">, </span>
+          </ng-container>
+        </p>
       </div>
 
-      <article class="mt-4 bg-white p-4 rounded-lg shadow-md">
-        <h3 class="text-lg font-semibold">Descripcion</h3>
+      <!-- Score -->
+      <div class="mt-4 inline-block bg-white p-4 rounded-lg shadow-md">
+        <p class="text-sm text-gray-500">SCORE</p>
+        <p
+          class="text-3xl font-bold"
+          [ngClass]="{
+            'low-grade': media < 5,
+            'medium-grade': media >= 5 && media < 7,
+            'high-grade': media >= 7 && media < 9,
+            'excellent-grade': media >= 9
+          }"
+        >
+          {{ media }}
+        </p>
+      </div>
+
+      <!-- Descripción -->
+      <article class="mt-6 bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold mb-2 text-gray-900">Descripción</h2>
         <p class="text-gray-700">{{ album?.descripcion }}</p>
       </article>
 
-      <!-- Details -->
-      <article class="mt-4 bg-white p-4 rounded-lg shadow-md">
-        <h3 class="text-lg font-semibold">Details</h3>
-        <p class="text-gray-700"><span class="font-semibold">Release Date:</span> {{ album?.fecha }}</p>
-        <p class="text-gray-700"><span class="font-semibold">Label:</span> {{ album?.discografica }}</p>
-        <p class="text-gray-700"><span class="font-semibold">Genres:</span> {{ album?.genero }}</p>
+      <!-- Detalles -->
+      <article class="mt-6 bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold mb-2 text-gray-900">Detalles</h2>
+        <ul class="text-gray-700 space-y-1">
+          <li><span class="font-semibold">Fecha de lanzamiento:</span> {{ album?.fecha | date:'longDate' }}</li>
+          <li><span class="font-semibold">Discográfica:</span> {{ album?.discografica }}</li>
+          <li><span class="font-semibold">Género:</span> {{ album?.genero }}</li>
+        </ul>
       </article>
     </section>
   </div>
 
-  <!-- User Reviews Section - Now full width -->
-  <section class="bg-white rounded-lg shadow-lg p-4 mt-6">
-    <!-- Header with user reviews title and view all link -->
-    <header class="flex justify-between items-center mb-4">
-      <h3 class="text-lg font-bold flex items-center text-gray-900">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
-          stroke="currentColor">
+  <!-- RESEÑAS DE USUARIOS POPULARES -->
+  <section class="mt-12 bg-white rounded-lg shadow-lg p-6">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold text-gray-900 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-6a2 2 0 012-2h10z" />
+                d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-6a2 2 0 012-2h10z" />
         </svg>
-        POPULAR USER REVIEWS
-      </h3>
-      <a href="#" class="text-sm text-gray-600 hover:text-gray-900">VIEW ALL</a>
-    </header>
+        Reseñas Destacadas
+      </h2>
+      <a
+        [routerLink]="['/resenya/byalbum', album?.id]"
+        class="text-blue-500 hover:underline font-medium text-sm"
+      >
+        Ver todas
+      </a>
+    </div>
 
-    @for (resenya of resenyas.content; track $index) {
-
-    <!-- User Review -->
-    <article class="mb-6">
-      <!-- User info and score -->
-      <div class="flex items-center mb-3">
-        <!-- User avatar -->
-        <div class="w-12 h-12 rounded-full bg-gray-100 mr-3 overflow-hidden">
-          <img [src]="serverURL + '/usuario/' + resenya.usuario.id + '/img'"
-            class="w-full h-full object-cover hover:opacity-80 transition-opacity"
-            alt="Avatar del usuario {{ resenya.usuario.nombre }}" />
+    <div class="space-y-6">
+      <article *ngFor="let r of resenyas.content" class="space-y-2">
+        <div class="flex items-center space-x-4">
+          <div class="w-12 h-12 rounded-full overflow-hidden bg-gray-100">
+            <img
+              [src]="serverURL + '/usuario/' + r.usuario.id + '/img'"
+              alt="Avatar {{ r.usuario.nombre }}"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div>
+            <p class="font-semibold text-gray-900">{{ r.usuario.nombre }}</p>
+            <span
+              class="inline-block text-sm font-bold px-2 py-0.5 rounded"
+              [ngClass]="{
+                'bg-red-100 text-red-600': r.nota < 5,
+                'bg-yellow-100 text-yellow-600': r.nota >= 5 && r.nota < 7,
+                'bg-green-100 text-green-600': r.nota >= 7 && r.nota < 9,
+                'bg-purple-100 text-purple-600': r.nota >= 9
+              }"
+            >
+              {{ r.nota }}
+            </span>
+          </div>
         </div>
-
-        <!-- Username and score -->
-        <div>
-          <p class="font-bold text-lg text-gray-900">{{ resenya.usuario.nombre }}</p>
-          <div class="flex items-center">
-            <span class="text-sm font-bold px-2 py-0.5 rounded" [class]="getBackgroundClass(resenya.nota)">
-              {{ resenya.nota }}
-          </span>
-                    </div>
-        </div>
-      </div>
-
-      <!-- Review text -->
-      <p class="text-gray-700 mb-4">{{ resenya.descripcion }}</p>
-
-      <!-- Timestamp -->
-      <p class="text-sm text-gray-500">{{ resenya.fecha }}</p>
-    </article>
-    }
-
+        <p class="text-gray-700">{{ r.descripcion }}</p>
+        <p class="text-sm text-gray-500">{{ r.fecha | date:'mediumDate' }}</p>
+        <hr class="border-gray-200" />
+      </article>
+    </div>
   </section>
+
 </div>
