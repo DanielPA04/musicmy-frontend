@@ -7,6 +7,8 @@ export interface IResenya {
     descripcion: string
     fecha: string
     website: string
+    liked?: boolean
+    likeCount?: number
     album: IAlbum
     usuario: IUsuario
   }

@@ -74,7 +74,7 @@ export class AlbumService {
     return this.oHttp.get<IPage<IAlbum>>(URL, httpOptions);
   }
 
-   getPageNew(
+  getPageNew(
     page: number,
     size: number,
     field: string,
@@ -103,7 +103,7 @@ export class AlbumService {
     return this.oHttp.get<IPage<IAlbum>>(URL, httpOptions);
   }
 
-    getPagePopular(
+  getPagePopular(
     page: number,
     size: number,
     field: string,
@@ -132,7 +132,7 @@ export class AlbumService {
     return this.oHttp.get<IPage<IAlbum>>(URL, httpOptions);
   }
 
-    getPagePopularRecent(
+  getPagePopularRecent(
     page: number,
     size: number,
     field: string,
@@ -161,8 +161,7 @@ export class AlbumService {
     return this.oHttp.get<IPage<IAlbum>>(URL, httpOptions);
   }
 
-
-     getPageTopRated(
+  getPageTopRated(
     page: number,
     size: number,
     field: string,
@@ -191,7 +190,6 @@ export class AlbumService {
     return this.oHttp.get<IPage<IAlbum>>(URL, httpOptions);
   }
 
-
   get(id: number): Observable<IAlbum> {
     let URL: string = '';
     URL += this.serverURL;
@@ -209,16 +207,46 @@ export class AlbumService {
   getMedia(id: number): Observable<number> {
     let URL: string = '';
     URL += this.serverURL;
-    URL +=  '/media' + '/' + id;
+    URL += '/media' + '/' + id;
     return this.oHttp.get<number>(URL);
   }
 
-   getByArtista(id: number): Observable<IAlbum[]> {
-      let URL: string = '';
-      URL += this.serverURL;
-      URL += '/byartista/' + id;
-      return this.oHttp.get<IAlbum[]>(URL);
+  getByArtista(id: number): Observable<IAlbum[]> {
+    let URL: string = '';
+    URL += this.serverURL;
+    URL += '/byartista/' + id;
+    return this.oHttp.get<IAlbum[]>(URL);
+  }
+
+  getFilteredPage(
+    page: number = 0,
+    size: number = 10,
+    field?: string,
+    dir: 'asc' | 'desc' = 'desc',
+    genero?: string,
+    discografica?: string,
+    nombre?: string
+  ): Observable<IPage<IAlbum>> {
+    let url = `${this.serverURL}/filter?page=${page}&size=${size}`;
+
+    // Ordenación
+    if (field) {
+      url += `&sort=${field},${dir}`;
     }
+
+    // Filtros dinámicos
+    if (genero) {
+      url += `&genero=${encodeURIComponent(genero)}`;
+    }
+    if (discografica) {
+      url += `&discografica=${encodeURIComponent(discografica)}`;
+    }
+    if (nombre) {
+      url += `&nombre=${encodeURIComponent(nombre)}`;
+    }
+
+    return this.oHttp.get<IPage<IAlbum>>(url, httpOptions);
+  }
 
   create(oAlbum: IAlbum): Observable<IAlbum> {
     oAlbum.fecha = new Date(oAlbum.fecha).toISOString().split('T')[0];
@@ -240,7 +268,7 @@ export class AlbumService {
     return this.oHttp.post<IAlbum>(URL, oAlbum);
   }
 
-   update(oAlbum: IAlbum): Observable<IAlbum> {
+  update(oAlbum: IAlbum): Observable<IAlbum> {
     oAlbum.fecha = new Date(oAlbum.fecha).toISOString().split('T')[0];
     let URL: string = '';
     URL += this.serverURL;

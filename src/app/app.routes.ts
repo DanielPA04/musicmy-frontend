@@ -44,6 +44,9 @@ import { UsuarioAdminDeleteRoutedComponent } from './component/usuario/usuario.a
 //Tipousuario
 import { TipousuarioAdminPlistRoutedComponent } from './component/tipousuario/tipousuario.admin.plist.routed/tipousuario.admin.plist.routed.component';
 import { UsuarioPerfilAllresenyasRoutedComponent } from './component/usuario/usuario.perfil.allresenyas.routed/usuario.perfil.allresenyas.routed.component';
+import { UsuarioTopRoutedComponent } from './component/usuario/usuario.top.routed/usuario.top.routed.component';
+import { AlbumFilterRoutedComponent } from './component/album/album.filter.routed/album.filter.routed.component';
+import { ArtistaFilterRoutedComponent } from './component/artista/artista.filter.routed/artista.filter.routed.component';
 //
 
 
@@ -73,6 +76,7 @@ export const routes: Routes = [
     { path: 'admin/album/edit/:id', component: AlbumAdminEditRoutedComponent, canActivate: [AdminGuard] },
     { path: 'admin/album/delete/:id', component: AlbumAdminDeleteRoutedComponent, canActivate: [AdminGuard] },
     { path: 'album/view/:id', component: AlbumUsuarioViewRoutedComponent },
+    { path: 'album', component: AlbumFilterRoutedComponent },
 
 
     //Artista
@@ -82,6 +86,7 @@ export const routes: Routes = [
     { path: 'admin/artista/edit/:id', component: ArtistaAdminEditRoutedComponent, canActivate: [AdminGuard] },
     { path: 'admin/artista/delete/:id', component: ArtistaAdminDeleteRoutedComponent, canActivate: [AdminGuard] },
     { path: 'artista/view/:id', component: ArtistaUsuarioViewRoutedComponent,  },
+    { path: 'artista', component: ArtistaFilterRoutedComponent,  },
 
 
     //Resenya
@@ -99,7 +104,9 @@ export const routes: Routes = [
      { path: 'admin/usuario/edit/:id', component: UsuarioAdminEditRoutedComponent, canActivate: [AdminGuard] },
      { path: 'admin/usuario/delete/:id', component: UsuarioAdminDeleteRoutedComponent, canActivate: [AdminGuard] },
      { path: 'edit/perfil', component: UsuarioPerfilEditRoutedComponent, canActivate: [UserGuard] },
-     { path: 'perfil/:email/resenyas', component: UsuarioPerfilAllresenyasRoutedComponent, canActivate: [UserGuard] },
+     { path: 'perfil/:email/resenyas', component: UsuarioPerfilAllresenyasRoutedComponent },
+    { path: 'top-usuarios', component: UsuarioTopRoutedComponent },
+
 
 
      //Tipousuario

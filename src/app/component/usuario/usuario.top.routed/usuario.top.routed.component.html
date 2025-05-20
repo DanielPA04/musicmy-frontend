@@ -1,0 +1,99 @@
+<div class="max-w-screen-lg mx-auto px-4 py-8">
+  <h2 class="text-3xl font-bold mb-10">Top 20 Usuarios</h2>
+
+  <!-- PODIO -->
+  <div class="relative h-80 mb-12">
+    <!-- 2º puesto -->
+    <div *ngIf="usuariosTop.length > 1" class="absolute left-1/4 bottom-4 flex flex-col items-center overflow-visible">
+      <div class="relative overflow-visible">
+        <!-- círculo con imagen -->
+        <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg">
+          <img [src]="url + '/usuario/' + usuariosTop[1].id + '/img'" alt="{{ usuariosTop[1].username }}"
+            class="w-full h-full object-cover hover:opacity-80 transition-opacity"
+            routerLink="/perfil/{{ usuariosTop[1].email }}" />
+        </div>
+        <!-- badge -->
+        <div
+          class="absolute -top-6 left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full flex items-center justify-center text-white font-extrabold text-lg bg-gray-400 shadow-md z-20">
+          2
+        </div>
+      </div>
+      <div class="mt-3 text-center">
+        <div class="font-semibold hover:text-blue-600" routerLink="/perfil/{{ usuariosTop[1].email }}">{{
+          usuariosTop[1].username }}</div>
+        <div class="text-gray-600 text-sm">
+          {{ usuariosTop[1].numeroResenyas }} reseñas · {{ usuariosTop[1].numeroLikesRecibidos }} likes
+        </div>
+      </div>
+    </div>
+
+    <!-- 1er puesto -->
+    <div *ngIf="usuariosTop.length > 0"
+      class="absolute left-1/2 bottom-12 transform -translate-x-1/2 flex flex-col items-center overflow-visible">
+      <div class="relative overflow-visible">
+        <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-white shadow-2xl">
+          <img [src]="url + '/usuario/' + usuariosTop[0].id + '/img'" alt="{{ usuariosTop[0].username }}"
+            class="w-full h-full object-cover hover:opacity-80 transition-opacity"
+            routerLink="/perfil/{{ usuariosTop[0].email }}" />
+        </div>
+        <div
+          class="absolute -top-8 left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full flex items-center justify-center text-white font-black text-2xl bg-yellow-400 shadow-lg z-20">
+          1
+        </div>
+      </div>
+      <div class="mt-4 text-center">
+        <div class="font-semibold text-lg hover:text-blue-600" routerLink="/perfil/{{ usuariosTop[0].email }}">{{
+          usuariosTop[0].username }}</div>
+        <div class="text-gray-600 text-sm">
+          {{ usuariosTop[0].numeroResenyas }} reseñas · {{ usuariosTop[0].numeroLikesRecibidos }} likes
+        </div>
+      </div>
+    </div>
+
+    <!-- 3er puesto -->
+    <div *ngIf="usuariosTop.length > 2"
+      class="absolute left-3/4 bottom-4 transform -translate-x-1/2 flex flex-col items-center overflow-visible">
+      <div class="relative overflow-visible">
+        <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg">
+          <img [src]="url + '/usuario/' + usuariosTop[2].id + '/img'" alt="{{ usuariosTop[2].username }}"
+            class="w-full h-full object-cover hover:opacity-80 transition-opacity"
+            routerLink="/perfil/{{ usuariosTop[2].email }}" />
+        </div>
+        <div
+          class="absolute -top-6 left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full flex items-center justify-center text-white font-extrabold text-lg bg-orange-600 shadow-md z-20">
+          3
+        </div>
+      </div>
+      <div class="mt-3 text-center">
+        <div class="font-semibold hover:text-blue-600" routerLink="/perfil/{{ usuariosTop[2].email }}">{{
+          usuariosTop[2].username }}</div>
+        <div class="text-gray-600 text-sm">
+          {{ usuariosTop[2].numeroResenyas }} reseñas · {{ usuariosTop[2].numeroLikesRecibidos }} likes
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LISTA PUESTOS 4–20 -->
+  <ul class="space-y-4">
+    <ng-container *ngFor="let user of usuariosTop; let i = index">
+      <li *ngIf="i >= 3" class="flex items-center bg-white rounded-lg shadow p-4 hover:bg-gray-50 transition">
+        <!-- Ranking -->
+        <div class="w-10 text-xl font-bold text-gray-700 mr-6 text-center">
+          {{ i + 1 }}
+        </div>
+        <!-- Avatar -->
+        <img [src]="url + '/usuario/' + user.id + '/img'" alt="{{ user.username }}"
+          class="w-12 h-12 rounded-full object-cover mr-4 hover:opacity-80 transition-opacity"
+          routerLink="/perfil/{{ user.email }}" />
+        <!-- Nombre + stats -->
+        <div class="flex-1">
+          <div class="font-semibold text-gray-800 hover:text-blue-600" routerLink="/perfil/{{ user.email }}">{{ user.username }}</div>
+          <div class="text-gray-600 text-sm">
+            {{ user.numeroResenyas }} reseñas · {{ user.numeroLikesRecibidos }} likes
+          </div>
+        </div>
+      </li>
+    </ng-container>
+  </ul>
+</div>

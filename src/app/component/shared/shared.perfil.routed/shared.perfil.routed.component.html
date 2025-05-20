@@ -12,14 +12,15 @@
 
             <!-- Info + botón -->
             <div class="flex-1">
-                <h2 class="text-4xl font-bold mb-1">{{ usuario?.nombre }}</h2>
-                <div class="flex items-center text-gray-400 mb-3">
+                <h2 class="text-4xl font-bold mb-1">{{ usuario?.username }}</h2>
+                <p *ngIf="usuario?.nombre" class="text-sm text-gray-400 mb-2">{{ usuario?.nombre }}</p>
+                <div *ngIf="usuario?.fecha" class="flex items-center text-gray-400 mb-3">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    <span>Se unió el {{ usuario?.fecha | date: 'MMMM yyyy' }}</span>
+                    <span>{{ usuario?.fecha | date: 'dd/MM/yyyy' }}</span>
                 </div>
 
                 <!-- Botón -->

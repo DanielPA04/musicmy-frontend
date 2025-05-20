@@ -5,6 +5,7 @@ import { IUsuario } from '../model/usuario.interface';
 import { Observable } from 'rxjs/internal/Observable';
 import { IPage } from '../environment/model.interface';
 import { CryptoService } from './crypto.service';
+import { IUsuarioRankingDTO } from '../model/dto/usuarioRankingDTO.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -146,6 +147,12 @@ export class UsuarioService {
     URL += this.serverURL + '/byemail';
     URL += '/' + email;
     return this.oHttp.get<IUsuario>(URL);
+  }
+
+  getTop20() {
+    let URL: string = '';
+    URL += this.serverURL + '/ranking';
+    return this.oHttp.get<IUsuarioRankingDTO[]>(URL);
   }
 
   delete(id: number) {
