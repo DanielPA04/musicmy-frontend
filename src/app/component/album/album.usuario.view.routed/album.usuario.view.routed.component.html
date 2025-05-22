@@ -85,11 +85,15 @@
       <article *ngFor="let r of resenyas.content" class="space-y-2">
         <div class="flex items-center space-x-4">
           <div class="w-12 h-12 rounded-full overflow-hidden bg-gray-100">
-            <img [src]="serverURL + '/usuario/' + r.usuario.id + '/img'" alt="Avatar {{ r.usuario.nombre }}"
-              class="w-full h-full object-cover" />
+            <img [src]="serverURL + '/usuario/' + r.usuario.id + '/img'" [routerLink]="['/perfil', r.usuario.email]"
+              alt="Avatar {{ r.usuario.nombre }}"
+              class="w-full h-full object-cover  hover:opacity-80 transition-opacity" />
           </div>
           <div>
-            <p class="font-semibold text-gray-900">{{ r.usuario.nombre }}</p>
+            <a [routerLink]="['/perfil', r.usuario.email]"
+              class="font-semibold text-gray-900 hover:text-blue-600 transition">
+              {{ r.usuario.nombre }}
+            </a>
             <span class="inline-block text-sm font-bold px-2 py-0.5 rounded" [ngClass]="{
                 'bg-red-100 text-red-600': r.nota < 5,
                 'bg-yellow-100 text-yellow-600': r.nota >= 5 && r.nota < 7,

@@ -1,30 +1,38 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { SharedSpinnerUnroutedComponent } from '../../shared/shared.spinner.unrouted/shared.spinner.unrouted.component';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+// auth.pwd.token.component.ts
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Modal, ModalInterface, ModalOptions, InstanceOptions } from 'flowbite';
+import { SharedSpinnerUnroutedComponent } from '../../shared/shared.spinner.unrouted/shared.spinner.unrouted.component';
 import { AuthService } from '../../../service/auth.service';
-import { SessionService } from '../../../service/session.service';
-import { InstanceOptions, Modal, ModalInterface, ModalOptions } from 'flowbite';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-auth.pwd.token',
+  selector: 'app-auth-pwd-token',
   templateUrl: './auth.pwd.token.component.html',
   styleUrls: ['./auth.pwd.token.component.css'],
-  imports: [MatProgressSpinnerModule, ReactiveFormsModule],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
 })
-export class AuthPwdTokenComponent implements OnInit {
+export class AuthPwdTokenComponent implements OnInit, AfterViewInit {
+  oAuthForm!: FormGroup;
+  message = '';
+  isSend = false;
+  token = '';
+
+  passwordVisible = false;
+  confirmPasswordVisible = false;
+
   loginmodal: HTMLElement | null = null;
   modal: ModalInterface | null = null;
-  oAuthForm: FormGroup | undefined = undefined;
-  message: string = '';
-
-  token: string = '';
-  success: boolean = false;
-  isSend: boolean = false;
-
   dialogRef!: MatDialogRef<SharedSpinnerUnroutedComponent>;
 
   modalOptions: ModalOptions = {
@@ -39,35 +47,41 @@ export class AuthPwdTokenComponent implements OnInit {
       }
     },
     onShow: () => {
-      console.log('Modal is shown');
       this.dialogRef.close();
+
+      console.log('Modal is shown');
     },
     onToggle: () => {
       console.log('Modal has been toggled');
     },
   };
-
-  instanceOptions: InstanceOptions = {
-    id: 'login-modal',
-    override: true,
-  };
+  instanceOptions: InstanceOptions = { id: 'login-modal', override: true };
 
   constructor(
     private oActivedRoute: ActivatedRoute,
     private oAuthService: AuthService,
     private oRouter: Router,
-    private oSessionService: SessionService,
     private dialog: MatDialog
   ) {
     this.token = this.oActivedRoute.snapshot.params['token'];
   }
 
   ngOnInit() {
-    this.createForm();
+    this.oAuthForm = new FormGroup(
+      {
+        password: new FormControl('', [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.maxLength(255),
+          Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/),
+        ]),
+        confirmPassword: new FormControl('', Validators.required),
+      },
+      { validators: this.passwordsMatchValidator }
+    );
   }
 
   ngAfterViewInit() {
-    // Asegúrate de que el DOM ya está listo
     this.loginmodal = document.querySelector('#login-modal');
     if (this.loginmodal) {
       this.modal = new Modal(
@@ -75,70 +89,68 @@ export class AuthPwdTokenComponent implements OnInit {
         this.modalOptions,
         this.instanceOptions
       );
-    } else {
-      console.error('Modal element not found!');
     }
   }
 
-  createForm() {
-    this.oAuthForm = new FormGroup({
-      password: new FormControl('', [
-        Validators.required,
-        Validators.minLength(8),
-        Validators.maxLength(255),
-        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/),
-      ]),
-    });
+  private passwordsMatchValidator(
+    group: AbstractControl
+  ): ValidationErrors | null {
+    const pass = group.get('password')!.value;
+    const confirm = group.get('confirmPassword')!.value;
+    return pass === confirm ? null : { passwordMismatch: true };
   }
 
+  get passwordCtrl(): FormControl {
+    return this.oAuthForm.get('password') as FormControl;
+  }
+  get confirmPasswordCtrl(): FormControl {
+    return this.oAuthForm.get('confirmPassword') as FormControl;
+  }
 
+  togglePassword() {
+    this.passwordVisible = !this.passwordVisible;
+  }
+  toggleConfirmPassword() {
+    this.confirmPasswordVisible = !this.confirmPasswordVisible;
+  }
 
-
-   onSubmit() {
-    if (this.oAuthForm?.invalid) {
-      const controls = this.oAuthForm.controls;
-
-      // Verificar errores en cada control
-      for (const controlName in controls) {
-        if (controls[controlName].errors) {
-          const errors = controls[controlName].errors;
-          if (errors['required']) {
-            this.message = `El campo ${controlName} es requerido.`;
-          } else if (errors['minlength']) {
-            this.message = `El campo ${controlName} debe tener al menos ${errors['minlength'].requiredLength} caracteres.`;
-          } else if (errors['maxlength']) {
-            this.message = `El campo ${controlName} no puede tener más de ${errors['maxlength'].requiredLength} caracteres.`;
-          } else if (errors['pattern']) {
-            this.message =
-              `El campo ${controlName} no cumple con el formato requerido. Debe usar por lo menos 1 número, 1 mayúscula y 1 minúscula`;
-          } else {
-            this.message = `El campo ${controlName} es inválido.`;
-          }
-          this.modal?.show();
-          break;
+  onSubmit() {
+    if (this.oAuthForm.invalid) {
+      if (this.passwordCtrl.errors) {
+        if (this.passwordCtrl.errors['required']) {
+          this.message = 'La contraseña es obligatoria.';
+        } else if (this.passwordCtrl.errors['minlength']) {
+          this.message = `Debe tener al menos ${this.passwordCtrl.errors['minlength'].requiredLength} caracteres.`;
+        } else if (this.passwordCtrl.errors['maxlength']) {
+          this.message = `No puede exceder ${this.passwordCtrl.errors['maxlength'].requiredLength} caracteres.`;
+        } else if (this.passwordCtrl.errors['pattern']) {
+          this.message = 'Debe incluir mayúscula, minúscula y número.';
         }
+      } else if (this.oAuthForm.errors?.['passwordMismatch']) {
+        this.message = 'Las contraseñas no coinciden.';
       }
+      this.modal?.show();
       return;
-    } else {
-      this.dialogRef = this.dialog.open(SharedSpinnerUnroutedComponent, {
-        disableClose: true,
-        panelClass: 'transparent-dialog',
-      });
-      this.oAuthService.changePassword(this.oAuthForm?.value, undefined,undefined ,this.token).subscribe({
-        next: (data: string) => {
-         this.message = 'Contraseña cambiada con exito';
-          this.isSend = true;
-          this.modal?.show();
-        },
-        error: (err) => {
-          console.log(err);
-          this.message = 'Error al cambiar la contraseña';
-          this.modal?.show();
-        },
-      });
-     
     }
-  }
 
- 
+    this.dialogRef = this.dialog.open(SharedSpinnerUnroutedComponent, {
+      disableClose: true,
+      panelClass: 'transparent-dialog',
+    });
+    this.oAuthService
+      .changePassword(this.passwordCtrl.value, undefined, undefined, this.token)
+      .subscribe({
+        next: () => {
+          this.message = 'Contraseña cambiada con éxito';
+          this.isSend = true;
+
+          this.modal?.show();
+        },
+        error: () => {
+          this.message =
+            'Error al cambiar la contraseña, token inválido o expirado.';
+          this.modal?.show();
+        },
+      });
+  }
 }

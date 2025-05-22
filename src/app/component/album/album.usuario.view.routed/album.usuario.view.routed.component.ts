@@ -102,7 +102,7 @@ export class AlbumUsuarioViewRoutedComponent implements OnInit {
             },
           });
 
-        this.oResenyaService.getPageByAlbum(album.id, 0, 10, '', '').subscribe({
+        this.oResenyaService.getPageByAlbum(album.id, 0, 10, 'fecha', '').subscribe({
           next: (data: IPage<IResenya>) => {
             this.resenyas = data;
             this.resenyas.content.forEach((resenya: IResenya) => {

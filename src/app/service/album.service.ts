@@ -132,63 +132,7 @@ export class AlbumService {
     return this.oHttp.get<IPage<IAlbum>>(URL, httpOptions);
   }
 
-  getPagePopularRecent(
-    page: number,
-    size: number,
-    field: string,
-    dir: string
-  ): Observable<IPage<IAlbum>> {
-    let URL: string = '';
-    URL += this.serverURL;
-    URL += '/popular/recent';
-    if (!page) {
-      page = 0;
-    }
-    URL += '?page=' + page;
-    if (!size) {
-      size = 10;
-    }
-    URL += '&size=' + size;
-    if (field) {
-      URL += '&sort=' + field;
-      if (dir === 'asc') {
-        URL += ',asc';
-      } else {
-        URL += ',desc';
-      }
-    }
 
-    return this.oHttp.get<IPage<IAlbum>>(URL, httpOptions);
-  }
-
-  getPageTopRated(
-    page: number,
-    size: number,
-    field: string,
-    dir: string
-  ): Observable<IPage<IAlbum>> {
-    let URL: string = '';
-    URL += this.serverURL;
-    URL += '/top-rated';
-    if (!page) {
-      page = 0;
-    }
-    URL += '?page=' + page;
-    if (!size) {
-      size = 10;
-    }
-    URL += '&size=' + size;
-    if (field) {
-      URL += '&sort=' + field;
-      if (dir === 'asc') {
-        URL += ',asc';
-      } else {
-        URL += ',desc';
-      }
-    }
-
-    return this.oHttp.get<IPage<IAlbum>>(URL, httpOptions);
-  }
 
   get(id: number): Observable<IAlbum> {
     let URL: string = '';
@@ -216,6 +160,66 @@ export class AlbumService {
     URL += this.serverURL;
     URL += '/byartista/' + id;
     return this.oHttp.get<IAlbum[]>(URL);
+  }
+
+    getPagePopularRecent(
+    page: number = 0,
+    size: number = 10,
+    field?: string,
+    dir: 'asc' | 'desc' = 'desc',
+    genero?: string,
+    discografica?: string,
+    nombre?: string
+  ): Observable<IPage<IAlbum>> {
+    let url = `${this.serverURL}/popular/recent?page=${page}&size=${size}`;
+
+    // Ordenación
+    if (field) {
+      url += `&sort=${field},${dir}`;
+    }
+
+    // Filtros dinámicos
+    if (genero) {
+      url += `&genero=${encodeURIComponent(genero)}`;
+    }
+    if (discografica) {
+      url += `&discografica=${encodeURIComponent(discografica)}`;
+    }
+    if (nombre) {
+      url += `&nombre=${encodeURIComponent(nombre)}`;
+    }
+
+    return this.oHttp.get<IPage<IAlbum>>(url, httpOptions);
+  }
+
+  getPageTopRated(
+     page: number = 0,
+    size: number = 10,
+    field?: string,
+    dir: 'asc' | 'desc' = 'desc',
+    genero?: string,
+    discografica?: string,
+    nombre?: string
+  ): Observable<IPage<IAlbum>> {
+    let url = `${this.serverURL}/top-rated?page=${page}&size=${size}`;
+
+    // Ordenación
+    if (field) {
+      url += `&sort=${field},${dir}`;
+    }
+
+    // Filtros dinámicos
+    if (genero) {
+      url += `&genero=${encodeURIComponent(genero)}`;
+    }
+    if (discografica) {
+      url += `&discografica=${encodeURIComponent(discografica)}`;
+    }
+    if (nombre) {
+      url += `&nombre=${encodeURIComponent(nombre)}`;
+    }
+
+    return this.oHttp.get<IPage<IAlbum>>(url, httpOptions);
   }
 
   getFilteredPage(

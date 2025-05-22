@@ -9,35 +9,82 @@
     </div>
 
     <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
-      <form [formGroup]="oAuthForm!" (ngSubmit)="onSubmit()">
+      <form [formGroup]="oAuthForm" (ngSubmit)="onSubmit()">
         <div class="py-8">
           <span class="text-2xl font-semibold">Cambiar contraseña</span>
         </div>
 
-        <div>
-          <label class="block font-medium text-sm text-gray-700" for="password" value="password">
+        <!-- Nueva contraseña -->
+        <div class="relative mb-4">
+          <label for="password" class="block font-medium text-sm text-gray-700">
+            Nueva contraseña
           </label>
-          <input type="text" formControlName="password" placeholder="Nueva contraseña"
-            class="w-full rounded-md py-2.5 px-4 border text-sm outline-[#f84525]" />
+          <input id="password" [type]="passwordVisible ? 'text' : 'password'" formControlName="password"
+            placeholder="••••••••" class="w-full rounded-md py-2.5 px-4 border text-sm outline-[#f84525]" />
+          <button type="button" (click)="togglePassword()"
+            class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none">
+            <ng-container *ngIf="!passwordVisible; else eyeOff">
+              <!-- SVG ojo cerrado -->
+            </ng-container>
+            <ng-template #eyeOff>
+              <!-- SVG ojo abierto -->
+            </ng-template>
+          </button>
+
+          <!-- Errores inline -->
+          <p *ngIf="passwordCtrl.touched && passwordCtrl.invalid" class="text-red-600 text-sm mt-1">
+            <span *ngIf="passwordCtrl.errors?.['required']">
+              La contraseña es obligatoria.
+            </span>
+            <span *ngIf="passwordCtrl.errors?.['minlength']">
+              Debe tener al menos
+              {{ passwordCtrl.errors?.['minlength']?.requiredLength }}
+              caracteres.
+            </span>
+            <span *ngIf="passwordCtrl.errors?.['maxlength']">
+              No puede exceder
+              {{ passwordCtrl.errors?.['maxlength']?.requiredLength }}
+              caracteres.
+            </span>
+            <span *ngIf="passwordCtrl.errors?.['pattern']">
+              Debe incluir mayúscula, minúscula y número.
+            </span>
+          </p>
         </div>
 
+        <!-- Confirmar contraseña -->
+        <div class="relative mb-4">
+          <label for="confirmPassword" class="block font-medium text-sm text-gray-700">
+            Confirmar contraseña
+          </label>
+          <input id="confirmPassword" [type]="confirmPasswordVisible ? 'text' : 'password'"
+            formControlName="confirmPassword" placeholder="••••••••"
+            class="w-full rounded-md py-2.5 px-4 border text-sm outline-[#f84525]" />
+          <button type="button" (click)="toggleConfirmPassword()"
+            class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none">
+            <ng-container *ngIf="!confirmPasswordVisible; else eyeOff2">
+              <!-- SVG ojo cerrado -->
+            </ng-container>
+            <ng-template #eyeOff2>
+              <!-- SVG ojo abierto -->
+            </ng-template>
+          </button>
 
-
-
+          <!-- Error de mismatch -->
+          <p *ngIf="oAuthForm.touched && oAuthForm.errors?.['passwordMismatch']" class="text-red-600 text-sm mt-1">
+            Las contraseñas no coinciden.
+          </p>
+        </div>
 
         <div class="flex items-center justify-end mt-4">
-
-
-          <button
-            class="ms-4 inline-flex items-center px-4 py-2 bg-[#f84525] border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-800 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
+          <button type="submit"
+            class="ms-4 inline-flex items-center px-4 py-2 bg-[#f84525] text-white rounded-md font-semibold text-xs uppercase tracking-widest hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-150"
             [disabled]="isSend">
             Enviar contraseña
           </button>
-
-
-
         </div>
       </form>
+
 
 
     </div>

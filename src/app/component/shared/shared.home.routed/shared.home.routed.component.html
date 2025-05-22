@@ -4,7 +4,7 @@
     <!-- Título y enlace "VIEW ALL" -->
     <div class="flex justify-between items-center w-full mb-6">
       <h2 id="new-releases-title" class="text-3xl font-bold tracking-tight">NEW RELEASES</h2>
-      <a href="#" class="text-blue-500 hover:underline font-medium">VIEW ALL</a>
+      <a (click)="navegarRecent()" class="text-blue-500 hover:underline font-medium">VIEW ALL</a>
     </div>
 
     <!-- Contenedor de álbumes con grid responsive -->
@@ -60,12 +60,12 @@
   </section>
 
 
-  <!-- BEST SELLERS Section -->
+  <!-- TOP RATED Section -->
   <section class="mb-12" aria-labelledby="best-sellers-title">
     <!-- Título y enlace "VIEW ALL" -->
     <div class="flex justify-between items-center w-full mb-6">
-      <h2 id="best-sellers-title" class="text-3xl font-bold tracking-tight">Best Sellers</h2>
-      <a href="#" class="text-blue-500 hover:underline font-medium">VIEW ALL</a>
+      <h2 id="best-sellers-title" class="text-3xl font-bold tracking-tight">TOP RATED</h2>
+      <a (click)="navegarTopRated()" class="text-blue-500 hover:underline font-medium">VIEW ALL</a>
     </div>
 
     <!-- Contenedor de álbumes con grid responsive -->
@@ -126,7 +126,7 @@
     <!-- Título y enlace "VIEW ALL" -->
     <div class="flex justify-between items-center w-full mb-6">
       <h2 id="best-sellers-title" class="text-3xl font-bold tracking-tight">POPULAR</h2>
-      <a href="#" class="text-blue-500 hover:underline font-medium">VIEW ALL</a>
+      <a (click)="navegarPopular()" class="text-blue-500 hover:underline font-medium">VIEW ALL</a>
     </div>
 
     <!-- Contenedor de álbumes con grid responsive -->

@@ -12,13 +12,15 @@ import type { ModalOptions, ModalInterface } from 'flowbite';
 import type { InstanceOptions } from 'flowbite';
 import { UsuarioService } from '../../../service/usuario.service';
 import { IUsuario } from '../../../model/usuario.interface';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { SharedSpinnerUnroutedComponent } from '../../shared/shared.spinner.unrouted/shared.spinner.unrouted.component';
 
 @Component({
   selector: 'app-shared.register.routed',
-  templateUrl: './shared.register.routed.component.html',
+  templateUrl: './auth.register.routed.component.html',
   standalone: true,
   imports: [ReactiveFormsModule, RouterModule],
-  styleUrls: ['./shared.register.routed.component.css'],
+  styleUrls: ['./auth.register.routed.component.css'],
 })
 export class AuthRegisterRoutedComponent implements OnInit, AfterViewInit {
   loginmodal: HTMLElement | null = null;
@@ -27,12 +29,14 @@ export class AuthRegisterRoutedComponent implements OnInit, AfterViewInit {
   message: string = '';
   passwordVisible: boolean = false;
 
-  isLoading : boolean = false;
+  isLoading: boolean = false;
+  dialogRef!: MatDialogRef<SharedSpinnerUnroutedComponent>;
 
   constructor(
     private oUsuarioService: UsuarioService,
     private oSessionService: SessionService,
-    private oRouter: Router
+    private oRouter: Router,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -49,6 +53,7 @@ export class AuthRegisterRoutedComponent implements OnInit, AfterViewInit {
     },
     onShow: () => {
       console.log('Modal is shown');
+      this.dialogRef.close();
     },
     onToggle: () => {
       console.log('Modal has been toggled');
@@ -63,6 +68,7 @@ export class AuthRegisterRoutedComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     // Asegúrate de que el DOM ya está listo
     this.loginmodal = document.querySelector('#register-modal');
+    console.log(this.loginmodal);
     if (this.loginmodal) {
       this.modal = new Modal(
         this.loginmodal,
@@ -73,6 +79,7 @@ export class AuthRegisterRoutedComponent implements OnInit, AfterViewInit {
       console.error('Modal element not found!');
     }
   }
+
   createForm() {
     this.oRegisterForm = new FormGroup({
       username: new FormControl('', [Validators.required]),
@@ -140,8 +147,14 @@ export class AuthRegisterRoutedComponent implements OnInit, AfterViewInit {
                         ' ya esta registrado';
                       this.modal?.show();
                       this.isLoading = false;
-
                     } else {
+                      this.dialogRef = this.dialog.open(
+                        SharedSpinnerUnroutedComponent,
+                        {
+                          disableClose: true,
+                          panelClass: 'transparent-dialog',
+                        }
+                      );
                       this.oUsuarioService
                         .register(this.oRegisterForm?.value)
                         .subscribe({
@@ -150,7 +163,6 @@ export class AuthRegisterRoutedComponent implements OnInit, AfterViewInit {
                             this.message = 'Registro exitoso';
                             this.modal?.show();
                             this.isLoading = false;
-
                           },
                           error: (err) => {
                             console.log(err);
