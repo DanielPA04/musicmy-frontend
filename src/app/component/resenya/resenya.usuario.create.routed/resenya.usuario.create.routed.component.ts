@@ -16,12 +16,13 @@ import { IResenya } from '../../../model/resenya.interface';
 import { MatInputModule } from '@angular/material/input';
 import { SessionService } from '../../../service/session.service';
 import { InstanceOptions, Modal, ModalInterface, ModalOptions } from 'flowbite';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-resenya-usuario-create-routed',
   templateUrl: './resenya.usuario.create.routed.component.html',
   styleUrls: ['./resenya.usuario.create.routed.component.css'],
-  imports: [MatInputModule, ReactiveFormsModule, RouterModule],
+  imports: [MatInputModule, ReactiveFormsModule, RouterModule, CommonModule],
 })
 export class ResenyaUsuarioCreateRoutedComponent
   implements OnInit, AfterViewInit
@@ -32,13 +33,13 @@ export class ResenyaUsuarioCreateRoutedComponent
   strMessage: string = '';
   email: string = '';
 
+  isEdit: boolean = false;
   resenyamodal: HTMLElement | null = null;
 
   modal: ModalInterface | null = null;
 
   form: FormGroup = new FormGroup({});
 
-  oAlbum: IAlbum = {} as IAlbum;
   oUsuario: IUsuario = {} as IUsuario;
 
   isResenyaOk: boolean = false;
@@ -90,6 +91,31 @@ export class ResenyaUsuarioCreateRoutedComponent
       if (this.oResenyaForm) {
         this.oResenyaForm.get('usuario')?.setValue(this.oUsuario);
         this.oResenyaForm.get('album.id')?.setValue(this.id);
+        this.oResenyaService
+          .findResenyaByEmailAndAlbumId(this.email, this.id)
+          .subscribe({
+            next: (data) => {
+              this.isEdit = true;
+              this.oResenya = data;
+              console.log('Resenya encontrada:', this.oResenya);
+
+              this.oResenyaForm!.get('nota')?.setValue(this.oResenya.nota);
+              this.oResenyaForm!.get('descripcion')?.setValue(
+                this.oResenya.descripcion
+              );
+              this.oResenyaForm!.get('website')?.setValue(
+                this.oResenya.website
+              );
+              console.log(
+                'Formulario actualizado con la resenya:',
+                this.oResenyaForm?.value
+              );
+            },
+            error: (error) => {
+              console.error('Error al obtener la resenya:', error);
+              this.isEdit = false;
+            },
+          });
       } else {
         console.error('Error: El formulario no está inicializado.');
       }
@@ -114,7 +140,7 @@ export class ResenyaUsuarioCreateRoutedComponent
 
   createForm() {
     this.oResenyaForm = new FormGroup({
-      nota: new FormControl('', [
+      nota: new FormControl(0, [
         Validators.required,
         Validators.pattern(/^(10|[0-9])$/),
       ]),
@@ -151,11 +177,17 @@ export class ResenyaUsuarioCreateRoutedComponent
   }
 
   updateForm() {
-    this.oResenyaForm?.controls['nota'].setValue('');
-    this.oResenyaForm?.controls['descripcion'].setValue('');
-    this.oResenyaForm?.controls['website'].setValue('');
-    this.oResenyaForm?.controls['album'].setValue('');
-    this.oResenyaForm?.controls['usuario'].setValue('');
+    if (this.isEdit) {
+      this.oResenyaForm!.get('nota')?.setValue(this.oResenya!.nota);
+      this.oResenyaForm!.get('descripcion')?.setValue(
+        this.oResenya!.descripcion
+      );
+      this.oResenyaForm!.get('website')?.setValue(this.oResenya!.website);
+    } else {
+      this.oResenyaForm!.get('nota')?.setValue('');
+      this.oResenyaForm!.get('descripcion')?.setValue('');
+      this.oResenyaForm!.get('website')?.setValue('');
+    }
   }
 
   onReset() {
@@ -165,30 +197,61 @@ export class ResenyaUsuarioCreateRoutedComponent
 
   onSubmit() {
     if (this.oResenyaForm?.valid) {
-      this.oResenyaService
-        .checkIfResenyaExists(this.oResenyaForm.value)
-        .subscribe((data) => {
-          if (!data) {
-            this.oResenyaService.create(this.oResenyaForm?.value).subscribe({
-              next: (data) => {
-                this.isResenyaOk = true;
-                this.oResenya = data;
-                this.strMessage = `Resenya creada.`;
-                this.modal?.show();
-              },
-              error: (err) => {
-                this.strMessage = `Error al crear la resenya.`;
-                this.modal?.show();
-              },
-            });
-          } else {
-            this.strMessage = 'La resenya ya existe.';
+      if (this.isEdit) {
+        let resenya: IResenya = this.oResenyaForm.value;
+        resenya.id = this.oResenya?.id!;
+        this.oResenyaService.update(resenya).subscribe({
+          next: (data) => {
+            this.isResenyaOk = true;
+            this.oResenya = data;
+            this.strMessage = `Resenya actualizada.`;
             this.modal?.show();
-          }
+          },
+          error: (err) => {
+            this.strMessage = `Error al actualizar la resenya.`;
+            this.modal?.show();
+          },
         });
+      } else {
+        this.oResenyaService
+          .checkIfResenyaExists(this.oResenyaForm.value)
+          .subscribe((data) => {
+            if (!data) {
+              this.oResenyaService.create(this.oResenyaForm?.value).subscribe({
+                next: (data) => {
+                  this.isResenyaOk = true;
+                  this.oResenya = data;
+                  this.strMessage = `Resenya creada.`;
+                  this.modal?.show();
+                },
+                error: (err) => {
+                  this.strMessage = `Error al crear la resenya.`;
+                  this.modal?.show();
+                },
+              });
+            } else {
+              this.strMessage = 'La resenya ya existe.';
+              this.modal?.show();
+            }
+          });
+      }
     } else {
       this.strMessage = 'El formulario no es valido.';
       this.modal?.show();
     }
+  }
+
+  get nota(): number {
+    // parseInt por si el formControl devuelve string
+    return parseInt(this.oResenyaForm?.get('nota')?.value, 10) || 0;
+  }
+
+  // Mapea la nota al nombre de la variable CSS correspondiente
+  getGradeColorVar(): string {
+    const m = this.nota;
+    if (m < 5) return 'var(--low-grade-bg)';
+    if (m < 7) return 'var(--medium-grade-bg)';
+    if (m < 9) return 'var(--high-grade-bg)';
+    return 'var(--excellent-grade-bg)';
   }
 }

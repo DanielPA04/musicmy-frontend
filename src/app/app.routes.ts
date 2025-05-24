@@ -96,6 +96,8 @@ export const routes: Routes = [
     { path: 'admin/resenya/edit/:id', component: ResenyaAdminEditRoutedComponent, canActivate: [AdminGuard] },
     { path: 'admin/resenya/delete/:id', component: ResenyaAdminDeleteRoutedComponent, canActivate: [AdminGuard] },
     { path: 'resenya/create/:id', component: ResenyaUsuarioCreateRoutedComponent, canActivate: [UserGuard] },
+    { path: 'resenya/edit/:id', component: ResenyaUsuarioCreateRoutedComponent, canActivate: [UserGuard] },
+
 
      //Usuario
      { path: 'admin/usuario/plist', component: UsuarioAdminPlistRoutedComponent, canActivate: [AdminGuard] },

@@ -150,7 +150,7 @@ export class ResenyaService {
     return this.oHttp.get<IPage<IResenya>>(URL, httpOptions);
   }
 
-   getPageByAlbumAndLikes(
+  getPageByAlbumAndLikes(
     id: number,
     page: number,
     size: number,
@@ -223,5 +223,15 @@ export class ResenyaService {
     URL += this.serverURL;
     URL += '/check/' + email + '/' + idAlbum;
     return this.oHttp.get<boolean>(URL);
+  }
+
+  findResenyaByEmailAndAlbumId(
+    email: string,
+    idAlbum: number
+  ): Observable<IResenya> {
+    let URL: string = '';
+    URL += this.serverURL;
+    URL += '/find/' + email + '/' + idAlbum;
+    return this.oHttp.get<IResenya>(URL);
   }
 }

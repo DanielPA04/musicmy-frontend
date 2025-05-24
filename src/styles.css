@@ -80,3 +80,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
     color: var(--excellent-grade-color);
 }
 
+
+
+
+.thermometer {
+  @apply w-4 h-36 border-2 border-gray-300 rounded-full overflow-hidden relative;
+}
+.thermometer-fill {
+  @apply w-full absolute bottom-0 transition-all duration-300;
+}
