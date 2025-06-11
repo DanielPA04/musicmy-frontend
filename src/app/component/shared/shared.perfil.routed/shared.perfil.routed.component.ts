@@ -24,6 +24,7 @@ import { SessionService } from '../../../service/session.service';
 export class SharedPerfilRoutedComponent implements OnInit {
   email: string = '';
   usuario: IUsuario | null = null;
+  serverURL : string = serverURL;
 
   // paginacion Resenya
   oPageRecent: IPage<IResenya> | null = null;
@@ -37,7 +38,6 @@ export class SharedPerfilRoutedComponent implements OnInit {
 
   nombresArtista: Map<number, IArtista[]> = new Map<number, IArtista[]>();
 
-  serverURL: string = serverURL;
 
   constructor(
     private oActivatedRoute: ActivatedRoute,
