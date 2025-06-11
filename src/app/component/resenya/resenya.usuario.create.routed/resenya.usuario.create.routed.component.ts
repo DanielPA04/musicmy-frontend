@@ -195,6 +195,10 @@ export class ResenyaUsuarioCreateRoutedComponent
     return false;
   }
 
+  closeModal() {
+  this.modal?.hide();
+}
+
   onSubmit() {
     if (this.oResenyaForm?.valid) {
       if (this.isEdit) {

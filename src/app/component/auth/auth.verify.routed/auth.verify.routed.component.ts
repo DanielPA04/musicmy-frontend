@@ -7,9 +7,9 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SharedSpinnerUnroutedComponent } from '../../shared/shared.spinner.unrouted/shared.spinner.unrouted.component';
 
 @Component({
-  selector: 'app-shared-verify-routed',
-  templateUrl: './shared.verify.routed.component.html',
-  styleUrls: ['./shared.verify.routed.component.css'],
+  selector: 'app-auth-verify-routed',
+  templateUrl: './auth.verify.routed.component.html',
+  styleUrls: ['./auth.verify.routed.component.css'],
   imports: [MatProgressSpinnerModule],
 })
 export class AuthVerifyRoutedComponent implements OnInit {

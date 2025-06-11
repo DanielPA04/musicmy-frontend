@@ -94,6 +94,10 @@ export class AuthLoginRoutedComponent implements OnInit, AfterViewInit {
     });
   }
 
+  closeModal() {
+    this.modal?.hide();
+  }
+
   onSubmit() {
     if (this.oAuthForm?.invalid) {
       const controls = this.oAuthForm.controls;
@@ -109,8 +113,7 @@ export class AuthLoginRoutedComponent implements OnInit, AfterViewInit {
           } else if (errors['maxlength']) {
             this.message = `El campo ${controlName} no puede tener más de ${errors['maxlength'].requiredLength} caracteres.`;
           } else if (errors['pattern']) {
-            this.message =
-              `El campo ${controlName} no cumple con el formato requerido. Debe usar por lo menos 1 número, 1 mayúscula y 1 minúscula`;
+            this.message = `El campo ${controlName} no cumple con el formato requerido. Debe usar por lo menos 1 número, 1 mayúscula y 1 minúscula`;
           } else {
             this.message = `El campo ${controlName} es inválido.`;
           }
@@ -153,7 +156,8 @@ export class AuthLoginRoutedComponent implements OnInit, AfterViewInit {
           error: (err) => {
             // TODO mirar de manejar el error mejor
             console.log(err);
-            this.message = err.error;
+            this.message =
+              err.error?.message || 'Error al verificar el usuario';
             this.modal?.show();
           },
         });
@@ -162,9 +166,9 @@ export class AuthLoginRoutedComponent implements OnInit, AfterViewInit {
 
   onSendVerificationEmail() {
     this.dialogRef = this.dialog.open(SharedSpinnerUnroutedComponent, {
-        disableClose: true,
-        panelClass: 'transparent-dialog',
-      });
+      disableClose: true,
+      panelClass: 'transparent-dialog',
+    });
     this.isLoading = true;
     this.oAuthService
       .resendVerificationEmail(this.oAuthForm?.get('identifier')?.value)

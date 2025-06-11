@@ -31,7 +31,7 @@ export class AuthRegisterRoutedComponent implements OnInit, AfterViewInit {
 
   isLoading: boolean = false;
   dialogRef!: MatDialogRef<SharedSpinnerUnroutedComponent>;
-
+  registered: boolean = false;
   constructor(
     private oUsuarioService: UsuarioService,
     private oSessionService: SessionService,
@@ -50,9 +50,13 @@ export class AuthRegisterRoutedComponent implements OnInit, AfterViewInit {
     closable: true,
     onHide: () => {
       console.log('Modal is hidden');
+      if (this.registered) {
+        this.oRouter.navigate(['/home']);
+      }
     },
     onShow: () => {
       console.log('Modal is shown');
+      this.isLoading = false;
       this.dialogRef.close();
     },
     onToggle: () => {
@@ -160,6 +164,7 @@ export class AuthRegisterRoutedComponent implements OnInit, AfterViewInit {
                         .subscribe({
                           next: (data: IUsuario) => {
                             console.log(data);
+                            this.registered = true;
                             this.message = 'Registro exitoso';
                             this.modal?.show();
                             this.isLoading = false;

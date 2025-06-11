@@ -3,7 +3,7 @@
     <div class="col text-center">
       <h2 class="my-2">
         <i class="bi bi-plus-square"></i>
-        Edición de Artista
+        Edición de Usuario
         <i class="bi bi-journal-text"></i>
       </h2>
       <form [formGroup]="oUsuarioForm!" (ngSubmit)="onSubmit()" novalidate>
@@ -104,7 +104,7 @@
             
               <!--Cambiar esto y buscar sitios similares-->
               <img
-              [src]="'http://localhost:8085/album/' + oUsuario?.id + '/img'"
+              [src]="'http://localhost:8085/usuario/' + oUsuario?.id + '/img'"
               width="200"
               height="200"
               class="w-8 h-8 mb-4"

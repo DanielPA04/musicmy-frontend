@@ -60,7 +60,7 @@ export class AlbumAdminDeleteRoutedComponent implements OnInit {
         );
       },
       error: (error) => {
-        this.showModal('Error al borrar el album');
+        this.showModal('Error al borrar el album, elimine sus dependencias primero');
       },
     });
   }
